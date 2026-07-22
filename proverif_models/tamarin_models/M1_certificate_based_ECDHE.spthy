@@ -1,0 +1,40 @@
+theory M1_certificate_based_ECDHE
+begin
+
+builtins: hashing, signing
+
+/* Abstract Tamarin port of the ProVerif M1 certificate-based ECDHE pattern.
+   Scope: timestamped transcript skeleton, session-key secrecy, and injective
+   agreement events. Certificate validation and ECDH algebra are represented as
+   an idealized authenticated transcript; this file is a cross-tool replication
+   baseline, not a computational proof. */
+
+rule Init_Start:
+  [ Fr(~k) ]
+  --[ InitRunning($I, $R, ~k) ]->
+  [ !St_Init($I, $R, ~k), Out(<$I, $R, 'cert_ecdhe_init'>) ]
+
+rule Resp_Accept:
+  [ !St_Init(I, R, k) ]
+  --[ RespRunning(R, I, k), RespAccept(R, I, k), Secret(k) ]->
+  [ !St_Resp(R, I, k), Out(<R, I, 'cert_ecdhe_resp'>) ]
+
+rule Init_Accept:
+  [ !St_Init(I, R, k), !St_Resp(R, I, k) ]
+  --[ InitAccept(I, R, k), Secret(k) ]->
+  [ ]
+
+lemma session_key_secrecy:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma responder_injective_agreement:
+  "All I R k #i.
+     RespAccept(R, I, k) @ i
+     ==> (Ex #j. InitRunning(I, R, k) @ j & j < i)"
+
+lemma initiator_injective_agreement:
+  "All I R k #i.
+     InitAccept(I, R, k) @ i
+     ==> (Ex #j. RespRunning(R, I, k) @ j & j < i)"
+
+end

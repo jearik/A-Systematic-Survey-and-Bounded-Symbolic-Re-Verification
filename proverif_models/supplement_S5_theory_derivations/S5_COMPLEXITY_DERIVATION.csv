@@ -1,0 +1,9 @@
+family,derivation,result
+PKI/ECDHE,"constant number of scalar multiplications, signatures and verifications; certificate chain length appears only in transmitted bytes","T_comp=O(1), B=O(|cert_chain|+lambda), S=O(|cert_chain|)"
+Consortium blockchain,constant local crypto plus q_l authenticated lookups and q_w updates; Merkle-like proofs have depth ceil(log N),"T=O(1+q_l log N+q_w log N), B=O(B_tx+q_l lambda log N), S_device=O(lambda log N)"
+Edge-assisted,device runs constant local crypto while edge handles s delegated sessions and stores cached tokens or credentials,"T_device=O(1), T_edge=O(s), B=O(RB), S_edge=O(s)"
+PUF,online exchange is one challenge-response plus hashes; server enrollment table stores m CRPs/helper records,"T_online=O(1), B=O(lambda), S_server=O(m)"
+Group/ring,linear ring signatures scan or aggregate r public keys unless an accumulator changes the witness form,"T=O(r), B=O(r lambda), S=O(r)"
+ZK,prover work follows the statement circuit; verification ranges from polylogarithmic to linear depending on the proof system,"T_prove=O(C_zk), T_verify in [O(polylog C_zk), O(C_zk)], B=O(|proof|+|credential|)"
+Cross-/multi-chain,verifier checks c chain states or relay proofs; each authenticated state proof has logarithmic depth in local chain state N,"T=O(c log N+q_l log N), B=O(c lambda log N+B_relay), S=O(c)"
+Lattice/PQ,ML-KEM/ML-DSA-style implementations use polynomial arithmetic dominated by NTT-like operations at dimension n,"T=O(n log n), B=O(|pk|+|ct|+|sig|), S=O(|sk|+|pk|)"

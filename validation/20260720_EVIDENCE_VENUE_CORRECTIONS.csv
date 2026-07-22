@@ -1,0 +1,48 @@
+paper_id,field,old_value,new_value,basis
+P109,verification_level,E,B,final evidence reassessment supplied for v17.1
+P130,verification_level,E,D,final evidence reassessment supplied for v17.1
+P170,verification_level,E,B,final evidence reassessment supplied for v17.1
+P189,verification_level,E,B,final evidence reassessment supplied for v17.1
+P210,verification_level,E,B,final evidence reassessment supplied for v17.1
+P216,verification_level,E,B,final evidence reassessment supplied for v17.1
+P220,verification_level,E,B,final evidence reassessment supplied for v17.1
+P223,verification_level,E,B,final evidence reassessment supplied for v17.1
+P226,verification_level,E,D,final evidence reassessment supplied for v17.1
+P109,venue_tier,other journal,conference / proceedings,final venue-type normalization supplied for v17.1
+P110,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P111,venue_tier,other journal,conference / proceedings,final venue-type normalization supplied for v17.1
+P124,venue_tier,other journal,conference / proceedings,final venue-type normalization supplied for v17.1
+P125,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P126,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P129,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P130,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P131,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P132,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P133,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P135,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P136,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P138,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P139,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P145,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P146,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P149,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P151,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P158,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P163,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P164,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P168,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P171,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P174,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P176,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P184,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P190,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P191,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P193,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P199,venue_tier,other journal,conference / proceedings,final venue-type normalization supplied for v17.1
+P210,venue_tier,conference / proceedings,other journal,final venue-type normalization supplied for v17.1
+P215,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P219,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P220,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P221,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P224,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1
+P226,venue_tier,conference / proceedings,IEEE transaction / flagship journal,final venue-type normalization supplied for v17.1

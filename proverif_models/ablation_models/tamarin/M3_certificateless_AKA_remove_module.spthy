@@ -1,0 +1,21 @@
+theory M3_certificateless_AKA_remove_module
+begin
+
+/* Explicit-fault parser/runner sanity template for M3, labelled KGC partial-key binding; not a component-removal ablation.
+   The rule deliberately permits acceptance without a prior run and releases
+   the secret so parser/runner detection can be checked. */
+
+rule Removed_Module_Attack:
+  [ Fr(~k) ]
+  --[ Accept('devA','devB',~k), Secret(~k) ]->
+  [ Out(~k) ]
+
+lemma secrecy_after_ablation:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma agreement_after_ablation:
+  "All k #i.
+     Accept('devA','devB',k) @ i
+     ==> (Ex #j. Run('devB','devA',k) @ j & j < i)"
+
+end

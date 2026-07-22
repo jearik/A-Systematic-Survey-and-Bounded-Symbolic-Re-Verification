@@ -1,0 +1,6 @@
+claim	M4blockchainpseudonymRemoveModule,A	Secret_A1	H(na,nb)	[31mFail[0m	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,A	Niagree_A2	-	[31mFail[0m	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,A	Nisynch_A3	-	[31mFail[0m	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Secret_B1	H(na,nb)	[31mFail[0m	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Niagree_B2	-	[31mFail[0m	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Nisynch_B3	-	[31mFail[0m	[exactly 1 attack]

@@ -1,0 +1,34 @@
+theory M6_anonymous_ZKP_abstract
+begin
+
+builtins: hashing, signing
+
+/* Abstract Tamarin port of M6. A zero-knowledge proof is represented as an
+   ideal credential-validity event. This checks secrecy and authentication over
+   an anonymous credential handle. It does not prove ZK soundness, CRS safety,
+   ring/group anonymity advantage, or metadata unlinkability. */
+
+rule Issue_Credential:
+  [ Fr(~cred) ]
+  --[ Issued($A, ~cred) ]->
+  [ !Credential($A, ~cred), Out('issuer_public_key') ]
+
+rule Prover_Run:
+  [ !Credential(A, cred), Fr(~k) ]
+  --[ ProverRun('anon_handle', ~k), ZKValid(cred), Secret(~k) ]->
+  [ !ZKSession(A, 'anon_handle', ~k), Out(<'anon_handle', 'zk_proof'>) ]
+
+rule Verifier_Accept:
+  [ !ZKSession(A, handle, k) ]
+  --[ VerifierAcc(handle, k), Secret(k) ]->
+  [ ]
+
+lemma anonymous_session_key_secrecy:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma credential_authentication:
+  "All handle k #i.
+     VerifierAcc(handle, k) @ i
+     ==> (Ex #j. ProverRun(handle, k) @ j & j < i)"
+
+end

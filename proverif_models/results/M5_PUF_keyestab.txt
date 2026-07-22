@@ -1,0 +1,88 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new pid: pufid;
+{2}new c: chal;
+{3}let r0: resp = puf(pid,c) in
+(
+    {4}!
+    {5}let pid_1: pufid = pid in
+    {6}in(net, (c_1: chal,EV: G));
+    {7}let r: resp = puf(pid_1,c_1) in
+    {8}new ed: exp;
+    {9}let ED: G = gexp(gen,ed) in
+    {10}let k: bitstring = kdf((gexp(EV,ed),r)) in
+    {11}event devAuth(c_1,k);
+    {12}out(net, (ED,h((r,ED,EV))))
+) | (
+    {13}!
+    {14}let c_2: chal = c in
+    {15}new ev: exp;
+    {16}let EV_1: G = gexp(gen,ev) in
+    {17}out(net, (c_2,EV_1));
+    {18}in(net, (ED_1: G,pf: bitstring));
+    {19}if (pf = h((r0,ED_1,EV_1))) then
+    {20}let k_1: bitstring = kdf((gexp(ED_1,ev),r0)) in
+    {21}event verAcc(c_2,k_1);
+    {22}out(net, senc(sess_secret,k_1))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new pid: pufid;
+{2}new c: chal;
+(
+    {4}!
+    {6}in(net, (c_1: chal,EV: G));
+    {8}new ed: exp;
+    {5}let pid_1: pufid = pid in
+    {7}let r: resp = puf(pid_1,c_1) in
+    {10}let k: bitstring = kdf((gexp(EV,ed),r)) in
+    {11}event devAuth(c_1,k);
+    {9}let ED: G = gexp(gen,ed) in
+    {12}out(net, (ED,h((r,ED,EV))))
+) | (
+    {13}!
+    {15}new ev: exp;
+    {16}let EV_1: G = gexp(gen,ev) in
+    {14}let c_2: chal = c in
+    {17}out(net, (c_2,EV_1));
+    {18}in(net, (ED_1: G,pf: bitstring));
+    {3}let r0: resp = puf(pid,c) in
+    {19}if (pf = h((r0,ED_1,EV_1))) then
+    {20}let k_1: bitstring = kdf((gexp(ED_1,ev),r0)) in
+    {21}event verAcc(c_2,k_1);
+    {22}out(net, senc(sess_secret,k_1))
+)
+
+-- Query not attacker(sess_secret[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(sess_secret[])
+RESULT not attacker(sess_secret[]) is true.
+-- Query inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2)) in process 1.
+Translating the process into Horn clauses...
+select attacker(gexp(gen,x))/-5000
+Completing...
+Starting query inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2))
+goal reachable: b-inj-event(devAuth(c[],kdf((gexp(gexp(gen,ev_1),ed_1),puf(pid[],c[])))),@occ11_1) -> inj-event(verAcc(c[],kdf((gexp(gexp(gen,ed_1),ev_1),puf(pid[],c[])))),@occ21_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+ev_1 = ev[!1 = @sid]
+ed_1 = ed[EV = gexp(gen,ev_1),c_1 = c[],!1 = @sid_1]
+@occ21_1 = @occ21[pf = h((puf(pid[],c[]),gexp(gen,ed_1),gexp(gen,ev_1))),ED_1 = gexp(gen,ed_1),!1 = @sid]
+@occ11_1 = @occ11[EV = gexp(gen,ev_1),c_1 = c[],!1 = @sid_1]
+RESULT inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(sess_secret[]) is true.
+
+Query inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2)) is true.
+
+--------------------------------------------------------------
+

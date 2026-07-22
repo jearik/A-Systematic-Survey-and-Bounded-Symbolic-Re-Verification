@@ -1,0 +1,44 @@
+// Scyther direct-authentication projection of the transcript-bound CL-BASA
+// variant after successful BAS directory lookup.
+
+usertype Domain;
+usertype PID;
+usertype EPK;
+
+const domA, domB: Domain;
+const pidU, pidV: PID;
+
+protocol CLBASADirectAuthFix(U,V)
+{
+  role U
+  {
+    fresh NU: Nonce;
+    fresh eU: EPK;
+    var NV: Nonce;
+    var eV: EPK;
+
+    send_1(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+    recv_2(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV, NU, pidU, eU}sk(V));
+
+    claim(U, Alive);
+    claim(U, Weakagree);
+    claim(U, Niagree);
+    claim(U, Nisynch);
+  }
+
+  role V
+  {
+    var NU: Nonce;
+    var eU: EPK;
+    fresh NV: Nonce;
+    fresh eV: EPK;
+
+    recv_1(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+    send_2(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV, NU, pidU, eU}sk(V));
+
+    claim(V, Alive);
+    claim(V, Weakagree);
+    claim(V, Niagree);
+    claim(V, Nisynch);
+  }
+}

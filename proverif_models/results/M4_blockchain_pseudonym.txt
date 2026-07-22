@@ -1,0 +1,142 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new edgeMskA: skey;
+{2}new edgeMskB: skey;
+{3}new openerSk: skey;
+{4}out(net, mpk(edgeMskA));
+{5}out(net, mpk(edgeMskB));
+{6}out(net, opk(openerSk));
+{7}new psA: id;
+{8}new psB: id;
+{9}let encId: bitstring = seal(realIdA,opk(openerSk)) in
+{10}let ckA: skey = extract(psA,edgeMskA) in
+{11}let ckB: skey = extract(psB,edgeMskB) in
+(
+    {12}!
+    {13}let psA_1: id = psA in
+    {14}let psB_1: id = psB in
+    {15}let mpkB: pkey = mpk(edgeMskB) in
+    {16}new x: exp;
+    {17}let X: G = gexp(gen,x) in
+    {18}out(net, (psA_1,encId,X,psign((psA_1,X),ckA)));
+    {19}in(net, (=psB_1,Y: G,sg: bitstring));
+    {20}if (pverify(sg,(psB_1,psA_1,X,Y),psB_1,mpkB) = true) then
+    {21}let k: bitstring = kdf(gexp(Y,x)) in
+    {22}event iRun(psA_1,psB_1,k);
+    {23}out(net, psign((psA_1,psB_1,X,Y),ckA));
+    {24}event iAcc(psA_1,psB_1,k);
+    {25}out(net, senc(sess_secret,k))
+) | (
+    {26}!
+    {27}let psB_2: id = psB in
+    {28}let mpkA: pkey = mpk(edgeMskA) in
+    {29}in(net, (psA_2: id,encId_1: bitstring,X_1: G,sgA: bitstring));
+    {30}if (pverify(sgA,(psA_2,X_1),psA_2,mpkA) = true) then
+    {31}new y: exp;
+    {32}let Y_1: G = gexp(gen,y) in
+    {33}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {34}event rRun(psA_2,psB_2,k_1);
+    {35}out(net, (psB_2,Y_1,psign((psB_2,psA_2,X_1,Y_1),ckB)));
+    {36}in(net, conf: bitstring);
+    {37}if (pverify(conf,(psA_2,psB_2,X_1,Y_1),psA_2,mpkA) = true) then
+    {38}event rAcc(psA_2,psB_2,k_1)
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new edgeMskA: skey;
+{2}new edgeMskB: skey;
+{3}new openerSk: skey;
+{4}out(net, mpk(edgeMskA));
+{5}out(net, mpk(edgeMskB));
+{6}out(net, opk(openerSk));
+{7}new psA: id;
+{8}new psB: id;
+(
+    {12}!
+    {16}new x: exp;
+    {17}let X: G = gexp(gen,x) in
+    {13}let psA_1: id = psA in
+    {10}let ckA: skey = extract(psA,edgeMskA) in
+    {9}let encId: bitstring = seal(realIdA,opk(openerSk)) in
+    {18}out(net, (psA_1,encId,X,psign((psA_1,X),ckA)));
+    {14}let psB_1: id = psB in
+    {19}in(net, (=psB_1,Y: G,sg: bitstring));
+    {15}let mpkB: pkey = mpk(edgeMskB) in
+    {20}if (pverify(sg,(psB_1,psA_1,X,Y),psB_1,mpkB) = true) then
+    {21}let k: bitstring = kdf(gexp(Y,x)) in
+    {22}event iRun(psA_1,psB_1,k);
+    {23}out(net, psign((psA_1,psB_1,X,Y),ckA));
+    {24}event iAcc(psA_1,psB_1,k);
+    {25}out(net, senc(sess_secret,k))
+) | (
+    {26}!
+    {29}in(net, (psA_2: id,encId_1: bitstring,X_1: G,sgA: bitstring));
+    {28}let mpkA: pkey = mpk(edgeMskA) in
+    {30}if (pverify(sgA,(psA_2,X_1),psA_2,mpkA) = true) then
+    {31}new y: exp;
+    {33}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {27}let psB_2: id = psB in
+    {34}event rRun(psA_2,psB_2,k_1);
+    {32}let Y_1: G = gexp(gen,y) in
+    {11}let ckB: skey = extract(psB,edgeMskB) in
+    {35}out(net, (psB_2,Y_1,psign((psB_2,psA_2,X_1,Y_1),ckB)));
+    {36}in(net, conf: bitstring);
+    {37}if (pverify(conf,(psA_2,psB_2,X_1,Y_1),psA_2,mpkA) = true) then
+    {38}event rAcc(psA_2,psB_2,k_1)
+)
+
+-- Query not attacker(realIdA[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(realIdA[])
+RESULT not attacker(realIdA[]) is true.
+-- Query not attacker(sess_secret[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(sess_secret[])
+RESULT not attacker(sess_secret[]) is true.
+-- Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2))
+goal reachable: b-inj-event(iRun(psA[],psB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ22_1) && attacker(encId_2) -> inj-event(rAcc(psA[],psB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ38_1)
+The 1st hypothesis occurs strictly before the conclusion.
+The 2nd hypothesis occurs before the conclusion.
+Abbreviations:
+x_1 = x[!1 = @sid]
+y_1 = y[sgA = psign((psA[],gexp(gen,x_1)),extract(psA[],edgeMskA[])),X_1 = gexp(gen,x_1),encId_1 = encId_2,psA_2 = psA[],!1 = @sid_1]
+@occ38_1 = @occ38[conf = psign((psA[],psB[],gexp(gen,x_1),gexp(gen,y_1)),extract(psA[],edgeMskA[])),sgA = psign((psA[],gexp(gen,x_1)),extract(psA[],edgeMskA[])),X_1 = gexp(gen,x_1),encId_1 = encId_2,psA_2 = psA[],!1 = @sid_1]
+@occ22_1 = @occ22[sg = psign((psB[],psA[],gexp(gen,x_1),gexp(gen,y_1)),extract(psB[],edgeMskB[])),Y = gexp(gen,y_1),!1 = @sid]
+RESULT inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+-- Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2))
+goal reachable: b-inj-event(rRun(psA[],psB[],kdf(gexp(gexp(gen,x_1),y_1))),@occ34_1) && attacker(encId_2) -> inj-event(iAcc(psA[],psB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ24_1)
+The 1st hypothesis occurs strictly before the conclusion.
+The 2nd hypothesis occurs before the conclusion.
+Abbreviations:
+x_1 = x[!1 = @sid]
+y_1 = y[sgA = psign((psA[],gexp(gen,x_1)),extract(psA[],edgeMskA[])),X_1 = gexp(gen,x_1),encId_1 = encId_2,psA_2 = psA[],!1 = @sid_1]
+@occ24_1 = @occ24[sg = psign((psB[],psA[],gexp(gen,x_1),gexp(gen,y_1)),extract(psB[],edgeMskB[])),Y = gexp(gen,y_1),!1 = @sid]
+@occ34_1 = @occ34[sgA = psign((psA[],gexp(gen,x_1)),extract(psA[],edgeMskA[])),X_1 = gexp(gen,x_1),encId_1 = encId_2,psA_2 = psA[],!1 = @sid_1]
+RESULT inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(realIdA[]) is true.
+
+Query not attacker(sess_secret[]) is true.
+
+Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+
+Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+

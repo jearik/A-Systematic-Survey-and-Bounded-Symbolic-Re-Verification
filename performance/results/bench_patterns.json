@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "timing_source": "bench_30_rounds_summary.json",
+    "status": "illustrative analytical composition, not a protocol implementation benchmark",
+    "latency_semantics": "three sequential one-way message flights multiplied by assumed one-way latency",
+    "pattern_namespace": "Perf-P1",
+    "manuscript_label": "P1",
+    "namespace_boundary": "distinct from published cases C1-C3"
+  },
+  "Perf-P1": {
+    "comp_us": 247.9927522222222,
+    "comm_B": 1036,
+    "message_flights": 3,
+    "composition": "2*(P-256 key generation + ECDH + ECDSA sign + ECDSA verify) + 6*SHA-256",
+    "display_name": "Explicit-certificate mutual authentication plus ECDHE"
+  }
+}

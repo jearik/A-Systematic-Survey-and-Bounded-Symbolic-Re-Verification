@@ -1,0 +1,44 @@
+// Scyther direct-authentication projection of CL-BASA after successful BAS
+// directory lookup. It checks the U/V signed token exchange only.
+
+usertype Domain;
+usertype PID;
+usertype EPK;
+
+const domA, domB: Domain;
+const pidU, pidV: PID;
+
+protocol CLBASADirectAuth(U,V)
+{
+  role U
+  {
+    fresh NU: Nonce;
+    fresh eU: EPK;
+    var NV: Nonce;
+    var eV: EPK;
+
+    send_1(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+    recv_2(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV}sk(V));
+
+    claim(U, Alive);
+    claim(U, Weakagree);
+    claim(U, Niagree);
+    claim(U, Nisynch);
+  }
+
+  role V
+  {
+    var NU: Nonce;
+    var eU: EPK;
+    fresh NV: Nonce;
+    fresh eV: EPK;
+
+    recv_1(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+    send_2(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV}sk(V));
+
+    claim(V, Alive);
+    claim(V, Weakagree);
+    claim(V, Niagree);
+    claim(V, Nisynch);
+  }
+}

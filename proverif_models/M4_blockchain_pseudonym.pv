@@ -1,0 +1,77 @@
+(* =====================================================================
+   M4 - Blockchain-anchored pseudonymous cross-domain authentication
+        (Cui/Shahidinejad-style). Each device authenticates under a public
+        pseudonym using an edge-issued, identity-based credential bound to
+        that pseudonym; the consortium ledger publishes the edge servers'
+        master public keys. The device's REAL identity is sealed under the
+        opener's public key and never transmitted in the clear, so only the
+        trusted opener can de-anonymize it.
+   Run:  proverif M4_blockchain_pseudonym.pv
+   Q1 session-key secrecy, Q2 mutual injective agreement, Q3 conditional
+   anonymity (real identity stays secret from the network attacker).
+   (Boolean-verification structure mirrors M2 to ensure termination.)
+   ===================================================================== *)
+free net: channel.
+type skey. type pkey. type G. type exp. type id.
+
+const gen: G.
+fun gexp(G, exp): G.
+equation forall x: exp, y: exp; gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x).
+
+(* Edge server as an identity-based credential authority over pseudonyms. *)
+fun mpk(skey): pkey.
+fun extract(id, skey): skey.                         (* credential key bound to a pseudonym *)
+fun psign(bitstring, skey): bitstring.
+reduc forall m: bitstring, p: id, ek: skey;
+      pverify(psign(m, extract(p, ek)), m, p, mpk(ek)) = true.
+
+(* Opener public key + one-way sealing of the real identity (no public open rule:
+   the attacker cannot invert it, modeling conditional anonymity). *)
+fun opk(skey): pkey.
+fun seal(id, pkey): bitstring.
+
+fun kdf(G): bitstring.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m,k),k)=m.
+
+event iRun(id,id,bitstring). event rAcc(id,id,bitstring).
+event rRun(id,id,bitstring). event iAcc(id,id,bitstring).
+free realIdA: id [private].
+free sess_secret: bitstring [private].
+query attacker(realIdA).                 (* anonymity: real identity stays secret *)
+query attacker(sess_secret).             (* session-key secrecy *)
+query a:id,b:id,k:bitstring; inj-event(rAcc(a,b,k)) ==> inj-event(iRun(a,b,k)).
+query a:id,b:id,k:bitstring; inj-event(iAcc(a,b,k)) ==> inj-event(rRun(a,b,k)).
+
+let initiator(psA:id, ckA:skey, encId:bitstring, psB:id, mpkB:pkey) =
+    new x:exp; let X=gexp(gen,x) in
+    out(net, (psA, encId, X, psign((psA,X), ckA)));
+    in(net, (=psB, Y:G, sg:bitstring));
+    if pverify(sg, (psB,psA,X,Y), psB, mpkB) = true then
+    let k = kdf(gexp(Y,x)) in
+    event iRun(psA,psB,k);
+    out(net, psign((psA,psB,X,Y), ckA));
+    event iAcc(psA,psB,k);
+    out(net, senc(sess_secret, k)).
+
+let responder(psB:id, ckB:skey, mpkA:pkey) =
+    in(net, (psA:id, encId:bitstring, X:G, sgA:bitstring));
+    if pverify(sgA, (psA,X), psA, mpkA) = true then
+    new y:exp; let Y=gexp(gen,y) in
+    let k = kdf(gexp(X,y)) in
+    event rRun(psA,psB,k);
+    out(net, (psB, Y, psign((psB,psA,X,Y), ckB)));
+    in(net, conf:bitstring);
+    if pverify(conf, (psA,psB,X,Y), psA, mpkA) = true then
+    event rAcc(psA,psB,k).
+
+process
+    new edgeMskA:skey; new edgeMskB:skey;            (* per-domain edge servers *)
+    new openerSk:skey;                               (* trusted opener *)
+    out(net, mpk(edgeMskA)); out(net, mpk(edgeMskB)); out(net, opk(openerSk));
+    new psA:id; new psB:id;                          (* public pseudonyms *)
+    let encId = seal(realIdA, opk(openerSk)) in      (* real id sealed for opener only *)
+    let ckA = extract(psA, edgeMskA) in              (* edge-issued credential keys *)
+    let ckB = extract(psB, edgeMskB) in
+    ( (! initiator(psA, ckA, encId, psB, mpk(edgeMskB)))
+    | (! responder(psB, ckB, mpk(edgeMskA))) )

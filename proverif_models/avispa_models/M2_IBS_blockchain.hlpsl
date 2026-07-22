@@ -1,0 +1,56 @@
+% AVISPA/HLPSL abstract port of M2 IBS plus consortium ledger.
+% Ledger reads are represented as public credential indices; consensus is not modeled.
+
+role initiator(A,B: agent, H: hash_func, SND,RCV: channel(dy))
+played_by A
+def=
+  local State: nat, Na,Nb,K,LA,LB: text
+  init State := 0
+  transition
+    1. State = 0 /\ RCV(start) =|>
+       State' := 1 /\ Na' := new() /\ LA' := H(A) /\ LB' := H(B) /\
+       SND(A.B.LA'.LB'.Na') /\
+       witness(A,B,m2_i_auth,Na')
+
+    2. State = 1 /\ RCV(B.A.LA.LB.Na.Nb') =|>
+       State' := 2 /\ K' := H(Na.Nb'.LA.LB) /\
+       request(A,B,m2_r_auth,Nb') /\
+       secret(K',m2_key,{A,B})
+end role
+
+role responder(A,B: agent, H: hash_func, SND,RCV: channel(dy))
+played_by B
+def=
+  local State: nat, Na,Nb,K,LA,LB: text
+  init State := 0
+  transition
+    1. State = 0 /\ RCV(A.B.LA'.LB'.Na') =|>
+       State' := 1 /\ Nb' := new() /\ K' := H(Na'.Nb'.LA'.LB') /\
+       SND(B.A.LA'.LB'.Na'.Nb') /\
+       witness(B,A,m2_r_auth,Nb') /\
+       request(B,A,m2_i_auth,Na') /\
+       secret(K',m2_key,{A,B})
+end role
+
+role session(A,B: agent, H: hash_func)
+def=
+  local SAI,RAI,SBR,RBR: channel(dy)
+  composition
+    initiator(A,B,H,SAI,RAI) /\ responder(A,B,H,SBR,RBR)
+end role
+
+role environment()
+def=
+  const a,b: agent, h: hash_func, m2_i_auth,m2_r_auth,m2_key: protocol_id
+  intruder_knowledge = {a,b,h}
+  composition
+    session(a,b,h)
+end role
+
+goal
+  secrecy_of m2_key
+  authentication_on m2_i_auth
+  authentication_on m2_r_auth
+end goal
+
+environment()

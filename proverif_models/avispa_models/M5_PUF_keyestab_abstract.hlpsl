@@ -1,0 +1,35 @@
+% AVISPA abstract M5 PUF model.
+% Supports secrecy/authentication over registered CRP abstraction only.
+
+role environment()
+def=
+  const device,verifier: agent, puf_response: text, m5_key,m5_auth: protocol_id
+  intruder_knowledge = {device,verifier}
+  composition
+    puf_stub(device,verifier)
+end role
+
+role puf_stub(D,V: agent)
+def=
+  local S,R: channel(dy)
+  composition
+    actor_stub(D,V,S,R)
+end role
+
+role actor_stub(D,V: agent, SND,RCV: channel(dy))
+def=
+  local State: nat, K: text
+  init State := 0
+  transition
+    1. State = 0 /\ RCV(start) =|>
+       State' := 1 /\ K' := puf_response /\
+       secret(K',m5_key,{D,V}) /\
+       witness(D,V,m5_auth,K')
+end role
+
+goal
+  secrecy_of m5_key
+  authentication_on m5_auth
+end goal
+
+environment()

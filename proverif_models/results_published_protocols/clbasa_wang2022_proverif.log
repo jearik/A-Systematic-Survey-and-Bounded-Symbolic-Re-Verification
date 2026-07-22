@@ -1,0 +1,621 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new skU: skey;
+{2}new skV: skey;
+{3}new pidU: pid;
+{4}new pidV: pid;
+{5}out(net, (pidU,pk(skU),pidV,pk(skV)));
+(
+    {6}!
+    {7}let pidU_1: pid = pidU in
+    {8}let pidV_1: pid = pidV in
+    {9}let pkV: pkey = pk(skV) in
+    {10}in(chA, (=pidU_1,=pidV_1,=reqinfA));
+    {11}event BASA_info_request(pidU_1,pidV_1);
+    {12}event BASA_info_response(pidU_1,pidV_1,pkV);
+    {13}out(chA, (pidV_1,domB,pkV))
+) | (
+    {14}!
+    {15}let pidU_2: pid = pidU in
+    {16}let pidV_2: pid = pidV in
+    {17}let pkU: pkey = pk(skU) in
+    {18}in(chB, (=pidV_2,=pidU_2,eu: G,=reqinfB));
+    {19}event BASB_validation_request(pidU_2,pidV_2,eu);
+    {20}event BASB_validation_success(pidU_2,pidV_2,pkU);
+    {21}out(chB, (pidU_2,domA,pkU))
+) | (
+    {22}!
+    {23}let pidU_3: pid = pidU in
+    {24}let skU_1: skey = skU in
+    {25}let pidV_3: pid = pidV in
+    {26}out(chA, (pidU_3,pidV_3,reqinfA));
+    {27}in(chA, (=pidV_3,=domB,pkV_1: pkey));
+    {28}new nU: nonce;
+    {29}new rU: exponent;
+    {30}let epkU: G = gexp(gen,rU) in
+    {31}let mU: bitstring = packU(nU,domA,pidU_3,epkU) in
+    {32}event U_token_sent(pidU_3,pidV_3,epkU);
+    {33}out(net, (pidU_3,nU,domA,epkU,sign(mU,skU_1)));
+    {34}in(net, (=pidV_3,nV: nonce,=domB,epkV: G,sigV: bitstring));
+    {35}let mV: bitstring = packV(nV,domB,pidV_3,epkV) in
+    {36}if (verify(sigV,mV,pkV_1) = true) then
+    {37}let k: bitstring = kdf(gexp(epkV,rU),pidU_3,pidV_3,domA,domB) in
+    {38}event U_accept(pidU_3,pidV_3,epkU,epkV,k);
+    {39}out(net, senc(secret_payload,k))
+) | (
+    {40}!
+    {41}let pidV_4: pid = pidV in
+    {42}let skV_1: skey = skV in
+    {43}in(net, (pidU_4: pid,nU_1: nonce,=domA,epkU_1: G,sigU: bitstring));
+    {44}out(chB, (pidV_4,pidU_4,epkU_1,reqinfB));
+    {45}in(chB, (=pidU_4,=domA,pkU_1: pkey));
+    {46}let mU_1: bitstring = packU(nU_1,domA,pidU_4,epkU_1) in
+    {47}if (verify(sigU,mU_1,pkU_1) = true) then
+    {48}new nV_1: nonce;
+    {49}new rV: exponent;
+    {50}let epkV_1: G = gexp(gen,rV) in
+    {51}let k_1: bitstring = kdf(gexp(epkU_1,rV),pidU_4,pidV_4,domA,domB) in
+    {52}event V_accept(pidU_4,pidV_4,epkU_1,k_1);
+    {53}event V_accept_keyed(pidU_4,pidV_4,epkU_1,k_1,pkU_1);
+    {54}let mV_1: bitstring = packV(nV_1,domB,pidV_4,epkV_1) in
+    {55}event V_token_sent(pidU_4,pidV_4,epkU_1,epkV_1,k_1);
+    {56}out(net, (pidV_4,nV_1,domB,epkV_1,sign(mV_1,skV_1)))
+) | (
+    {57}phase 1;
+    {58}out(net, (skU,skV))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skU: skey;
+{2}new skV: skey;
+{3}new pidU: pid;
+{4}new pidV: pid;
+{5}out(net, (pidU,pk(skU),pidV,pk(skV)));
+(
+    {6}!
+    {8}let pidV_1: pid = pidV in
+    {7}let pidU_1: pid = pidU in
+    {10}in(chA, (=pidU_1,=pidV_1,=reqinfA));
+    {11}event BASA_info_request(pidU_1,pidV_1);
+    {9}let pkV: pkey = pk(skV) in
+    {12}event BASA_info_response(pidU_1,pidV_1,pkV);
+    {13}out(chA, (pidV_1,domB,pkV))
+) | (
+    {14}!
+    {16}let pidV_2: pid = pidV in
+    {15}let pidU_2: pid = pidU in
+    {18}in(chB, (=pidV_2,=pidU_2,eu: G,=reqinfB));
+    {19}event BASB_validation_request(pidU_2,pidV_2,eu);
+    {17}let pkU: pkey = pk(skU) in
+    {20}event BASB_validation_success(pidU_2,pidV_2,pkU);
+    {21}out(chB, (pidU_2,domA,pkU))
+) | (
+    {22}!
+    {25}let pidV_3: pid = pidV in
+    {23}let pidU_3: pid = pidU in
+    {26}out(chA, (pidU_3,pidV_3,reqinfA));
+    {27}in(chA, (=pidV_3,=domB,pkV_1: pkey));
+    {28}new nU: nonce;
+    {29}new rU: exponent;
+    {30}let epkU: G = gexp(gen,rU) in
+    {32}event U_token_sent(pidU_3,pidV_3,epkU);
+    {31}let mU: bitstring = packU(nU,domA,pidU_3,epkU) in
+    {24}let skU_1: skey = skU in
+    {33}out(net, (pidU_3,nU,domA,epkU,sign(mU,skU_1)));
+    {34}in(net, (=pidV_3,nV: nonce,=domB,epkV: G,sigV: bitstring));
+    {35}let mV: bitstring = packV(nV,domB,pidV_3,epkV) in
+    {36}if (verify(sigV,mV,pkV_1) = true) then
+    {37}let k: bitstring = kdf(gexp(epkV,rU),pidU_3,pidV_3,domA,domB) in
+    {38}event U_accept(pidU_3,pidV_3,epkU,epkV,k);
+    {39}out(net, senc(secret_payload,k))
+) | (
+    {40}!
+    {43}in(net, (pidU_4: pid,nU_1: nonce,=domA,epkU_1: G,sigU: bitstring));
+    {41}let pidV_4: pid = pidV in
+    {44}out(chB, (pidV_4,pidU_4,epkU_1,reqinfB));
+    {45}in(chB, (=pidU_4,=domA,pkU_1: pkey));
+    {46}let mU_1: bitstring = packU(nU_1,domA,pidU_4,epkU_1) in
+    {47}if (verify(sigU,mU_1,pkU_1) = true) then
+    {48}new nV_1: nonce;
+    {49}new rV: exponent;
+    {51}let k_1: bitstring = kdf(gexp(epkU_1,rV),pidU_4,pidV_4,domA,domB) in
+    {52}event V_accept(pidU_4,pidV_4,epkU_1,k_1);
+    {53}event V_accept_keyed(pidU_4,pidV_4,epkU_1,k_1,pkU_1);
+    {50}let epkV_1: G = gexp(gen,rV) in
+    {55}event V_token_sent(pidU_4,pidV_4,epkU_1,epkV_1,k_1);
+    {54}let mV_1: bitstring = packV(nV_1,domB,pidV_4,epkV_1) in
+    {42}let skV_1: skey = skV in
+    {56}out(net, (pidV_4,nV_1,domB,epkV_1,sign(mV_1,skV_1)))
+) | (
+    {57}phase 1;
+    {58}out(net, (skU,skV))
+)
+
+-- Query not attacker_p1(secret_payload[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 153 rules (71 with conclusion selected). Queue: 9 rules.
+Starting query not attacker_p1(secret_payload[])
+RESULT not attacker_p1(secret_payload[]) is true.
+-- Query inj-event(V_accept(u,v,eu_1,k_2)) ==> inj-event(U_token_sent(u,v,eu_1)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 147 rules (64 with conclusion selected). Queue: 8 rules.
+Starting query inj-event(V_accept(u,v,eu_1,k_2)) ==> inj-event(U_token_sent(u,v,eu_1))
+goal reachable: @sid ≠ @sid_1 && b-inj-event(U_token_sent(pidU[],pidV[],gexp(gen,rU_1)),@occ32_1) -> inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1) && inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2)
+Abbreviations:
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid_2]
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid_2]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid]
+@occ52_1 = @occ52[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid]
+rV_2 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+@occ52_2 = @occ52[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+@occ32_1 = @occ32[pkV_1 = pk(skV[]),!1 = @sid_2]
+
+Derivation:
+Abbreviations:
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+@occ52_1 = @occ52[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+rV_2 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+@occ52_2 = @occ52[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+@occ32_1 = @occ32[pkV_1 = pk(skV[]),!1 = @sid]
+
+1. The message (pidU[],pidV[],reqinfA) may be sent on channel chA[] at output {26}.
+mess(chA[],(pidU[],pidV[],reqinfA)).
+
+2. The message (pidU[],pidV[],reqinfA) that may be sent on channel chA[] by 1 may be received at input {10}.
+So the message (pidV[],domB,pk(skV[])) may be sent on channel chA[] at output {13}.
+mess(chA[],(pidV[],domB,pk(skV[]))).
+
+3. The message (pidV[],domB,pk(skV[])) that may be sent on channel chA[] by 2 may be received at input {27}.
+The event U_token_sent(pidU[],pidV[],gexp(gen,rU_1)) (with occurrence name @occ32_1) may be executed at {32}.
+So the message (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])) may be sent to the attacker at output {33}.
+attacker((pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]))).
+
+4. By 3, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])).
+Using the function 5-proj-5-tuple the attacker may obtain sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]).
+attacker(sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])).
+
+5. By 3, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])).
+Using the function 4-proj-5-tuple the attacker may obtain gexp(gen,rU_1).
+attacker(gexp(gen,rU_1)).
+
+6. Using the function domA the attacker may obtain domA.
+attacker(domA).
+
+7. By 3, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])).
+Using the function 2-proj-5-tuple the attacker may obtain nU_2.
+attacker(nU_2).
+
+8. The message (pidU[],pk(skU[]),pidV[],pk(skV[])) may be sent to the attacker at output {5}.
+attacker((pidU[],pk(skU[]),pidV[],pk(skV[]))).
+
+9. By 8, the attacker may know (pidU[],pk(skU[]),pidV[],pk(skV[])).
+Using the function 1-proj-4-tuple the attacker may obtain pidU[].
+attacker(pidU[]).
+
+10. By 9, the attacker may know pidU[].
+By 7, the attacker may know nU_2.
+By 6, the attacker may know domA.
+By 5, the attacker may know gexp(gen,rU_1).
+By 4, the attacker may know sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]).
+Using the function 5-tuple the attacker may obtain (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])).
+attacker((pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]))).
+
+11. The attacker has some term sigU_1.
+attacker(sigU_1).
+
+12. The attacker has some term eu_1.
+attacker(eu_1).
+
+13. The attacker has some term nU_3.
+attacker(nU_3).
+
+14. By 9, the attacker may know pidU[].
+By 13, the attacker may know nU_3.
+By 6, the attacker may know domA.
+By 12, the attacker may know eu_1.
+By 11, the attacker may know sigU_1.
+Using the function 5-tuple the attacker may obtain (pidU[],nU_3,domA,eu_1,sigU_1).
+attacker((pidU[],nU_3,domA,eu_1,sigU_1)).
+
+15. The message (pidU[],nU_3,domA,eu_1,sigU_1) that the attacker may have by 14 may be received at input {43}.
+So the message (pidV[],pidU[],eu_1,reqinfB) may be sent on channel chB[] at output {44}.
+mess(chB[],(pidV[],pidU[],eu_1,reqinfB)).
+
+16. The message (pidV[],pidU[],eu_1,reqinfB) that may be sent on channel chB[] by 15 may be received at input {18}.
+So the message (pidU[],domA,pk(skU[])) may be sent on channel chB[] at output {21}.
+mess(chB[],(pidU[],domA,pk(skU[]))).
+
+17. The message (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])) that the attacker may have by 10 may be received at input {43}.
+The message (pidU[],domA,pk(skU[])) that may be sent on channel chB[] by 16 may be received at input {45}.
+So event V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)) may be executed at {52} in session @sid_2.
+inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2).
+
+18. By 17, inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2).
+The goal is reached, represented in the following fact:
+inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2).
+
+19. The attacker has some term sigU_2.
+attacker(sigU_2).
+
+20. The attacker has some term eu_2.
+attacker(eu_2).
+
+21. The attacker has some term nU_4.
+attacker(nU_4).
+
+22. By 9, the attacker may know pidU[].
+By 21, the attacker may know nU_4.
+By 6, the attacker may know domA.
+By 20, the attacker may know eu_2.
+By 19, the attacker may know sigU_2.
+Using the function 5-tuple the attacker may obtain (pidU[],nU_4,domA,eu_2,sigU_2).
+attacker((pidU[],nU_4,domA,eu_2,sigU_2)).
+
+23. The message (pidU[],nU_4,domA,eu_2,sigU_2) that the attacker may have by 22 may be received at input {43}.
+So the message (pidV[],pidU[],eu_2,reqinfB) may be sent on channel chB[] at output {44}.
+mess(chB[],(pidV[],pidU[],eu_2,reqinfB)).
+
+24. The message (pidV[],pidU[],eu_2,reqinfB) that may be sent on channel chB[] by 23 may be received at input {18}.
+So the message (pidU[],domA,pk(skU[])) may be sent on channel chB[] at output {21}.
+mess(chB[],(pidU[],domA,pk(skU[]))).
+
+25. The message (pidU[],nU_2,domA,gexp(gen,rU_1),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[])) that the attacker may have by 10 may be received at input {43}.
+The message (pidU[],domA,pk(skU[])) that may be sent on channel chB[] by 24 may be received at input {45}.
+So event V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)) may be executed at {52} in session @sid_1.
+inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1).
+
+26. By 25, inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1).
+The goal is reached, represented in the following fact:
+inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1).
+
+27. By 26, inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1).
+By 18, inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2).
+We have @occ52_1 ≠ @occ52_2.
+The goals for injectivity are reached, combined in the following fact:
+inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ52_1) && inj-event(V_accept(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_2),rU_1),pidU[],pidV[],domA,domB)),@occ52_2).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skU: skey creating skU_2 at {1}
+
+new skV: skey creating skV_2 at {2}
+
+new pidU: pid creating pidU_5 at {3}
+
+new pidV: pid creating pidV_5 at {4}
+
+out(net, (~M,~M_1,~M_2,~M_3)) with ~M = pidU_5, ~M_1 = pk(skU_2), ~M_2 = pidV_5, ~M_3 = pk(skV_2) at {5}
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a received at {10} in copy a_1
+
+event BASA_info_request(pidU_5,pidV_5) at {11} in copy a_1
+
+event BASA_info_response(pidU_5,pidV_5,pk(skV_2)) at {12} in copy a_1
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a_2 received at {27} in copy a (input fails)
+
+out(chA, (pidV_5,domB,pk(skV_2))) at {13} in copy a_1 received at {27} in copy a_2
+
+new nU: nonce creating nU_5 at {28} in copy a_2
+
+new rU: exponent creating rU_2 at {29} in copy a_2
+
+event U_token_sent(pidU_5,pidV_5,gexp(gen,rU_2)) at {32} in copy a_2
+
+out(net, (~M_4,~M_5,~M_6,~M_7,~M_8)) with ~M_4 = pidU_5, ~M_5 = nU_5, ~M_6 = domA, ~M_7 = gexp(gen,rU_2), ~M_8 = sign(packU(nU_5,domA,pidU_5,gexp(gen,rU_2)),skU_2) at {33} in copy a_2
+
+in(net, (~M,a_3,domA,a_4,a_5)) with ~M = pidU_5 at {43} in copy a_6
+
+out(chB, (pidV_5,pidU_5,a_4,reqinfB)) at {44} in copy a_6 received at {18} in copy a_7
+
+event BASB_validation_request(pidU_5,pidV_5,a_4) at {19} in copy a_7
+
+event BASB_validation_success(pidU_5,pidV_5,pk(skU_2)) at {20} in copy a_7
+
+in(net, (~M,~M_5,domA,~M_7,~M_8)) with ~M = pidU_5, ~M_5 = nU_5, ~M_7 = gexp(gen,rU_2), ~M_8 = sign(packU(nU_5,domA,pidU_5,gexp(gen,rU_2)),skU_2) at {43} in copy a_8
+
+out(chB, (pidV_5,pidU_5,gexp(gen,rU_2),reqinfB)) at {44} in copy a_8 received at {18} in copy a_9
+
+event BASB_validation_request(pidU_5,pidV_5,gexp(gen,rU_2)) at {19} in copy a_9
+
+event BASB_validation_success(pidU_5,pidV_5,pk(skU_2)) at {20} in copy a_9
+
+out(chB, (pidU_5,domA,pk(skU_2))) at {21} in copy a_7 received at {45} in copy a_8
+
+new nV_1: nonce creating nV_2 at {48} in copy a_8
+
+new rV: exponent creating rV_3 at {49} in copy a_8
+
+event V_accept(pidU_5,pidV_5,gexp(gen,rU_2),kdf(gexp(gexp(gen,rU_2),rV_3),pidU_5,pidV_5,domA,domB)) at {52} in copy a_8 (goal)
+
+event V_accept_keyed(pidU_5,pidV_5,gexp(gen,rU_2),kdf(gexp(gexp(gen,rU_2),rV_3),pidU_5,pidV_5,domA,domB),pk(skU_2)) at {53} in copy a_8
+
+event V_token_sent(pidU_5,pidV_5,gexp(gen,rU_2),gexp(gen,rV_3),kdf(gexp(gexp(gen,rU_2),rV_3),pidU_5,pidV_5,domA,domB)) at {55} in copy a_8
+
+out(net, (~M_9,~M_10,~M_11,~M_12,~M_13)) with ~M_9 = pidV_5, ~M_10 = nV_2, ~M_11 = domB, ~M_12 = gexp(gen,rV_3), ~M_13 = sign(packV(nV_2,domB,pidV_5,gexp(gen,rV_3)),skV_2) at {56} in copy a_8
+
+in(net, (~M,a_10,domA,a_11,a_12)) with ~M = pidU_5 at {43} in copy a_13
+
+out(chB, (pidV_5,pidU_5,a_11,reqinfB)) at {44} in copy a_13 received at {45} in copy a_6 (input fails)
+
+in(net, (~M,~M_5,domA,~M_7,~M_8)) with ~M = pidU_5, ~M_5 = nU_5, ~M_7 = gexp(gen,rU_2), ~M_8 = sign(packU(nU_5,domA,pidU_5,gexp(gen,rU_2)),skU_2) at {43} in copy a_14
+
+out(chB, (pidV_5,pidU_5,gexp(gen,rU_2),reqinfB)) at {44} in copy a_14 received at {45} in copy a_13 (input fails)
+
+out(chB, (pidU_5,domA,pk(skU_2))) at {21} in copy a_9 received at {45} in copy a_14
+
+new nV_1: nonce creating nV_3 at {48} in copy a_14
+
+new rV: exponent creating rV_4 at {49} in copy a_14
+
+event V_accept(pidU_5,pidV_5,gexp(gen,rU_2),kdf(gexp(gexp(gen,rU_2),rV_4),pidU_5,pidV_5,domA,domB)) at {52} in copy a_14 (goal)
+
+The event V_accept(pidU_5,pidV_5,gexp(gen,rU_2),kdf(gexp(gexp(gen,rV_3),rU_2),pidU_5,pidV_5,domA,domB)) is executed at {52} in copy a_8.
+The event V_accept(pidU_5,pidV_5,gexp(gen,rU_2),kdf(gexp(gexp(gen,rV_4),rU_2),pidU_5,pidV_5,domA,domB)) is executed at {52} in copy a_14.
+A trace has been found.
+RESULT inj-event(V_accept(u,v,eu_1,k_2)) ==> inj-event(U_token_sent(u,v,eu_1)) is false.
+RESULT (but event(V_accept(u,v,eu_1,k_2)) ==> event(U_token_sent(u,v,eu_1)) is true.)
+-- Query inj-event(U_accept(u,v,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,eu_1,ev,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 155 rules (64 with conclusion selected). Queue: 24 rules.
+Starting query inj-event(U_accept(u,v,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,eu_1,ev,k_2))
+goal reachable: b-inj-event(V_token_sent(pidU[],pidV[],gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rU_1),rV_1),pidU[],pidV[],domA,domB)),@occ55_1) -> inj-event(U_accept(pidU[],pidV[],gexp(gen,rU_2),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_2),pidU[],pidV[],domA,domB)),@occ38_1)
+Abbreviations:
+rU_2 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid_1]
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid_1]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+nV_2 = nV_1[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+@occ38_1 = @occ38[sigV = sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]),epkV = gexp(gen,rV_1),nV = nV_2,pkV_1 = pk(skV[]),!1 = @sid]
+@occ55_1 = @occ55[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+
+Derivation:
+Abbreviations:
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid_1]
+rU_2 = rU[pkV_1 = pk(skV[]),!1 = @sid_1]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]),epkU_1 = gexp(gen,rU_2),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+nV_2 = nV_1[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]),epkU_1 = gexp(gen,rU_2),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+@occ38_1 = @occ38[sigV = sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]),epkV = gexp(gen,rV_1),nV = nV_2,pkV_1 = pk(skV[]),!1 = @sid]
+@occ55_1 = @occ55[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]),epkU_1 = gexp(gen,rU_2),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_2]
+
+1. The message (pidU[],pidV[],reqinfA) may be sent on channel chA[] at output {26}.
+mess(chA[],(pidU[],pidV[],reqinfA)).
+
+2. The message (pidU[],pidV[],reqinfA) that may be sent on channel chA[] by 1 may be received at input {10}.
+So the message (pidV[],domB,pk(skV[])) may be sent on channel chA[] at output {13}.
+mess(chA[],(pidV[],domB,pk(skV[]))).
+
+3. The message (pidU[],pidV[],reqinfA) may be sent on channel chA[] at output {26}.
+mess(chA[],(pidU[],pidV[],reqinfA)).
+
+4. The message (pidU[],pidV[],reqinfA) that may be sent on channel chA[] by 3 may be received at input {10}.
+So the message (pidV[],domB,pk(skV[])) may be sent on channel chA[] at output {13}.
+mess(chA[],(pidV[],domB,pk(skV[]))).
+
+5. The message (pidV[],domB,pk(skV[])) that may be sent on channel chA[] by 4 may be received at input {27}.
+So the message (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])) may be sent to the attacker at output {33}.
+attacker((pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]))).
+
+6. By 5, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])).
+Using the function 5-proj-5-tuple the attacker may obtain sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]).
+attacker(sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])).
+
+7. By 5, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])).
+Using the function 4-proj-5-tuple the attacker may obtain gexp(gen,rU_2).
+attacker(gexp(gen,rU_2)).
+
+8. Using the function domA the attacker may obtain domA.
+attacker(domA).
+
+9. By 5, the attacker may know (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])).
+Using the function 2-proj-5-tuple the attacker may obtain nU_2.
+attacker(nU_2).
+
+10. The message (pidU[],pk(skU[]),pidV[],pk(skV[])) may be sent to the attacker at output {5}.
+attacker((pidU[],pk(skU[]),pidV[],pk(skV[]))).
+
+11. By 10, the attacker may know (pidU[],pk(skU[]),pidV[],pk(skV[])).
+Using the function 1-proj-4-tuple the attacker may obtain pidU[].
+attacker(pidU[]).
+
+12. By 11, the attacker may know pidU[].
+By 9, the attacker may know nU_2.
+By 8, the attacker may know domA.
+By 7, the attacker may know gexp(gen,rU_2).
+By 6, the attacker may know sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]).
+Using the function 5-tuple the attacker may obtain (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])).
+attacker((pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[]))).
+
+13. The attacker has some term sigU_1.
+attacker(sigU_1).
+
+14. The attacker has some term eu_1.
+attacker(eu_1).
+
+15. The attacker has some term nU_3.
+attacker(nU_3).
+
+16. By 11, the attacker may know pidU[].
+By 15, the attacker may know nU_3.
+By 8, the attacker may know domA.
+By 14, the attacker may know eu_1.
+By 13, the attacker may know sigU_1.
+Using the function 5-tuple the attacker may obtain (pidU[],nU_3,domA,eu_1,sigU_1).
+attacker((pidU[],nU_3,domA,eu_1,sigU_1)).
+
+17. The message (pidU[],nU_3,domA,eu_1,sigU_1) that the attacker may have by 16 may be received at input {43}.
+So the message (pidV[],pidU[],eu_1,reqinfB) may be sent on channel chB[] at output {44}.
+mess(chB[],(pidV[],pidU[],eu_1,reqinfB)).
+
+18. The message (pidV[],pidU[],eu_1,reqinfB) that may be sent on channel chB[] by 17 may be received at input {18}.
+So the message (pidU[],domA,pk(skU[])) may be sent on channel chB[] at output {21}.
+mess(chB[],(pidU[],domA,pk(skU[]))).
+
+19. The message (pidU[],nU_2,domA,gexp(gen,rU_2),sign(packU(nU_2,domA,pidU[],gexp(gen,rU_2)),skU[])) that the attacker may have by 12 may be received at input {43}.
+The message (pidU[],domA,pk(skU[])) that may be sent on channel chB[] by 18 may be received at input {45}.
+The event V_token_sent(pidU[],pidV[],gexp(gen,rU_2),gexp(gen,rV_1),kdf(gexp(gexp(gen,rU_2),rV_1),pidU[],pidV[],domA,domB)) (with occurrence name @occ55_1) may be executed at {55}.
+So the message (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])) may be sent to the attacker at output {56}.
+attacker((pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]))).
+
+20. By 19, the attacker may know (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])).
+Using the function 5-proj-5-tuple the attacker may obtain sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]).
+attacker(sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])).
+
+21. By 19, the attacker may know (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])).
+Using the function 4-proj-5-tuple the attacker may obtain gexp(gen,rV_1).
+attacker(gexp(gen,rV_1)).
+
+22. Using the function domB the attacker may obtain domB.
+attacker(domB).
+
+23. By 19, the attacker may know (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])).
+Using the function 2-proj-5-tuple the attacker may obtain nV_2.
+attacker(nV_2).
+
+24. By 10, the attacker may know (pidU[],pk(skU[]),pidV[],pk(skV[])).
+Using the function 3-proj-4-tuple the attacker may obtain pidV[].
+attacker(pidV[]).
+
+25. By 24, the attacker may know pidV[].
+By 23, the attacker may know nV_2.
+By 22, the attacker may know domB.
+By 21, the attacker may know gexp(gen,rV_1).
+By 20, the attacker may know sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]).
+Using the function 5-tuple the attacker may obtain (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])).
+attacker((pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[]))).
+
+26. The message (pidV[],domB,pk(skV[])) that may be sent on channel chA[] by 2 may be received at input {27}.
+The message (pidV[],nV_2,domB,gexp(gen,rV_1),sign(packV(nV_2,domB,pidV[],gexp(gen,rV_1)),skV[])) that the attacker may have by 25 may be received at input {34}.
+So event U_accept(pidU[],pidV[],gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)) may be executed at {38} in session @sid.
+inj-event(U_accept(pidU[],pidV[],gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ38_1).
+
+27. By 26, inj-event(U_accept(pidU[],pidV[],gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ38_1).
+The goal is reached, represented in the following fact:
+inj-event(U_accept(pidU[],pidV[],gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ38_1).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skU: skey creating skU_2 at {1}
+
+new skV: skey creating skV_2 at {2}
+
+new pidU: pid creating pidU_5 at {3}
+
+new pidV: pid creating pidV_5 at {4}
+
+out(net, (~M,~M_1,~M_2,~M_3)) with ~M = pidU_5, ~M_1 = pk(skU_2), ~M_2 = pidV_5, ~M_3 = pk(skV_2) at {5}
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a received at {10} in copy a_1
+
+event BASA_info_request(pidU_5,pidV_5) at {11} in copy a_1
+
+event BASA_info_response(pidU_5,pidV_5,pk(skV_2)) at {12} in copy a_1
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a_2 received at {10} in copy a_3
+
+event BASA_info_request(pidU_5,pidV_5) at {11} in copy a_3
+
+event BASA_info_response(pidU_5,pidV_5,pk(skV_2)) at {12} in copy a_3
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a_4 received at {27} in copy a (input fails)
+
+out(chA, (pidV_5,domB,pk(skV_2))) at {13} in copy a_1 received at {27} in copy a_2
+
+new nU: nonce creating nU_4 at {28} in copy a_2
+
+new rU: exponent creating rU_3 at {29} in copy a_2
+
+event U_token_sent(pidU_5,pidV_5,gexp(gen,rU_3)) at {32} in copy a_2
+
+out(net, (~M_4,~M_5,~M_6,~M_7,~M_8)) with ~M_4 = pidU_5, ~M_5 = nU_4, ~M_6 = domA, ~M_7 = gexp(gen,rU_3), ~M_8 = sign(packU(nU_4,domA,pidU_5,gexp(gen,rU_3)),skU_2) at {33} in copy a_2
+
+out(chA, (pidU_5,pidV_5,reqinfA)) at {26} in copy a_5 received at {27} in copy a_4 (input fails)
+
+out(chA, (pidV_5,domB,pk(skV_2))) at {13} in copy a_3 received at {27} in copy a_5
+
+new nU: nonce creating nU_5 at {28} in copy a_5
+
+new rU: exponent creating rU_4 at {29} in copy a_5
+
+event U_token_sent(pidU_5,pidV_5,gexp(gen,rU_4)) at {32} in copy a_5
+
+out(net, (~M_9,~M_10,~M_11,~M_12,~M_13)) with ~M_9 = pidU_5, ~M_10 = nU_5, ~M_11 = domA, ~M_12 = gexp(gen,rU_4), ~M_13 = sign(packU(nU_5,domA,pidU_5,gexp(gen,rU_4)),skU_2) at {33} in copy a_5
+
+in(net, (~M,a_6,domA,a_7,a_8)) with ~M = pidU_5 at {43} in copy a_9
+
+out(chB, (pidV_5,pidU_5,a_7,reqinfB)) at {44} in copy a_9 received at {18} in copy a_10
+
+event BASB_validation_request(pidU_5,pidV_5,a_7) at {19} in copy a_10
+
+event BASB_validation_success(pidU_5,pidV_5,pk(skU_2)) at {20} in copy a_10
+
+in(net, (~M,~M_5,domA,~M_7,~M_8)) with ~M = pidU_5, ~M_5 = nU_4, ~M_7 = gexp(gen,rU_3), ~M_8 = sign(packU(nU_4,domA,pidU_5,gexp(gen,rU_3)),skU_2) at {43} in copy a_11
+
+out(chB, (pidV_5,pidU_5,gexp(gen,rU_3),reqinfB)) at {44} in copy a_11 received at {45} in copy a_9 (input fails)
+
+out(chB, (pidU_5,domA,pk(skU_2))) at {21} in copy a_10 received at {45} in copy a_11
+
+new nV_1: nonce creating nV_3 at {48} in copy a_11
+
+new rV: exponent creating rV_2 at {49} in copy a_11
+
+event V_accept(pidU_5,pidV_5,gexp(gen,rU_3),kdf(gexp(gexp(gen,rU_3),rV_2),pidU_5,pidV_5,domA,domB)) at {52} in copy a_11
+
+event V_accept_keyed(pidU_5,pidV_5,gexp(gen,rU_3),kdf(gexp(gexp(gen,rU_3),rV_2),pidU_5,pidV_5,domA,domB),pk(skU_2)) at {53} in copy a_11
+
+event V_token_sent(pidU_5,pidV_5,gexp(gen,rU_3),gexp(gen,rV_2),kdf(gexp(gexp(gen,rU_3),rV_2),pidU_5,pidV_5,domA,domB)) at {55} in copy a_11
+
+out(net, (~M_14,~M_15,~M_16,~M_17,~M_18)) with ~M_14 = pidV_5, ~M_15 = nV_3, ~M_16 = domB, ~M_17 = gexp(gen,rV_2), ~M_18 = sign(packV(nV_3,domB,pidV_5,gexp(gen,rV_2)),skV_2) at {56} in copy a_11
+
+in(net, (~M_2,~M_15,domB,~M_17,~M_18)) with ~M_2 = pidV_5, ~M_15 = nV_3, ~M_17 = gexp(gen,rV_2), ~M_18 = sign(packV(nV_3,domB,pidV_5,gexp(gen,rV_2)),skV_2) at {34} in copy a_5
+
+event U_accept(pidU_5,pidV_5,gexp(gen,rU_4),gexp(gen,rV_2),kdf(gexp(gexp(gen,rV_2),rU_4),pidU_5,pidV_5,domA,domB)) at {38} in copy a_5 (goal)
+
+The event U_accept(pidU_5,pidV_5,gexp(gen,rU_4),gexp(gen,rV_2),kdf(gexp(gexp(gen,rV_2),rU_4),pidU_5,pidV_5,domA,domB)) is executed at {38} in copy a_5.
+A trace has been found.
+RESULT inj-event(U_accept(u,v,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,eu_1,ev,k_2)) is false.
+RESULT (even event(U_accept(u,v,eu_1,ev,k_2)) ==> event(V_token_sent(u,v,eu_1,ev,k_2)) is false.)
+-- Query event(V_accept_keyed(u,v,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 147 rules (64 with conclusion selected). Queue: 14 rules.
+Starting query event(V_accept_keyed(u,v,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku))
+goal reachable: b-event(BASB_validation_success(pidU[],pidV[],pk(skU[]))) -> event(V_accept_keyed(pidU[],pidV[],gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB),pk(skU[])))
+Abbreviations:
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+RESULT event(V_accept_keyed(u,v,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker_p1(secret_payload[]) is true.
+
+Query inj-event(V_accept(u,v,eu_1,k_2)) ==> inj-event(U_token_sent(u,v,eu_1)) is false.
+
+Query inj-event(U_accept(u,v,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,eu_1,ev,k_2)) is false.
+
+Query event(V_accept_keyed(u,v,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) is true.
+
+--------------------------------------------------------------
+
+
+real	0m0.205s
+user	0m0.057s
+sys	0m0.015s

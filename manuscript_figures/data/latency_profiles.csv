@@ -1,0 +1,7 @@
+profile,one_way_latency_ms,bandwidth_mbps
+Wired LAN,0.5,100
+Wi-Fi,3,50
+5G,10,100
+LTE-M,100,1
+NB-IoT,1600,0.06
+GEO satellite,550,10

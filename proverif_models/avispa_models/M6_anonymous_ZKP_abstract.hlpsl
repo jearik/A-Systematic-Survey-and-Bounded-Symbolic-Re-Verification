@@ -1,0 +1,36 @@
+% AVISPA abstract M6 anonymous ZK credential model.
+% Supports credential-authentication skeleton only; ZK soundness and unlinkability are out of scope.
+
+role environment()
+def=
+  const prover,verifier: agent, anon_handle,zk_session_key: text,
+        m6_key,m6_auth: protocol_id
+  intruder_knowledge = {prover,verifier,anon_handle}
+  composition
+    zk_stub(prover,verifier)
+end role
+
+role zk_stub(P,V: agent)
+def=
+  local S,R: channel(dy)
+  composition
+    actor_stub(P,V,S,R)
+end role
+
+role actor_stub(P,V: agent, SND,RCV: channel(dy))
+def=
+  local State: nat, K: text
+  init State := 0
+  transition
+    1. State = 0 /\ RCV(start) =|>
+       State' := 1 /\ K' := zk_session_key /\
+       secret(K',m6_key,{P,V}) /\
+       witness(P,V,m6_auth,K')
+end role
+
+goal
+  secrecy_of m6_key
+  authentication_on m6_auth
+end goal
+
+environment()

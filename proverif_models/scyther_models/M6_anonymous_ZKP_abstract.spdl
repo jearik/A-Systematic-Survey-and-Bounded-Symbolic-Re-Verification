@@ -1,0 +1,36 @@
+// Scyther abstract M6 anonymous ZK credential model.
+// Checks credential-handle AKE secrecy/authentication only; not ZK soundness or unlinkability.
+
+hashfunction H;
+hashfunction Anon;
+
+protocol M6AnonymousZKPAbstract(P,V)
+{
+  role P
+  {
+    fresh np: Nonce;
+    var nv: Nonce;
+
+    send_1(P,V, Anon(P),{Anon(P),np}pk(V));
+    recv_2(V,P, {V,Anon(P),np,nv}pk(P));
+    send_3(P,V, {Anon(P),V,np,nv}H(np,nv));
+
+    claim(P, Secret, H(np,nv));
+    claim(P, Niagree);
+    claim(P, Nisynch);
+  }
+
+  role V
+  {
+    var np: Nonce;
+    fresh nv: Nonce;
+
+    recv_1(P,V, Anon(P),{Anon(P),np}pk(V));
+    send_2(V,P, {V,Anon(P),np,nv}pk(P));
+    recv_3(P,V, {Anon(P),V,np,nv}H(np,nv));
+
+    claim(V, Secret, H(np,nv));
+    claim(V, Niagree);
+    claim(V, Nisynch);
+  }
+}

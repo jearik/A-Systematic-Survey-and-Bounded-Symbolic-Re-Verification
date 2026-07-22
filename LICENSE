@@ -1,0 +1,21 @@
+Dual-license notice
+
+Copyright (c) 2026 Shangyuan Guo, Rosilah Hassan, and Nor Shahriza Abdul Karim
+
+Unless a file states otherwise, this repository is licensed as follows:
+
+1. Data, documentation, tables, figures, figure inputs, result summaries, and
+   other non-code material are licensed under the Creative Commons Attribution
+   4.0 International License (CC BY 4.0). See LICENSE-DATA.md.
+
+2. Original software source code, scripts, and formal-model source files are
+   licensed under the MIT License. See LICENSE-CODE.txt.
+
+Raw or derived bibliographic facts may not be copyrightable in some
+jurisdictions. The licenses grant only rights that the licensors have authority
+to grant. They do not grant rights in third-party publications, trademarks,
+patents, personal data, or independently copyrighted material referenced by
+the repository.
+
+When redistributing a mixed collection, retain this notice and both license
+files. Cite the accompanying manuscript and indicate any modifications.

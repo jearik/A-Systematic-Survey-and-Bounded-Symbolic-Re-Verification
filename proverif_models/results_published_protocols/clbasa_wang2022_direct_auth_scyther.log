@@ -1,0 +1,12 @@
+claim	CLBASADirectAuth,U	Alive_U1	-	[32mOk[0m	[proof of correctness]
+claim	CLBASADirectAuth,U	Weakagree_U2	-	[31mFail[0m	[at least 2 attacks]
+claim	CLBASADirectAuth,U	Niagree_U3	-	[31mFail[0m	[at least 2 attacks]
+claim	CLBASADirectAuth,U	Nisynch_U4	-	[31mFail[0m	[at least 2 attacks]
+claim	CLBASADirectAuth,V	Alive_V1	-	[32mOk[0m	[proof of correctness]
+claim	CLBASADirectAuth,V	Weakagree_V2	-	[31mFail[0m	[at least 1 attack]
+claim	CLBASADirectAuth,V	Niagree_V3	-	[31mFail[0m	[at least 1 attack]
+claim	CLBASADirectAuth,V	Nisynch_V4	-	[31mFail[0m	[at least 1 attack]
+
+real	0m0.019s
+user	0m0.006s
+sys	0m0.000s

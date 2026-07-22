@@ -1,0 +1,35 @@
+// Scyther abstract M5 PUF model.
+// Verifier sends a fresh challenge; device returns a protected signed response.
+
+hashfunction H;
+
+protocol M5PUFKeyEstabAbstract(D,V)
+{
+  role D
+  {
+    var challenge: Nonce;
+    fresh response: Nonce;
+
+    recv_1(V,D, {V,D,challenge}pk(D));
+    send_2(D,V, {{D,V,challenge,response}sk(D)}pk(V));
+    recv_3(V,D, {V,D,challenge}H(challenge,response));
+
+    claim(D, Secret, H(challenge,response));
+    claim(D, Niagree);
+    claim(D, Nisynch);
+  }
+
+  role V
+  {
+    fresh challenge: Nonce;
+    var response: Nonce;
+
+    send_1(V,D, {V,D,challenge}pk(D));
+    recv_2(D,V, {{D,V,challenge,response}sk(D)}pk(V));
+    send_3(V,D, {V,D,challenge}H(challenge,response));
+
+    claim(V, Secret, H(challenge,response));
+    claim(V, Niagree);
+    claim(V, Nisynch);
+  }
+}

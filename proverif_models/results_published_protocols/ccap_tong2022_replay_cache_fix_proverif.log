@@ -1,0 +1,201 @@
+Process 0 (that is, the initial process):
+{1}new skA: skey;
+{2}new pidA: pid;
+(
+    {3}let pidA_1: pid = pidA in
+    {4}let pkA: pkey = pk(skA) in
+    {5}new pi: zkp;
+    {6}out(chVSReq, (verify_tag,pidA_1,pkA,pi));
+    {7}in(chVSReq, (=verify_tag,=pidA_1,=pkA,pi2: zkp));
+    {8}event LedgerPseudonymValid(pidA_1,pkA);
+    {9}!
+    {10}in(chLookupReq, q: pid);
+    {11}if (q = pidA_1) then
+    {12}out(chLookupResp, (pidA_1,pkA,ballot_ok))
+) | (
+    {13}let pidA_2: pid = pidA in
+    {14}let skA_1: skey = skA in
+    {15}new n: nonce;
+    {16}let pkA_1: pkey = pk(skA_1) in
+    {17}event DeviceAuthSent(pidA_2,pkA_1,n);
+    {18}out(cache, (pidA_2,n));
+    {19}out(net, (authenticate,pidA_2,n,sign(authmsg(pidA_2,n),skA_1)))
+) | (
+    {20}!
+    {21}in(net, (=authenticate,pidIn: pid,n_1: nonce,sig: bitstring));
+    {22}in(cache, (=pidIn,=n_1));
+    {23}out(chLookupReq, pidIn);
+    {24}in(chLookupResp, (=pidIn,pkIn: pkey,=ballot_ok));
+    {25}if (checksign(sig,authmsg(pidIn,n_1),pkIn) = true) then
+    {26}event PASBAccept(pidIn,pkIn,n_1)
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skA: skey;
+{2}new pidA: pid;
+(
+    {5}new pi: zkp;
+    {4}let pkA: pkey = pk(skA) in
+    {3}let pidA_1: pid = pidA in
+    {6}out(chVSReq, (verify_tag,pidA_1,pkA,pi));
+    {7}in(chVSReq, (=verify_tag,=pidA_1,=pkA,pi2: zkp));
+    {8}event LedgerPseudonymValid(pidA_1,pkA);
+    {9}!
+    {10}in(chLookupReq, q: pid);
+    {11}if (q = pidA_1) then
+    {12}out(chLookupResp, (pidA_1,pkA,ballot_ok))
+) | (
+    {15}new n: nonce;
+    {14}let skA_1: skey = skA in
+    {16}let pkA_1: pkey = pk(skA_1) in
+    {13}let pidA_2: pid = pidA in
+    {17}event DeviceAuthSent(pidA_2,pkA_1,n);
+    {18}out(cache, (pidA_2,n));
+    {19}out(net, (authenticate,pidA_2,n,sign(authmsg(pidA_2,n),skA_1)))
+) | (
+    {20}!
+    {21}in(net, (=authenticate,pidIn: pid,n_1: nonce,sig: bitstring));
+    {22}in(cache, (=pidIn,=n_1));
+    {23}out(chLookupReq, pidIn);
+    {24}in(chLookupResp, (=pidIn,pkIn: pkey,=ballot_ok));
+    {25}if (checksign(sig,authmsg(pidIn,n_1),pkIn) = true) then
+    {26}event PASBAccept(pidIn,pkIn,n_1)
+)
+
+-- Query inj-event(PASBAccept(p,pkA_2,n_2)) ==> inj-event(DeviceAuthSent(p,pkA_2,n_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(PASBAccept(p,pkA_2,n_2)) ==> inj-event(DeviceAuthSent(p,pkA_2,n_2))
+goal reachable: @sid ≠ @sid_1 && b-inj-event(DeviceAuthSent(pidA[],pk(skA[]),n[]),@occ17[]) -> inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1) && inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2)
+Abbreviations:
+@occ26_1 = @occ26[pkIn = pk(skA[]),sig = sign(authmsg(pidA[],n[]),skA[]),n_1 = n[],pidIn = pidA[],!1 = @sid]
+@occ26_2 = @occ26[pkIn = pk(skA[]),sig = sign(authmsg(pidA[],n[]),skA[]),n_1 = n[],pidIn = pidA[],!1 = @sid_1]
+
+Derivation:
+Abbreviations:
+@occ26_1 = @occ26[pkIn = pk(skA[]),sig = sign(authmsg(pidA[],n[]),skA[]),n_1 = n[],pidIn = pidA[],!1 = @sid]
+@occ26_2 = @occ26[pkIn = pk(skA[]),sig = sign(authmsg(pidA[],n[]),skA[]),n_1 = n[],pidIn = pidA[],!1 = @sid_1]
+
+1. The event DeviceAuthSent(pidA[],pk(skA[]),n[]) (with occurrence name @occ17[]) may be executed at {17}.
+So the message (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])) may be sent to the attacker at output {19}.
+attacker((authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[]))).
+
+2. By 1, the attacker may know (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])).
+Using the function 4-proj-4-tuple the attacker may obtain sign(authmsg(pidA[],n[]),skA[]).
+attacker(sign(authmsg(pidA[],n[]),skA[])).
+
+3. By 1, the attacker may know (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])).
+Using the function 3-proj-4-tuple the attacker may obtain n[].
+attacker(n[]).
+
+4. By 1, the attacker may know (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])).
+Using the function 2-proj-4-tuple the attacker may obtain pidA[].
+attacker(pidA[]).
+
+5. Using the function authenticate the attacker may obtain authenticate.
+attacker(authenticate).
+
+6. By 5, the attacker may know authenticate.
+By 4, the attacker may know pidA[].
+By 3, the attacker may know n[].
+By 2, the attacker may know sign(authmsg(pidA[],n[]),skA[]).
+Using the function 4-tuple the attacker may obtain (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])).
+attacker((authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[]))).
+
+7. The event DeviceAuthSent(pidA[],pk(skA[]),n[]) (with occurrence name @occ17[]) may be executed at {17}.
+So the message (pidA[],n[]) may be sent on channel cache[] at output {18}.
+mess(cache[],(pidA[],n[])).
+
+8. The message (verify_tag,pidA[],pk(skA[]),pi[]) may be sent on channel chVSReq[] at output {6}.
+mess(chVSReq[],(verify_tag,pidA[],pk(skA[]),pi[])).
+
+9. The attacker has some term sig_1.
+attacker(sig_1).
+
+10. By 5, the attacker may know authenticate.
+By 4, the attacker may know pidA[].
+By 3, the attacker may know n[].
+By 9, the attacker may know sig_1.
+Using the function 4-tuple the attacker may obtain (authenticate,pidA[],n[],sig_1).
+attacker((authenticate,pidA[],n[],sig_1)).
+
+11. The message (authenticate,pidA[],n[],sig_1) that the attacker may have by 10 may be received at input {21}.
+The message (pidA[],n[]) that may be sent on channel cache[] by 7 may be received at input {22}.
+So the message pidA[] may be sent on channel chLookupReq[] at output {23}.
+mess(chLookupReq[],pidA[]).
+
+12. The message (verify_tag,pidA[],pk(skA[]),pi[]) that may be sent on channel chVSReq[] by 8 may be received at input {7}.
+The message pidA[] that may be sent on channel chLookupReq[] by 11 may be received at input {10}.
+So the message (pidA[],pk(skA[]),ballot_ok) may be sent on channel chLookupResp[] at output {12}.
+mess(chLookupResp[],(pidA[],pk(skA[]),ballot_ok)).
+
+13. The message (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])) that the attacker may have by 6 may be received at input {21}.
+The message (pidA[],n[]) that may be sent on channel cache[] by 7 may be received at input {22}.
+The message (pidA[],pk(skA[]),ballot_ok) that may be sent on channel chLookupResp[] by 12 may be received at input {24}.
+So event PASBAccept(pidA[],pk(skA[]),n[]) may be executed at {26} in session @sid_1.
+inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2).
+
+14. By 13, inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2).
+The goal is reached, represented in the following fact:
+inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2).
+
+15. The attacker has some term sig_2.
+attacker(sig_2).
+
+16. By 5, the attacker may know authenticate.
+By 4, the attacker may know pidA[].
+By 3, the attacker may know n[].
+By 15, the attacker may know sig_2.
+Using the function 4-tuple the attacker may obtain (authenticate,pidA[],n[],sig_2).
+attacker((authenticate,pidA[],n[],sig_2)).
+
+17. The message (authenticate,pidA[],n[],sig_2) that the attacker may have by 16 may be received at input {21}.
+The message (pidA[],n[]) that may be sent on channel cache[] by 7 may be received at input {22}.
+So the message pidA[] may be sent on channel chLookupReq[] at output {23}.
+mess(chLookupReq[],pidA[]).
+
+18. The message (verify_tag,pidA[],pk(skA[]),pi[]) that may be sent on channel chVSReq[] by 8 may be received at input {7}.
+The message pidA[] that may be sent on channel chLookupReq[] by 17 may be received at input {10}.
+So the message (pidA[],pk(skA[]),ballot_ok) may be sent on channel chLookupResp[] at output {12}.
+mess(chLookupResp[],(pidA[],pk(skA[]),ballot_ok)).
+
+19. The message (authenticate,pidA[],n[],sign(authmsg(pidA[],n[]),skA[])) that the attacker may have by 6 may be received at input {21}.
+The message (pidA[],n[]) that may be sent on channel cache[] by 7 may be received at input {22}.
+The message (pidA[],pk(skA[]),ballot_ok) that may be sent on channel chLookupResp[] by 18 may be received at input {24}.
+So event PASBAccept(pidA[],pk(skA[]),n[]) may be executed at {26} in session @sid.
+inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1).
+
+20. By 19, inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1).
+The goal is reached, represented in the following fact:
+inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1).
+
+21. By 20, inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1).
+By 14, inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2).
+We have @occ26_1 ≠ @occ26_2.
+The goals for injectivity are reached, combined in the following fact:
+inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_1) && inj-event(PASBAccept(pidA[],pk(skA[]),n[]),@occ26_2).
+
+
+Could not find a trace corresponding to this derivation.
+RESULT inj-event(PASBAccept(p,pkA_2,n_2)) ==> inj-event(DeviceAuthSent(p,pkA_2,n_2)) cannot be proved.
+RESULT (but event(PASBAccept(p,pkA_2,n_2)) ==> event(DeviceAuthSent(p,pkA_2,n_2)) is true.)
+-- Query event(PASBAccept(p,pkA_2,n_2)) ==> event(LedgerPseudonymValid(p,pkA_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(PASBAccept(p,pkA_2,n_2)) ==> event(LedgerPseudonymValid(p,pkA_2))
+goal reachable: b-event(LedgerPseudonymValid(pidA[],pk(skA[]))) -> event(PASBAccept(pidA[],pk(skA[]),n[]))
+RESULT event(PASBAccept(p,pkA_2,n_2)) ==> event(LedgerPseudonymValid(p,pkA_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query inj-event(PASBAccept(p,pkA_2,n_2)) ==> inj-event(DeviceAuthSent(p,pkA_2,n_2)) cannot be proved.
+
+Query event(PASBAccept(p,pkA_2,n_2)) ==> event(LedgerPseudonymValid(p,pkA_2)) is true.
+
+--------------------------------------------------------------
+
+
+real	0m0.047s
+user	0m0.005s
+sys	0m0.006s

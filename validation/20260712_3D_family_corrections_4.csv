@@ -1,0 +1,5 @@
+paper_id,original_family,corrected_family,corrected_facets,reason
+P105,Certificateless split-key,Ledger-mediated trust,ledger-present; multi-ledger; privacy/anonymity-layer,The proposed protocol gives the node a self-generated full key and accepts ledger-recorded credentials/accumulator proofs; no KGC partial-key plus user-secret construction is used.
+P155,Certificateless split-key,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,The CA generates device/server key pairs and the verifier checks cross-domain certificates against blockchain/Merkle state; this is not certificateless split-key cryptography.
+P182,Certificateless split-key,Other/classical-general,no-ledger; distributed-threshold; privacy/anonymity-layer,The proposed mechanism uses threshold sharing of a domain master key and identity-based signatures; blockchain appears only in related work.
+P187,Certificateless split-key,Other/classical-general,no-ledger; distributed-threshold; privacy/anonymity-layer,The proposed DCA uses threshold secret sharing and bilinear verification; KGC/certificateless/blockchain passages describe prior work.

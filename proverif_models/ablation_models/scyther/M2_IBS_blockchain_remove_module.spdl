@@ -1,0 +1,29 @@
+// Explicit-fault parser/runner sanity template for M2, labelled consortium-ledger trust anchor; not a component-removal ablation.
+// Public fresh values intentionally make the claimed secret attackable.
+
+hashfunction H;
+
+protocol M2IBSblockchainRemoveModule(A,B)
+{
+  role A
+  {
+    fresh na: Nonce;
+    var nb: Nonce;
+    send_1(A,B, na);
+    recv_2(B,A, nb);
+    claim(A, Secret, H(na,nb));
+    claim(A, Niagree);
+    claim(A, Nisynch);
+  }
+
+  role B
+  {
+    var na: Nonce;
+    fresh nb: Nonce;
+    recv_1(A,B, na);
+    send_2(B,A, nb);
+    claim(B, Secret, H(na,nb));
+    claim(B, Niagree);
+    claim(B, Nisynch);
+  }
+}

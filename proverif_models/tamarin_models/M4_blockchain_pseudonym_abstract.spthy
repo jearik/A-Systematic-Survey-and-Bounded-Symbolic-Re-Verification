@@ -1,0 +1,33 @@
+theory M4_blockchain_pseudonym_abstract
+begin
+
+builtins: hashing
+
+/* Abstract Tamarin port of M4. This file checks pseudonym-bound secrecy and
+   authentication only. It does not prove observational equivalence, timing
+   unlinkability, issuer accountability, or BFT ledger consistency. */
+
+rule Ledger_Pseudonym:
+  [ Fr(~pid), Fr(~k) ]
+  --[ PseudonymIssued($A, ~pid), IdentityHidden($A, ~pid) ]->
+  [ !Pseudo($A, ~pid), !St_Key($A, ~pid, ~k), Out(<~pid, 'ledger_commitment'>) ]
+
+rule Pseudo_Run:
+  [ !Pseudo(A, pid), !St_Key(A, pid, k) ]
+  --[ InitRunning(A, $B, k) ]->
+  [ !PseudoRun(A, $B, pid, k), Out(<pid, $B, 'pseudo_init'>) ]
+
+rule Pseudo_Accept:
+  [ !PseudoRun(A, B, pid, k) ]
+  --[ RespRunning(B, A, k), RespAccept(B, A, k), InitAccept(A, B, k), Secret(k) ]->
+  [ ]
+
+lemma pseudonym_key_secrecy:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma pseudonym_agreement:
+  "All A B k #i.
+     RespAccept(B, A, k) @ i
+     ==> (Ex #j. InitRunning(A, B, k) @ j & j < i)"
+
+end

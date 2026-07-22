@@ -1,0 +1,110 @@
+paper_id,ref_number,mechanism_family,deployment_crosscutting_facets,verification_level,title,doi
+P224,29,Other/classical-general,ledger-present; privacy/anonymity-layer,D,Toward Cross-Domain Dynamic Accumulator Authentication Based on Blockchain in Internet of Things,10.1109/tii.2021.3116049
+P140,30,Ledger-mediated trust,ledger-present,C,A distributed identity management and cross-domain authentication scheme for the Internet of Things,10.1016/j.future.2025.107818
+P216,31,Post-quantum,ledger-present,E,PQ-BCDA A post-quantum blockchain based cross-domain authentication scheme for Internet of Things,10.1016/j.iot.2025.101737
+P186,32,Group-/ring-signature,privacy/anonymity-layer; no-ledger,E,DCAGS-IoT Dynamic Cross-Domain Authentication Scheme Using Group Signature in IoT,10.3390/app13105847
+P130,33,Ledger-mediated trust,ledger-present,E,A Blockchain-Based Cross-Domain Authentication Management System for IoT Devices,10.1109/tnse.2023.3292624
+P134,34,Other/classical-general,privacy/anonymity-layer; no-ledger,E,A Certificate Authority Domain-based Cross-domain Authentication Scheme for Virtual Enterprise Using Identity Based Encryption,10.1109/bigcom53800.2021.00007
+P152,35,Certificateless split-key,ledger-present; privacy/anonymity-layer,B,A Privacy-Aware Cross-Domain Device Authentication Scheme for IIoT Based on Blockchain,10.1109/hpcc-dss-smartcity-dependsys53884.2021.00097
+P156,36,Ledger-mediated trust,ledger-present,E,A Trusted IoT Communication Architecture Based on Blockchain and Named Data Network,10.1088/1742-6596/2224/1/012091
+P202,37,Ledger-mediated trust,ledger-present; multi-ledger; privacy/anonymity-layer,A,Hybrid-Blockchain-Based Cross-Domain Authentication for Internet of Marine Things,10.1016/j.csi.2026.104140
+P164,38,Ledger-mediated trust,ledger-present,A,BCEDAS A Blockchain and Chameleon Hash-Based Efficient Decentralized Authentication Scheme for Internet of Vehicles With Multi-Scenario,10.1109/tits.2026.3670901
+P176,39,Ledger-mediated trust,ledger-present,E,Blockchain-Empowered Decentralized Horizontal Federated Learning for 5G-Enabled UAVs,10.1109/tii.2021.3116132
+P173,40,Ledger-mediated trust,ledger-present,E,Blockchain-Based Cross-Domain Authentication for Intelligent 5G-Enabled Internet of Drones,10.1145/3477090.3481053
+P200,41,Ledger-mediated trust,ledger-present; multi-ledger,E,Federated Hierarchical Trust-Based Interaction Scheme for Cross-Domain Industrial IoT,10.1109/jiot.2022.3200854
+P113,42,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,E,Blockchain-Based Cross-Domain Authentication With Dynamic Domain Participation in IoT,10.1109/jiot.2024.3486331
+P159,43,Ledger-mediated trust,ledger-present; multi-ledger,C,An Efficient Consensus Algorithm for Blockchain-Based Cross-Domain Authentication in Bandwidth-Constrained Wide-Area IoT Networks,10.1109/jiot.2024.3420719
+P168,44,Ledger-mediated trust,ledger-present,E,BLECA A Blockchain-Based Lightweight and Efficient Cross-Domain Authentication Scheme for Smart Parks,10.32604/cmc.2023.041676
+P201,45,Certificateless split-key,ledger-present; multi-ledger; privacy/anonymity-layer,D,Hybrid blockchain-based many-to-many cross-domain authentication scheme for smart agriculture IoT networks,10.1016/j.jksuci.2024.101946
+P116,46,Ledger-mediated trust,ledger-present,D,Bridge of Trust Cross Domain Authentication for Industrial Internet of Things (IIoT) Blockchain over Transport Layer Security (TLS),10.3390/electronics12112401
+P102,47,Ledger-mediated trust,ledger-present,E,CCAP A Complete Cross-Domain Authentication Based on Blockchain for Internet of Things,10.1109/tifs.2022.3214733
+P185,48,Ledger-mediated trust,ledger-present,A,Cross-domain secure communication scheme in industrial internet of things based on consortium blockchain,10.1007/s12083-025-02055-z
+P193,49,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,B,Efficient and Anonymous Cross-Domain Authentication for IIoT Based on Blockchain,10.1109/tnse.2022.3224453
+P153,50,Ledger-mediated trust,ledger-present; multi-ledger; privacy/anonymity-layer,B,A Privacy-Preserving Cross-Domain Authentication and Key Agreement Scheme via Multiblockchains for Smart Cities,10.1109/jiot.2025.3607798
+P112,51,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,E,Authentication Technology in Internet of Things and Privacy Security Issues in Typical Application Scenarios,10.3390/electronics12081812
+P132,52,Ledger-mediated trust,ledger-present,C,A Blockchain-Based Multi-CA Cross-Domain Authentication Scheme in Decentralized Autonomous Network,10.1109/tnsm.2022.3180357
+P223,53,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,Secure Cross-Domain Authentication and Data Sharing Scheme for IIoT in Cloud-Fog Automation Architecture,10.1109/jsac.2025.3574606
+P191,54,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,B,Dynamic Time-Bound Anonymous Complete Cross-Domain Authentication Scheme for IoT,10.1109/ton.2025.3635736
+P136,55,Ledger-mediated trust,ledger-present,A,A Certificateless-Based Authentication and Key Agreement Scheme for IIoT Cross-Domain,10.1155/2022/3693748
+P051,56,Ledger-mediated trust,ledger-present,C,DynaTrac A Decentralized Cross-Domain Authentication Framework With Dynamic Reputation Weighting and Accountable Tracing,10.1109/jiot.2025.3588990
+P161,57,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,BAT-CA A Blockchain-Based Anonymous and Traceable Cross-Domain Authentication Approach for Interner of Things,10.1109/WCNC61545.2025.10978745
+P194,58,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,C,Efficient and Privacy-preserving Blockchain-based Multi-factor Device Authentication Protocol for Cross-domain IIoT,10.1109/JIOT.2022.3176192
+P145,59,Ledger-mediated trust,ledger-present; multi-ledger,D,A Lightweight Authentication Scheme Based on Consortium Blockchain for Cross-Domain IoT,10.1155/2022/9686049
+P120,60,Ledger-mediated trust,ledger-present,B,A Lightweight Authentication Method for Industrial Internet of Things Based on Blockchain and Chebyshev Chaotic Maps,10.3390/fi17080338
+P167,61,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,A,BEPHAP A Blockchain-based Efficient Privacy-Preserving Handover Authentication Protocol with key agreement for Internet of Vehicles,10.1016/j.sysarc.2023.102869
+P172,62,Ledger-mediated trust,ledger-present,A,Blockchain-Based Certificate-Free Cross-Domain Authentication Mechanism for Industrial Internet,10.1109/jiot.2023.3296506
+P183,63,Ledger-mediated trust,ledger-present,E,Cross-domain identity authentication scheme based on blockchain and PKI system,10.1016/j.hcc.2022.100096
+P213,64,Ledger-mediated trust,ledger-present,E,Optimizing Scalable Storage for Blockchain-Based IoT Cross-Domain Authentication,10.1109/CIoTSC67482.2025.11413127
+P222,65,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,D,SE-CAS Secure and Efficient Cross-Domain Authentication Scheme Based on Blockchain for Space TT&C Networks,10.1109/jiot.2024.3401178
+P125,66,Ledger-mediated trust,ledger-present; multi-ledger,E,Split-Chain-Based Efficient Blockchain-Assisted Cross-Domain Authentication for IoT,10.1109/tnsm.2024.3379587
+P221,67,Ledger-mediated trust,ledger-present,D,Scalable Storage Optimization for Blockchain-Based Cross-Domain Authentication in IoT,10.1109/tnsm.2025.3591086
+P187,68,Other/classical-general,no-ledger; distributed-threshold; privacy/anonymity-layer,D,Distributed Cross-Domain Anonymous Authentication Scheme in Internet of Things,10.1109/jiot.2025.3555770
+P124,69,Certificateless split-key,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,Research on an Efficient Cross-Domain Authentication Scheme that is Based on Blockchain and Edge Computing,10.1007/978-981-95-5294-8_37
+P175,70,Ledger-mediated trust,ledger-present; edge/fog-mediated,D,Blockchain-based lightweight trusted data interaction scheme for cross-domain IIoT,10.1016/j.dcan.2024.11.018
+P174,71,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,Blockchain-Based Lightweight Message Authentication for Edge-Assisted Cross-Domain Industrial Internet of Things,10.1109/tdsc.2023.3285800
+P133,72,Certificateless split-key,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,A Blockchain-Based Mutual Authentication Scheme for Collaborative Edge Computing,10.1109/tcss.2021.3056540
+P109,73,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,A Lightweight Group Authentication Framework for Cross-Domain Internet of Things,10.1007/978-3-031-94458-1_2
+P118,74,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,A,Efficient Blockchain-Based Mutual Authentication and Session Key Agreement for Cross-Domain IIoT,10.1109/jiot.2024.3351892
+P195,75,Ledger-mediated trust,ledger-present; edge/fog-mediated,E,Efficient hybrid centralized and blockchain-based authentication architecture for heterogeneous IoT systems,10.1016/j.jksuci.2023.01.011
+P166,76,Certificateless split-key,ledger-present; edge/fog-mediated; privacy/anonymity-layer,D,BCPPAS Blockchain-Based Cross-Domain Identity Authentication Scheme for IoT with Privacy Protection,10.1109/CSCWD64889.2025.11033242
+P162,77,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,BCAE A Blockchain-Based Cross Domain Authentication Scheme for Edge Computing,10.1109/jiot.2024.3387934
+P179,78,Hardware-/device-rooted,ledger-present; edge/fog-mediated; privacy/anonymity-layer,D,BTAA Blockchain and TEE-Assisted Authentication for IoT Systems,10.1109/jiot.2023.3252565
+P131,79,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,A Blockchain-Based Cross-Domain Data Transmission Scheme for Industrial Internet of Things With Edge-Cloud Computing,10.1109/tsc.2025.3603155
+P135,80,Certificateless split-key,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,A Certificateless Anonymous Cross-Domain Authentication Scheme Assisted by Blockchain for Internet of Vehicles,10.1155/2022/3488977
+P190,81,Other/classical-general,ledger-present; edge/fog-mediated,D,Dynamic Authentication and Granularized Authorization With Cross-Domain Zero Trust Architecture in Large-Scale IoT Networks,10.1109/tnse.2025.3650377
+P150,82,Ledger-mediated trust,ledger-present; multi-ledger; edge/fog-mediated; privacy/anonymity-layer,A,A New Identity Authentication and Key Agreement Protocol Based on Multi-Layer Blockchain in Edge Computing,10.1109/access.2023.3347808
+P211,83,Other/classical-general,edge/fog-mediated; no-ledger,B,LRCDA A Lightweight and Reusable Cross-Domain Authentication Scheme for Industrial IoT Based on Distributed Architecture,10.1109/jiot.2025.3635817
+P192,84,Ledger-mediated trust,ledger-present; edge/fog-mediated; privacy/anonymity-layer,A,ECroA Efficient Cross-Domain Authentication in Dynamic Digital Twins of Wireless Industrial IoT,10.1109/jsac.2026.3669135
+P137,85,Ledger-mediated trust,ledger-present; multi-ledger; edge/fog-mediated; privacy/anonymity-layer,E,A Cross-domain Authentication Scheme Based on Blockchain and Edge Computing,10.1109/jiot.2020.2999510
+P142,86,Ledger-mediated trust,ledger-present; edge/fog-mediated,C,A highly reliable cross-domain identity authentication protocol based on blockchain in edge computing environment,10.1109/CSCWD54268.2022.9776072
+P208,87,Other/classical-general,edge/fog-mediated; privacy/anonymity-layer; no-ledger,E,Lightweight Cross-Domain Authentication Scheme for Securing Wireless IoT Devices Using Backscatter Communication,10.1109/jiot.2024.3378476
+P210,88,Other/classical-general,ledger-present; edge/fog-mediated,E,LightweightAttribute-BasedCross-Domain AuthenticationforPowerIoT withEdgeComputingIntegration,10.13052/jcsm2245-1439.1522
+P217,89,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,Research on Secure Authentication and Access Control for Device Access Based on Distributed Architecture,10.1109/CAIBDA65784.2025.11183375
+P196,90,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,A,Efficient Provably Secure Authentication Protocol for Multidomain IIoT Using a Combined Off-Chain and On-Chain Approach,10.1109/jiot.2023.3347677
+P117,91,Hardware-/device-rooted,ledger-present; privacy/anonymity-layer,A,Chebyshev Polynomial and Private Blockchain Based Cross-Domain Authentication Protocol for IoD Networks,10.1109/CCNC51664.2024.10454702
+P165,92,Hardware-/device-rooted,ledger-present; privacy/anonymity-layer,A,BCPA A Blockchain-Based Cross-Domain Privacy-Preserving Authentication Scheme in Internet of Things Environments,10.1109/jiot.2025.3601211
+P188,93,Ledger-mediated trust,ledger-present,E,DKGAuth Blockchain-Assisted Distributed Key Generation and Authentication for Cross-Domain Intelligent IoT,10.1109/jiot.2024.3379310
+P123,94,Hardware-/device-rooted,ledger-present; multi-ledger,E,Blockchain and PUF-based secure key establishment protocol for cross- domain digital twins in industrial Internet of Things architecture,10.1016/j.jare.2023.09.017
+P151,95,Hardware-/device-rooted,ledger-present; edge/fog-mediated; privacy/anonymity-layer,A,A Post-Quantum Secure Federated Learning Framework for Cross-Domain V2G Authentication,10.1109/tce.2025.3580338
+P206,96,Hardware-/device-rooted,ledger-present,A,LCH-AKA Identity Authentication and Key Agreement Scheme of Lightweight Cross-Domain Heterogeneous Network Based on PUF,10.1109/jiot.2025.3645889
+P204,97,Other/classical-general,ledger-present,A,LBCM A Scalable and DDoS-Resistant Cross-Domain Authentication Protocol for IIoT Using Chaotic Maps and Merkle Tree,10.1109/jiot.2026.3675667
+P126,98,Hardware-/device-rooted,ledger-present,A,CD-AKA-IoV A Provably Secure Cross-Domain Authentication and Key Agreement Protocol for Internet of Vehicle,10.32604/cmc.2025.065560
+P205,99,Other/classical-general,ledger-present; privacy/anonymity-layer,B,LCDMA Lightweight Cross-Domain Mutual Identity Authentication Scheme for Internet of Things,10.1109/jiot.2023.3252051
+P207,100,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,B,Lightweight Blockchain-Enhanced Mutual Authentication Protocol for UAVs,10.1109/jiot.2023.3324543
+P158,101,Certificateless split-key,ledger-present; privacy/anonymity-layer,B,An anonymous and efficient certificateless signature scheme based on blockchain in NDN-IoT environments,10.1002/ett.4979
+P180,102,Certificateless split-key,ledger-present,B,CABC A Cross-Domain Authentication Method Combining Blockchain with Certificateless Signature for IIoT☆,10.1016/j.future.2024.04.042
+P122,103,Certificateless split-key,privacy/anonymity-layer; no-ledger,B,LCC-AKA: Lightweight Certificateless Cross-Domain Authentication Key Agreement Protocol for IoT Devices,10.1016/j.comnet.2026.112018
+P147,104,Certificateless split-key,ledger-present; privacy/anonymity-layer,A,A Lightweight Cross-Domain Direct Identity Authentication Protocol for VANETs,10.1109/jiot.2024.3438257
+P171,105,Certificateless split-key,ledger-present; privacy/anonymity-layer,D,Blockchain-Based C ertificateless Cross-Domain Authentication Scheme in the Industrial Internet of Things,10.32604/cmc.2024.053950
+P128,106,Ledger-mediated trust,ledger-present,C,A Blockchain-Assisted Cross-Domain Authentication and Key Negotiation Scheme in IIoT,10.1109/access.2025.3565393
+P199,107,Certificateless split-key,ledger-present; privacy/anonymity-layer,C,Enhance IoT Security A Blo ckchain and Chameleon Hashing-Based Scheme for Authentication,10.1007/978-981-96-0154-7_14
+P105,108,Ledger-mediated trust,ledger-present; multi-ledger; privacy/anonymity-layer,C,AAMB a cross-domain identity authentication scheme based on multilayered blockchains in IoMT,10.1007/s11227-025-07309-4
+P146,109,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,D,A Lightweight Blockchain-Based Cross-Domain Authentication and Data Sharing Scheme for the Industrial Internet of Things,10.7544/issn1000-1239.202550402
+P177,110,Ledger-mediated trust,ledger-present,A,Blockchain‑based cross‑ domain authentication in a multi‑ domain Internet of drones environment,10.1007/s11227-024-06447-5
+P219,111,Certificateless split-key,ledger-present; multi-ledger,A,Revocable Certificateless Cross-Domain Authentication Scheme Based on Primary–Secondary Blockchain,10.1109/tcss.2024.3378719
+P220,112,Group-/ring-signature,ledger-present; multi-ledger,E,S3 Cross Blockchain-Based Cross-Domain Authentication With Self-Sovereign and Supervised Identity Management,10.1109/tnsm.2025.3642315
+P181,113,Group-/ring-signature,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,CABR a cross-domain authentication method combines blockchain and ring signatures,10.1007/s10586-025-05421-x
+P129,114,Certificateless split-key,ledger-present; privacy/anonymity-layer,B,A Blockchain-Based Certificateless Anonymous Cross-Domain Authentication Scheme for IoV,10.1155/int/1782136
+P182,115,Other/classical-general,no-ledger; distributed-threshold; privacy/anonymity-layer,B,Conditionalprivacy-preservingmessageauthenticationschemefor cross-domainIndustrialInternetofThings,10.1016/j.adhoc.2023.103137
+P197,116,Group-/ring-signature,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,Efficient Revocable Cross-Domain Anonymous Authentication Scheme for IIoT,10.1109/tifs.2024.3523198
+P139,117,Ledger-mediated trust,ledger-present,D,A Distributed Authentication Scheme Based on Smart Contract for Roaming Service in Mobile Vehicular Networks,10.1109/tvt.2022.3148303
+P160,118,Group-/ring-signature,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,Anonymous and Traceable A Dynamic Group Signature-Based Cross-Domain Authentication for IIoT,10.3390/math13132127
+P163,119,Group-/ring-signature,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,BCDAP-DGS Dynamic Group Signature and Batch Cross-Domain Authentication Protocol for Intelligent Transportation,10.1109/tits.2025.3593412
+P198,120,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,D,"Endogenous Security Formal Definition, Innovation Mechanisms, and Experiment Research in Industrial Internet",10.26599/TST.2023.9010034
+P189,121,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,DPCZK Enhancing Device Privacy Through Certificate-Free Encryption and Zero Knowledge Proof in Multi-Domain IoT Environments,10.1109/jiot.2025.3545732
+P111,122,Zero-knowledge/privacy credential,ledger-present; privacy/anonymity-layer,D,An Anonymous Authentication Scheme with Low Overhead for Cross-Domain IoT,10.1007/978-981-97-0862-8_7
+P214,123,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,B,PECD-DSIIoT Privacy-enhanced cross-domain data sharing scheme for IIoT,10.1016/j.jisa.2025.104128
+P178,124,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,D,BP-AKAA Blockchain-enforcedPrivacy-preservingAuthenticationandKey AgreementandAccessControlforIIoT,10.1016/j.jisa.2023.103443
+P184,125,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,A,Cross-Domain Identity Authentication Scheme for the IIoT Identification Resolution System Based on Self-Sovereign Identity,10.1109/ton.2025.3578035
+P170,126,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,Blockchain-Assisted Transparent Cross-Domain Authorization and Authentication for Smart City,10.1109/jiot.2022.3154632
+P226,127,Zero-knowledge/privacy credential,ledger-present; edge/fog-mediated; privacy/anonymity-layer,E,XAuth Efficient Privacy-preserving Cross-domain Authentication,10.1109/tdsc.2021.3092375
+P148,128,Ledger-mediated trust,ledger-present; multi-ledger; privacy/anonymity-layer,A,A Multi-Blockchain Based Anonymous Cross-Domain Authentication Scheme for Industrial Internet of Things,10.1109/TrustCom63139.2024.00160
+P155,129,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,B,A Traceable Cross-Domain Anonymous Authentication Scheme in Industrial Internet of Things,10.1109/ICNLP65360.2025.11108575
+P138,130,Certificateless split-key,ledger-present; multi-ledger,E,A Cross-Domain Authentication Scheme Based on Cooperative Blockchains Functioning With Revocation for Medical Consortiums,10.1109/tnsm.2022.3146929
+P143,131,Ledger-mediated trust,ledger-present; multi-ledger,E,A Lightweight and Robust Cross-Domain Authentication Scheme Based on Master-Slave Blockchain,10.1109/ICCC56324.2022.10065974
+P149,132,Ledger-mediated trust,ledger-present; multi-ledger,E,A Multi-Blockchain-Based Cross-Domain Authentication and Authorization Scheme for Energy Internet,10.1155/2023/4778967
+P225,133,Ledger-mediated trust,ledger-present; privacy/anonymity-layer,E,TrustPIoT Blockchain-based Anonymous Authentication for Cross-Domain Intelligent PIoT,10.1109/ICAIT62580.2024.10808094
+P215,134,Post-quantum,ledger-present; privacy/anonymity-layer,C,Post-Quantum Traceable Anonymous Cross-Domain Authentication for Blockchain-Based IoT,10.1109/tce.2025.3635021
+P227,135,Post-quantum,ledger-present; privacy/anonymity-layer,D,"ZebraCPA Decentralized, Postquantum Conditional Privacy-Preserving Authentication for VANETs via Traceable ZK Ring Signatures",10.1109/jiot.2026.3667814
+P110,136,Post-quantum,ledger-present; multi-ledger,B,A Post-Quantum Cross-Domain Authentication Scheme Based on Multi-Chain Architecture,10.32604/cmc.2024.046816
+P203,137,Post-quantum,privacy/anonymity-layer; no-ledger,B,Lattice-Based Certificateless Proxy Re-Signature for IoT A Computation-and-Storage Optimized Post-Quantum Scheme,10.3390/s25154848

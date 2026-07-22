@@ -1,0 +1,65 @@
+(* =====================================================================
+   M3 — Certificateless authenticated key agreement (CL-AKA) cross-domain.
+        No certificates, no key escrow: full private key = partial key (from KGC)
+        + user-chosen secret value (Dong/Wang/Tan-style abstraction).
+   Run:  proverif M3_certificateless_AKA.pv
+   Q1 session-key secrecy, Q2 mutual agreement, Q3 bounded non-derivability after modeled KGC-key output (not full PFS/eCK).
+   ===================================================================== *)
+free net: channel.
+type skey. type pkey. type G. type exp. type id.
+
+const gen: G.
+fun gexp(G, exp): G.
+equation forall x: exp, y: exp; gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x).
+
+(* Certificateless key structure *)
+fun mpk(skey): pkey.                                 (* KGC master public key *)
+fun partial(id, skey): skey.                         (* partial private key D_id from KGC *)
+fun fullpk(id, exp): pkey.                            (* public key from id + secret value *)
+fun clsign(bitstring, skey, exp): bitstring.         (* sign with (partial key, secret value) *)
+reduc forall m: bitstring, i: id, msk: skey, xv: exp;
+      clverify(clsign(m, partial(i, msk), xv), m, i, fullpk(i, xv), mpk(msk)) = true.
+
+fun kdf(G): bitstring.
+fun senc(bitstring,bitstring):bitstring.
+reduc forall m:bitstring,k:bitstring; sdec(senc(m,k),k)=m.
+
+event iRun(id,id,bitstring). event rAcc(id,id,bitstring).
+event rRun(id,id,bitstring). event iAcc(id,id,bitstring).
+free secret_sess: bitstring [private].
+query attacker(secret_sess).
+query a:id,b:id,k:bitstring; inj-event(rAcc(a,b,k)) ==> inj-event(iRun(a,b,k)).
+query a:id,b:id,k:bitstring; inj-event(iAcc(a,b,k)) ==> inj-event(rRun(a,b,k)).
+
+let initiator(idA:id, dA:skey, xvA:exp, idB:id, mpkB:pkey) =
+    new ea: exp; let EA = gexp(gen, ea) in
+    out(net, (idA, fullpk(idA,xvA), EA, clsign((idA,EA), dA, xvA)));
+    in(net, (=idB, pkB:pkey, EB:G, sg:bitstring));
+    if clverify(sg, (idB,idA,EA,EB), idB, pkB, mpkB) = true then
+    let k = kdf(gexp(EB, ea)) in
+    event iRun(idA,idB,k);
+    out(net, clsign((idA,idB,EA,EB,EA), dA, xvA));
+    event iAcc(idA,idB,k);
+    out(net, senc(secret_sess, k)).
+
+let responder(idB:id, dB:skey, xvB:exp, mpkA:pkey) =
+    in(net, (idA:id, pkA:pkey, EA:G, sgA:bitstring));
+    if clverify(sgA, (idA,EA), idA, pkA, mpkA) = true then
+    new eb: exp; let EB = gexp(gen, eb) in
+    let k = kdf(gexp(EA, eb)) in
+    event rRun(idA,idB,k);
+    out(net, (idB, fullpk(idB,xvB), EB, clsign((idB,idA,EA,EB), dB, xvB)));
+    in(net, c:bitstring);
+    if clverify(c, (idA,idB,EA,EB,EA), idA, pkA, mpkA) = true then
+    event rAcc(idA,idB,k).
+
+process
+    new mskA:skey; new mskB:skey;
+    out(net, mpk(mskA)); out(net, mpk(mskB));
+    new idA:id; new idB:id;
+    new xvA:exp; new xvB:exp;                          (* user secret values *)
+    let dA = partial(idA, mskA) in
+    let dB = partial(idB, mskB) in
+    ( (! initiator(idA,dA,xvA,idB,mpk(mskB)))
+    | (! responder(idB,dB,xvB,mpk(mskA)))
+    | phase 1; out(net, (mskA, mskB)) )               (* bounded KGC-key output check; not a full PFS/eCK game *)

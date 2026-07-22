@@ -1,0 +1,218 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new skCA_A: skey;
+{2}new skCA_B: skey;
+{3}let pkCA_A: pkey = pk(skCA_A) in
+{4}let pkCA_B: pkey = pk(skCA_B) in
+{5}out(net, pkCA_A);
+{6}out(net, pkCA_B);
+{7}new skA: skey;
+{8}let pkA: pkey = pk(skA) in
+{9}new skB: skey;
+{10}let pkB: pkey = pk(skB) in
+{11}let certA: bitstring = cert(pkA,skCA_A) in
+{12}let certB: bitstring = cert(pkB,skCA_B) in
+(
+    {13}let skA_1: skey = skA in
+    {14}new x: exp;
+    {15}let X: G = gexp(gen,x) in
+    {16}out(net, (pkA,X,certA));
+    {17}in(net, (pkB_1: pkey,Y: G,certB_1: bitstring,sgB: bitstring));
+    {18}let =pkB_1 = opencert(certB_1,pkCA_B) in
+    {19}let (=pkB_1,=pkA,=X,=Y) = checksign(sgB,pkB_1) in
+    {20}out(net, sign((pkB_1,pkA,X,Y),skA_1));
+    {21}out(net, m1_completed)
+) | (
+    {22}let skB_1: skey = skB in
+    {23}in(net, (pkA_1: pkey,X_1: G,certA_1: bitstring));
+    {24}let =pkA_1 = opencert(certA_1,pkCA_A) in
+    {25}new y: exp;
+    {26}let Y_1: G = gexp(gen,y) in
+    {27}out(net, (pkB,Y_1,certB,sign((pkB,pkA_1,X_1,Y_1),skB_1)));
+    {28}in(net, sgA: bitstring);
+    {29}let (=pkB,=pkA_1,=X_1,=Y_1) = checksign(sgA,pkA_1) in
+    0
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skCA_A: skey;
+{2}new skCA_B: skey;
+{3}let pkCA_A: pkey = pk(skCA_A) in
+{5}out(net, pkCA_A);
+{4}let pkCA_B: pkey = pk(skCA_B) in
+{6}out(net, pkCA_B);
+{7}new skA: skey;
+{9}new skB: skey;
+(
+    {14}new x: exp;
+    {15}let X: G = gexp(gen,x) in
+    {8}let pkA: pkey = pk(skA) in
+    {11}let certA: bitstring = cert(pkA,skCA_A) in
+    {16}out(net, (pkA,X,certA));
+    {17}in(net, (pkB_1: pkey,Y: G,certB_1: bitstring,sgB: bitstring));
+    {18}let =pkB_1 = opencert(certB_1,pkCA_B) in
+    {19}let (=pkB_1,=pkA,=X,=Y) = checksign(sgB,pkB_1) in
+    {13}let skA_1: skey = skA in
+    {20}out(net, sign((pkB_1,pkA,X,Y),skA_1));
+    {21}out(net, m1_completed)
+) | (
+    {23}in(net, (pkA_1: pkey,X_1: G,certA_1: bitstring));
+    {24}let =pkA_1 = opencert(certA_1,pkCA_A) in
+    {25}new y: exp;
+    {26}let Y_1: G = gexp(gen,y) in
+    {22}let skB_1: skey = skB in
+    {10}let pkB: pkey = pk(skB) in
+    {12}let certB: bitstring = cert(pkB,skCA_B) in
+    {27}out(net, (pkB,Y_1,certB,sign((pkB,pkA_1,X_1,Y_1),skB_1)));
+    {28}in(net, sgA: bitstring);
+    {29}let (=pkB,=pkA_1,=X_1,=Y_1) = checksign(sgA,pkA_1) in
+    0
+)
+
+-- Query not attacker(m1_completed[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(m1_completed[])
+goal reachable: attacker(m1_completed[])
+
+Derivation:
+Abbreviations:
+y_1 = y[certA_1 = cert(pk(skA[]),skCA_A[]),X_1 = gexp(gen,x[]),pkA_1 = pk(skA[])]
+y_2 = y[certA_1 = cert(pk(skA[]),skCA_A[]),X_1 = X_2,pkA_1 = pk(skA[])]
+y_3 = y[certA_1 = cert(pk(skA[]),skCA_A[]),X_1 = X_3,pkA_1 = pk(skA[])]
+
+1. The message (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])) may be sent to the attacker at output {16}.
+attacker((pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[]))).
+
+2. By 1, the attacker may know (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])).
+Using the function 3-proj-3-tuple the attacker may obtain cert(pk(skA[]),skCA_A[]).
+attacker(cert(pk(skA[]),skCA_A[])).
+
+3. By 1, the attacker may know (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])).
+Using the function 2-proj-3-tuple the attacker may obtain gexp(gen,x[]).
+attacker(gexp(gen,x[])).
+
+4. By 1, the attacker may know (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])).
+Using the function 1-proj-3-tuple the attacker may obtain pk(skA[]).
+attacker(pk(skA[])).
+
+5. By 4, the attacker may know pk(skA[]).
+By 3, the attacker may know gexp(gen,x[]).
+By 2, the attacker may know cert(pk(skA[]),skCA_A[]).
+Using the function 3-tuple the attacker may obtain (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])).
+attacker((pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[]))).
+
+6. The message (pk(skA[]),gexp(gen,x[]),cert(pk(skA[]),skCA_A[])) that the attacker may have by 5 may be received at input {23}.
+So the message (pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])) may be sent to the attacker at output {27}.
+attacker((pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[]))).
+
+7. By 6, the attacker may know (pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])).
+Using the function 4-proj-4-tuple the attacker may obtain sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[]).
+attacker(sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])).
+
+8. The attacker has some term X_3.
+attacker(X_3).
+
+9. By 4, the attacker may know pk(skA[]).
+By 8, the attacker may know X_3.
+By 2, the attacker may know cert(pk(skA[]),skCA_A[]).
+Using the function 3-tuple the attacker may obtain (pk(skA[]),X_3,cert(pk(skA[]),skCA_A[])).
+attacker((pk(skA[]),X_3,cert(pk(skA[]),skCA_A[]))).
+
+10. The message (pk(skA[]),X_3,cert(pk(skA[]),skCA_A[])) that the attacker may have by 9 may be received at input {23}.
+So the message (pk(skB[]),gexp(gen,y_3),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_3,gexp(gen,y_3)),skB[])) may be sent to the attacker at output {27}.
+attacker((pk(skB[]),gexp(gen,y_3),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_3,gexp(gen,y_3)),skB[]))).
+
+11. By 10, the attacker may know (pk(skB[]),gexp(gen,y_3),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_3,gexp(gen,y_3)),skB[])).
+Using the function 3-proj-4-tuple the attacker may obtain cert(pk(skB[]),skCA_B[]).
+attacker(cert(pk(skB[]),skCA_B[])).
+
+12. By 6, the attacker may know (pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])).
+Using the function 2-proj-4-tuple the attacker may obtain gexp(gen,y_1).
+attacker(gexp(gen,y_1)).
+
+13. The attacker has some term X_2.
+attacker(X_2).
+
+14. By 4, the attacker may know pk(skA[]).
+By 13, the attacker may know X_2.
+By 2, the attacker may know cert(pk(skA[]),skCA_A[]).
+Using the function 3-tuple the attacker may obtain (pk(skA[]),X_2,cert(pk(skA[]),skCA_A[])).
+attacker((pk(skA[]),X_2,cert(pk(skA[]),skCA_A[]))).
+
+15. The message (pk(skA[]),X_2,cert(pk(skA[]),skCA_A[])) that the attacker may have by 14 may be received at input {23}.
+So the message (pk(skB[]),gexp(gen,y_2),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_2,gexp(gen,y_2)),skB[])) may be sent to the attacker at output {27}.
+attacker((pk(skB[]),gexp(gen,y_2),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_2,gexp(gen,y_2)),skB[]))).
+
+16. By 15, the attacker may know (pk(skB[]),gexp(gen,y_2),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),X_2,gexp(gen,y_2)),skB[])).
+Using the function 1-proj-4-tuple the attacker may obtain pk(skB[]).
+attacker(pk(skB[])).
+
+17. By 16, the attacker may know pk(skB[]).
+By 12, the attacker may know gexp(gen,y_1).
+By 11, the attacker may know cert(pk(skB[]),skCA_B[]).
+By 7, the attacker may know sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[]).
+Using the function 4-tuple the attacker may obtain (pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])).
+attacker((pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[]))).
+
+18. The message (pk(skB[]),gexp(gen,y_1),cert(pk(skB[]),skCA_B[]),sign((pk(skB[]),pk(skA[]),gexp(gen,x[]),gexp(gen,y_1)),skB[])) that the attacker may have by 17 may be received at input {17}.
+So the message m1_completed[] may be sent to the attacker at output {21}.
+attacker(m1_completed[]).
+
+19. By 18, attacker(m1_completed[]).
+The goal is reached, represented in the following fact:
+attacker(m1_completed[]).
+
+
+Unified X_2 with gexp(gen,x[])
+Unified X_3 with gexp(gen,x[])
+The clause after UnifyDerivationPrecise is
+attacker(m1_completed[])
+This clause still contradicts the query.
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skCA_A: skey creating skCA_A_1 at {1}
+
+new skCA_B: skey creating skCA_B_1 at {2}
+
+out(net, ~M) with ~M = pk(skCA_A_1) at {5}
+
+out(net, ~M_1) with ~M_1 = pk(skCA_B_1) at {6}
+
+new skA: skey creating skA_2 at {7}
+
+new skB: skey creating skB_2 at {9}
+
+new x: exp creating x_1 at {14}
+
+out(net, (~M_2,~M_3,~M_4)) with ~M_2 = pk(skA_2), ~M_3 = gexp(gen,x_1), ~M_4 = cert(pk(skA_2),skCA_A_1) at {16}
+
+in(net, (~M_2,~M_3,~M_4)) with ~M_2 = pk(skA_2), ~M_3 = gexp(gen,x_1), ~M_4 = cert(pk(skA_2),skCA_A_1) at {23}
+
+new y: exp creating y_4 at {25}
+
+out(net, (~M_5,~M_6,~M_7,~M_8)) with ~M_5 = pk(skB_2), ~M_6 = gexp(gen,y_4), ~M_7 = cert(pk(skB_2),skCA_B_1), ~M_8 = sign((pk(skB_2),pk(skA_2),gexp(gen,x_1),gexp(gen,y_4)),skB_2) at {27}
+
+in(net, (~M_5,~M_6,~M_7,~M_8)) with ~M_5 = pk(skB_2), ~M_6 = gexp(gen,y_4), ~M_7 = cert(pk(skB_2),skCA_B_1), ~M_8 = sign((pk(skB_2),pk(skA_2),gexp(gen,x_1),gexp(gen,y_4)),skB_2) at {17}
+
+out(net, ~M_9) with ~M_9 = sign((pk(skB_2),pk(skA_2),gexp(gen,x_1),gexp(gen,y_4)),skA_2) at {20}
+
+out(net, ~M_10) with ~M_10 = m1_completed at {21}
+
+The attacker has the message ~M_10 = m1_completed.
+A trace has been found.
+RESULT not attacker(m1_completed[]) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(m1_completed[]) is false.
+
+--------------------------------------------------------------
+

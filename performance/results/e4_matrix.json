@@ -1,0 +1,49 @@
+{
+  "pattern_id": "Perf-P1",
+  "manuscript_label": "P1",
+  "pattern": "Explicit-certificate mutual authentication plus ECDHE",
+  "namespace_boundary": "Perf-P1 is performance-only and distinct from published cases C1-C3",
+  "profiles": [
+    {
+      "name": "Wired LAN",
+      "one_way_latency_ms": 0.5,
+      "bandwidth_mbps": 100.0
+    },
+    {
+      "name": "Wi-Fi",
+      "one_way_latency_ms": 3.0,
+      "bandwidth_mbps": 50.0
+    },
+    {
+      "name": "5G",
+      "one_way_latency_ms": 10.0,
+      "bandwidth_mbps": 100.0
+    },
+    {
+      "name": "LTE-M",
+      "one_way_latency_ms": 100.0,
+      "bandwidth_mbps": 1.0
+    },
+    {
+      "name": "NB-IoT",
+      "one_way_latency_ms": 1600.0,
+      "bandwidth_mbps": 0.06
+    },
+    {
+      "name": "GEO satellite",
+      "one_way_latency_ms": 550.0,
+      "bandwidth_mbps": 10.0
+    }
+  ],
+  "matrix_ms": [
+    [
+      1.8308727522222223,
+      9.413752752222223,
+      30.33087275222222,
+      308.5359927522222,
+      4938.381326085556,
+      1651.0767927522222
+    ]
+  ],
+  "boundary": "assumed profiles; no live network measurement"
+}

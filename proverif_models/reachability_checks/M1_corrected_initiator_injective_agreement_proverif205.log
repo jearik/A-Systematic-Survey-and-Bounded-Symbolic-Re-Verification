@@ -1,0 +1,106 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new skCA_A: skey;
+{2}new skCA_B: skey;
+{3}let pkCA_A: pkey = pk(skCA_A) in
+{4}let pkCA_B: pkey = pk(skCA_B) in
+{5}out(net, pkCA_A);
+{6}out(net, pkCA_B);
+{7}new skA: skey;
+{8}let pkA: pkey = pk(skA) in
+{9}new skB: skey;
+{10}let pkB: pkey = pk(skB) in
+{11}out(net, pkA);
+{12}out(net, pkB);
+{13}let certA: bitstring = cert(pkA,skCA_A) in
+{14}let certB: bitstring = cert(pkB,skCA_B) in
+(
+    {15}!
+    {16}let skA_1: skey = skA in
+    {17}new x: exp;
+    {18}let X: G = gexp(gen,x) in
+    {19}out(net, (pkA,X,certA));
+    {20}in(net, (pkB_1: pkey,Y: G,certB_1: bitstring,sgB: bitstring));
+    {21}let =pkB_1 = opencert(certB_1,pkCA_B) in
+    {22}let k: bitstring = kdf(gexp(Y,x)) in
+    {23}let (=pkB_1,=pkA,=X,=Y) = checksign(sgB,pkB_1) in
+    {24}event initRunning(pkA,pkB_1,k);
+    {25}out(net, sign((pkB_1,pkA,X,Y),skA_1));
+    {26}event initAccept(pkA,pkB_1,k);
+    {27}out(net, senc(secretA,k))
+) | (
+    {28}!
+    {29}let skB_1: skey = skB in
+    {30}in(net, (pkA_1: pkey,X_1: G,certA_1: bitstring));
+    {31}let =pkA_1 = opencert(certA_1,pkCA_A) in
+    {32}new y: exp;
+    {33}let Y_1: G = gexp(gen,y) in
+    {34}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {35}event respRunning(pkA_1,pkB,k_1);
+    {36}out(net, (pkB,Y_1,certB,sign((pkB,pkA_1,X_1,Y_1),skB_1)));
+    {37}in(net, sgA: bitstring);
+    {38}let (=pkB,=pkA_1,=X_1,=Y_1) = checksign(sgA,pkA_1) in
+    {39}event respAccept(pkA_1,pkB,k_1);
+    {40}out(net, senc(secretB,k_1))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skCA_A: skey;
+{2}new skCA_B: skey;
+{3}let pkCA_A: pkey = pk(skCA_A) in
+{5}out(net, pkCA_A);
+{4}let pkCA_B: pkey = pk(skCA_B) in
+{6}out(net, pkCA_B);
+{7}new skA: skey;
+{9}new skB: skey;
+{8}let pkA: pkey = pk(skA) in
+{11}out(net, pkA);
+{10}let pkB: pkey = pk(skB) in
+{12}out(net, pkB);
+(
+    {15}!
+    {17}new x: exp;
+    {18}let X: G = gexp(gen,x) in
+    {13}let certA: bitstring = cert(pkA,skCA_A) in
+    {19}out(net, (pkA,X,certA));
+    {20}in(net, (pkB_1: pkey,Y: G,certB_1: bitstring,sgB: bitstring));
+    {21}let =pkB_1 = opencert(certB_1,pkCA_B) in
+    {23}let (=pkB_1,=pkA,=X,=Y) = checksign(sgB,pkB_1) in
+    {22}let k: bitstring = kdf(gexp(Y,x)) in
+    {24}event initRunning(pkA,pkB_1,k);
+    {16}let skA_1: skey = skA in
+    {25}out(net, sign((pkB_1,pkA,X,Y),skA_1));
+    {26}event initAccept(pkA,pkB_1,k);
+    {27}out(net, senc(secretA,k))
+) | (
+    {28}!
+    {30}in(net, (pkA_1: pkey,X_1: G,certA_1: bitstring));
+    {31}let =pkA_1 = opencert(certA_1,pkCA_A) in
+    {32}new y: exp;
+    {34}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {35}event respRunning(pkA_1,pkB,k_1);
+    {33}let Y_1: G = gexp(gen,y) in
+    {29}let skB_1: skey = skB in
+    {14}let certB: bitstring = cert(pkB,skCA_B) in
+    {36}out(net, (pkB,Y_1,certB,sign((pkB,pkA_1,X_1,Y_1),skB_1)));
+    {37}in(net, sgA: bitstring);
+    {38}let (=pkB,=pkA_1,=X_1,=Y_1) = checksign(sgA,pkA_1) in
+    {39}event respAccept(pkA_1,pkB,k_1);
+    {40}out(net, senc(secretB,k_1))
+)
+
+-- Query inj-event(initAccept(a,b,k_2)) ==> inj-event(respRunning(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+select attacker(gexp(gen,x_1))/-5000
+200 rules inserted. Base: 112 rules (41 with conclusion selected). Queue: 41 rules.
+400 rules inserted. Base: 220 rules (92 with conclusion selected). Queue: 1 rules.
+600 rules inserted. Base: 363 rules (178 with conclusion selected). Queue: 2 rules.
+800 rules inserted. Base: 505 rules (263 with conclusion selected). Queue: 1 rules.
+
+TIMEOUT

@@ -1,0 +1,19 @@
+model,tool,seeded_label,legacy_baseline_mean_s,legacy_baseline_std_s,explicit_fault_elapsed_s,runtime_delta_metadata_s,explicit_fault_over_legacy_baseline_ratio,runner_detection_signature,log_id
+M1,ProVerif,certificate/transcript binding,0.0316,0.0131,0.0395,0.0079,1.25,secrecy breach; agreement failure,S3-L01
+M1,Tamarin,certificate/transcript binding,0.2423,0.0399,0.1977,-0.0446,0.82,secrecy lemma falsified; agreement lemma falsified,S3-L02
+M1,Scyther,certificate/transcript binding,0.0222,0.0239,0.0094,-0.0128,0.42,Secret claim fail; Niagree fail; Nisynch fail,S3-L03
+M2,ProVerif,consortium-ledger trust anchor,0.0332,0.0172,0.0107,-0.0225,0.32,secrecy breach; agreement failure,S3-L04
+M2,Tamarin,consortium-ledger trust anchor,0.3745,0.0522,0.1741,-0.2004,0.46,secrecy lemma falsified; agreement lemma falsified,S3-L05
+M2,Scyther,consortium-ledger trust anchor,0.0161,0.0084,0.0092,-0.0069,0.57,Secret claim fail; Niagree fail; Nisynch fail,S3-L06
+M3,ProVerif,KGC partial-key binding,0.0402,0.0121,0.0113,-0.0289,0.28,secrecy breach; agreement failure,S3-L07
+M3,Tamarin,KGC partial-key binding,0.5270,0.1032,0.1330,-0.3940,0.25,secrecy lemma falsified; agreement lemma falsified,S3-L08
+M3,Scyther,KGC partial-key binding,0.0095,0.0029,0.0066,-0.0029,0.69,Secret claim fail; Niagree fail; Nisynch fail,S3-L09
+M4,ProVerif,pseudonym ledger / sealed identity,0.0262,0.0060,0.0115,-0.0147,0.44,secrecy breach; agreement failure,S3-L10
+M4,Tamarin,pseudonym ledger / sealed identity,0.2752,0.0588,0.1745,-0.1007,0.63,secrecy lemma falsified; agreement lemma falsified,S3-L11
+M4,Scyther,pseudonym ledger / sealed identity,0.0194,0.0148,0.0054,-0.0140,0.28,Secret claim fail; Niagree fail; Nisynch fail,S3-L12
+M5,ProVerif,PUF challenge-response,0.0115,0.0062,0.0116,0.0001,1.01,secrecy breach; agreement failure,S3-L13
+M5,Tamarin,PUF challenge-response,0.2361,0.0187,0.1437,-0.0924,0.61,secrecy lemma falsified; agreement lemma falsified,S3-L14
+M5,Scyther,PUF challenge-response,0.0069,0.0013,0.0078,0.0009,1.13,Secret claim fail; Niagree fail; Nisynch fail,S3-L15
+M6,ProVerif,ZK credential proof,0.0331,0.0125,0.0090,-0.0241,0.27,secrecy breach; agreement failure,S3-L16
+M6,Tamarin,ZK credential proof,0.2102,0.0323,0.1831,-0.0271,0.87,secrecy lemma falsified; agreement lemma falsified,S3-L17
+M6,Scyther,ZK credential proof,0.0062,0.0020,0.0321,0.0259,5.18,Secret claim fail; Niagree fail; Nisynch fail,S3-L18

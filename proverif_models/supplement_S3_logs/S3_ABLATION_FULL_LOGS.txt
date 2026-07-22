@@ -1,0 +1,1031 @@
+========================================================================================
+S3-L01 | M1 | ProVerif | remove: certificate/transcript binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M1_certificate_based_ECDHE_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L02 | M1 | Tamarin | remove: certificate/transcript binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M1_certificate_based_ECDHE_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M1_certificate_based_ECDHE_remove_module] Theory loaded
+[Theory M1_certificate_based_ECDHE_remove_module] Theory translated
+[Theory M1_certificate_based_ECDHE_remove_module] Derivation checks started
+[Theory M1_certificate_based_ECDHE_remove_module] Derivation checks ended
+[Theory M1_certificate_based_ECDHE_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M1_certificate_based_ECDHE_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M1_certificate_based_ECDHE_remove_module.spthy
+
+  processing time: 0.11s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L03 | M1 | Scyther | remove: certificate/transcript binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M1_certificate_based_ECDHE_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M1certificatebasedECDHERemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M1certificatebasedECDHERemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M1certificatebasedECDHERemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M1certificatebasedECDHERemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M1certificatebasedECDHERemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M1certificatebasedECDHERemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]
+
+========================================================================================
+S3-L04 | M2 | ProVerif | remove: consortium-ledger trust anchor | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M2_IBS_blockchain_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L05 | M2 | Tamarin | remove: consortium-ledger trust anchor | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M2_IBS_blockchain_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M2_IBS_blockchain_remove_module] Theory loaded
+[Theory M2_IBS_blockchain_remove_module] Theory translated
+[Theory M2_IBS_blockchain_remove_module] Derivation checks started
+[Theory M2_IBS_blockchain_remove_module] Derivation checks ended
+[Theory M2_IBS_blockchain_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M2_IBS_blockchain_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M2_IBS_blockchain_remove_module.spthy
+
+  processing time: 0.07s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L06 | M2 | Scyther | remove: consortium-ledger trust anchor | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M2_IBS_blockchain_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M2IBSblockchainRemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M2IBSblockchainRemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M2IBSblockchainRemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M2IBSblockchainRemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M2IBSblockchainRemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M2IBSblockchainRemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]
+
+========================================================================================
+S3-L07 | M3 | ProVerif | remove: KGC partial-key binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M3_certificateless_AKA_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L08 | M3 | Tamarin | remove: KGC partial-key binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M3_certificateless_AKA_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M3_certificateless_AKA_remove_module] Theory loaded
+[Theory M3_certificateless_AKA_remove_module] Theory translated
+[Theory M3_certificateless_AKA_remove_module] Derivation checks started
+[Theory M3_certificateless_AKA_remove_module] Derivation checks ended
+[Theory M3_certificateless_AKA_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M3_certificateless_AKA_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M3_certificateless_AKA_remove_module.spthy
+
+  processing time: 0.06s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L09 | M3 | Scyther | remove: KGC partial-key binding | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M3_certificateless_AKA_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M3certificatelessAKARemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M3certificatelessAKARemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M3certificatelessAKARemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M3certificatelessAKARemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M3certificatelessAKARemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M3certificatelessAKARemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]
+
+========================================================================================
+S3-L10 | M4 | ProVerif | remove: pseudonym ledger / sealed identity | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M4_blockchain_pseudonym_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L11 | M4 | Tamarin | remove: pseudonym ledger / sealed identity | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M4_blockchain_pseudonym_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M4_blockchain_pseudonym_remove_module] Theory loaded
+[Theory M4_blockchain_pseudonym_remove_module] Theory translated
+[Theory M4_blockchain_pseudonym_remove_module] Derivation checks started
+[Theory M4_blockchain_pseudonym_remove_module] Derivation checks ended
+[Theory M4_blockchain_pseudonym_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M4_blockchain_pseudonym_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M4_blockchain_pseudonym_remove_module.spthy
+
+  processing time: 0.08s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L12 | M4 | Scyther | remove: pseudonym ledger / sealed identity | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M4_blockchain_pseudonym_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M4blockchainpseudonymRemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M4blockchainpseudonymRemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]
+
+========================================================================================
+S3-L13 | M5 | ProVerif | remove: PUF challenge-response | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M5_PUF_keyestab_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L14 | M5 | Tamarin | remove: PUF challenge-response | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M5_PUF_keyestab_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M5_PUF_keyestab_remove_module] Theory loaded
+[Theory M5_PUF_keyestab_remove_module] Theory translated
+[Theory M5_PUF_keyestab_remove_module] Derivation checks started
+[Theory M5_PUF_keyestab_remove_module] Derivation checks ended
+[Theory M5_PUF_keyestab_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M5_PUF_keyestab_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M5_PUF_keyestab_remove_module.spthy
+
+  processing time: 0.07s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L15 | M5 | Scyther | remove: PUF challenge-response | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M5_PUF_keyestab_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M5PUFkeyestabRemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M5PUFkeyestabRemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M5PUFkeyestabRemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M5PUFkeyestabRemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M5PUFkeyestabRemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M5PUFkeyestabRemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]
+
+========================================================================================
+S3-L16 | M6 | ProVerif | remove: ZK credential proof | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\proverif_M6_anonymous_ZKP_remove_module.txt
+----------------------------------------------------------------------------------------
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+
+========================================================================================
+S3-L17 | M6 | Tamarin | remove: ZK credential proof | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\tamarin_M6_anonymous_ZKP_remove_module.txt
+----------------------------------------------------------------------------------------
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M6_anonymous_ZKP_remove_module] Theory loaded
+[Theory M6_anonymous_ZKP_remove_module] Theory translated
+[Theory M6_anonymous_ZKP_remove_module] Derivation checks started
+[Theory M6_anonymous_ZKP_remove_module] Derivation checks ended
+[Theory M6_anonymous_ZKP_remove_module] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M6_anonymous_ZKP_remove_module
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Removed_Module_Attack:
+   [ Fr( ~k ) ]
+  --[ Accept( 'devA', 'devB', ~k ), Secret( ~k ) ]->
+   [ Out( ~k ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma secrecy_after_ablation:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( !KU( ~k ) @ #vk )
+  case Removed_Module_Attack
+  SOLVED // trace found
+qed
+
+lemma agreement_after_ablation:
+  all-traces
+  "∀ k #i.
+    (Accept( 'devA', 'devB', k ) @ #i) ⇒
+    (∃ #j. (Run( 'devB', 'devA', k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i.
+  (Accept( 'devA', 'devB', k ) @ #i)
+ ∧
+  ∀ #j. (Run( 'devB', 'devA', k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+SOLVED // trace found
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M6_anonymous_ZKP_remove_module.spthy
+
+  processing time: 0.10s
+  
+  secrecy_after_ablation (all-traces): falsified - found trace (3 steps)
+  agreement_after_ablation (all-traces): falsified - found trace (2 steps)
+
+==============================================================================
+
+========================================================================================
+S3-L18 | M6 | Scyther | remove: ZK credential proof | status: ATTACK
+source: <PROJECT_ROOT>\proverif_models\results_ablation\scyther_M6_anonymous_ZKP_remove_module.txt
+----------------------------------------------------------------------------------------
+claim	M6anonymousZKPRemoveModule,A	Secret_A1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M6anonymousZKPRemoveModule,A	Niagree_A2	-	Fail	[exactly 1 attack]
+claim	M6anonymousZKPRemoveModule,A	Nisynch_A3	-	Fail	[exactly 1 attack]
+claim	M6anonymousZKPRemoveModule,B	Secret_B1	H(na,nb)	Fail	[exactly 1 attack]
+claim	M6anonymousZKPRemoveModule,B	Niagree_B2	-	Fail	[exactly 1 attack]
+claim	M6anonymousZKPRemoveModule,B	Nisynch_B3	-	Fail	[exactly 1 attack]

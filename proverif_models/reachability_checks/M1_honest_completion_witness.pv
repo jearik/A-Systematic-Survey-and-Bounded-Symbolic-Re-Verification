@@ -1,0 +1,54 @@
+(* M1 honest-completion witness for the v15.3F transcript correction.
+   Expected interpretation: RESULT attacker(m1_completed[]) is true means that
+   at least one initiator execution reaches the completion output. This file is
+   a liveness/non-vacuity check only; it is not a secrecy proof. *)
+
+free net: channel.
+type skey. type pkey. type G. type exp.
+
+const gen: G.
+fun gexp(G, exp): G.
+equation forall x: exp, y: exp; gexp(gexp(gen, x), y) = gexp(gexp(gen, y), x).
+
+fun pk(skey): pkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, k: skey; checksign(sign(m, k), pk(k)) = m.
+
+fun cert(pkey, skey): bitstring.
+reduc forall p: pkey, k: skey; opencert(cert(p, k), pk(k)) = p.
+
+fun kdf(G): bitstring.
+free m1_completed: bitstring [private].
+query attacker(m1_completed).
+
+let initiator(skA: skey, pkA: pkey, pkCA_B: pkey, certA: bitstring) =
+    new x: exp;
+    let X = gexp(gen, x) in
+    out(net, (pkA, X, certA));
+    in(net, (pkB: pkey, Y: G, certB: bitstring, sgB: bitstring));
+    let (=pkB) = opencert(certB, pkCA_B) in
+    let (=pkB, =pkA, =X, =Y) = checksign(sgB, pkB) in
+    out(net, sign((pkB, pkA, X, Y), skA));
+    out(net, m1_completed).
+
+let responder(skB: skey, pkB: pkey, pkCA_A: pkey, certB: bitstring) =
+    in(net, (pkA: pkey, X: G, certA: bitstring));
+    let (=pkA) = opencert(certA, pkCA_A) in
+    new y: exp;
+    let Y = gexp(gen, y) in
+    out(net, (pkB, Y, certB, sign((pkB, pkA, X, Y), skB)));
+    in(net, sgA: bitstring);
+    let (=pkB, =pkA, =X, =Y) = checksign(sgA, pkA) in
+    0.
+
+process
+    new skCA_A: skey; new skCA_B: skey;
+    let pkCA_A = pk(skCA_A) in
+    let pkCA_B = pk(skCA_B) in
+    out(net, pkCA_A); out(net, pkCA_B);
+    new skA: skey; let pkA = pk(skA) in
+    new skB: skey; let pkB = pk(skB) in
+    let certA = cert(pkA, skCA_A) in
+    let certB = cert(pkB, skCA_B) in
+    (initiator(skA, pkA, pkCA_B, certA) |
+     responder(skB, pkB, pkCA_A, certB))

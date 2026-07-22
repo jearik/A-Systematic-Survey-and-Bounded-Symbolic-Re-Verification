@@ -1,0 +1,13 @@
+{
+ "X.509 ECDSA-P256 certificate (DER)": 398,
+ "X.509 RSA-2048 certificate (DER)": 794,
+ "ECDSA-P256 signature (DER)": 71,
+ "ECDSA-P256 signature (raw r||s)": 64,
+ "RSA-2048 signature": 256,
+ "EC point P-256 (compressed)": 33,
+ "EC point P-256 (uncompressed)": 65,
+ "SHA-256 digest": 32,
+ "AES-GCM tag": 16,
+ "Nonce/timestamp (typical)": 16,
+ "ECQV implicit cert (point + ~45 B metadata, analytical)": 78
+}

@@ -1,0 +1,112 @@
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M5_PUF_keyestab_abstract] Theory loaded
+[Theory M5_PUF_keyestab_abstract] Theory translated
+[Theory M5_PUF_keyestab_abstract] Derivation checks started
+[Theory M5_PUF_keyestab_abstract] Derivation checks ended
+[Theory M5_PUF_keyestab_abstract] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M5_PUF_keyestab_abstract
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, h/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Enroll_PUF:
+   [ Fr( ~r ) ]
+  --[ Enrolled( $D, 'challenge', ~r ) ]->
+   [ !PUF( $D, 'challenge', ~r ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Device_Run:
+   [ !PUF( $D, c, r ), Fr( ~k ) ]
+  --[ DevAuth( c, ~k ), Secret( ~k ) ]->
+   [ !DeviceSession( $D, c, r, ~k ), Out( <$D, c, 'puf_proof'> ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Verifier_Accept:
+   [ !DeviceSession( D, c, r, k ), !PUF( D, c, r ) ]
+  --[ VerAcc( c, k ), Secret( k ) ]->
+   [ ]
+
+  /* has exactly the trivial AC variant */
+
+lemma puf_session_key_secrecy:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( Secret( k ) @ #i )
+  case Device_Run
+  solve( !PUF( $D, c, r ) ▶₀ #i )
+    case Enroll_PUF
+    by solve( !KU( ~k ) @ #vk )
+  qed
+next
+  case Verifier_Accept
+  solve( !DeviceSession( D, c, r, k ) ▶₀ #i )
+    case Device_Run
+    solve( !PUF( $D, 'challenge', ~r ) ▶₁ #i )
+      case Enroll_PUF
+      by solve( !KU( ~k ) @ #vk )
+    qed
+  qed
+qed
+
+lemma puf_device_authentication:
+  all-traces
+  "∀ c k #i.
+    (VerAcc( c, k ) @ #i) ⇒ (∃ #j. (DevAuth( c, k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c k #i.
+  (VerAcc( c, k ) @ #i) ∧ ∀ #j. (DevAuth( c, k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+solve( !DeviceSession( D, c, r, k ) ▶₀ #i )
+  case Device_Run
+  by contradiction /* from formulas */
+qed
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M5_PUF_keyestab_abstract.spthy
+
+  processing time: 0.17s
+  
+  puf_session_key_secrecy (all-traces): verified (7 steps)
+  puf_device_authentication (all-traces): verified (3 steps)
+
+==============================================================================

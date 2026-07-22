@@ -1,0 +1,7 @@
+model,illustrative_trust_evidence,analytical_byte_delta_B,basis,status
+M1,certificate/transcript binding,938,2 P-256 X.509 certs (398 B each) + 2 ECDSA signatures (71 B each),"analytical, from local bench_sizes.json"
+M2,consortium-ledger trust anchor,64 lower bound; 640 with two N=1000 Merkle proofs,2 SHA-256 ledger commitments; optional 2*ceil(log2(1000))*32 B proofs,"analytical hash-proof model, not live-chain packet trace"
+M3,KGC partial-key binding,66 lower bound,two compressed P-256 public values at 33 B each; partial keys not transmitted in the symbolic model,analytical lower bound
+M4,pseudonym ledger / sealed identity,48 lower bound,32 B pseudonym commitment + 16 B nonce/timestamp lower bound; sealed identity is opaque in the model,analytical lower bound; no packet capture
+M5,PUF challenge-response,48,16 B challenge + 32 B hash proof,analytical lower bound; PUF helper data not modeled
+M6,ZK credential proof,not reported,proof size depends on the selected ZK system/circuit; symbolic model uses an opaque proof term,not quantified to avoid fabricating a proof-system-specific byte cost

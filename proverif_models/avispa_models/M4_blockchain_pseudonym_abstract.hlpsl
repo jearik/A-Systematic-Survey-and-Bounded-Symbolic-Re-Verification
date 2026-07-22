@@ -1,0 +1,35 @@
+% AVISPA abstract M4 pseudonym model.
+% Supports secrecy/authentication only; anonymity and ledger consistency are out of scope.
+
+role environment()
+def=
+  const a,b,pid,session_key: text, m4_key,m4_auth: protocol_id
+  intruder_knowledge = {a,b,pid}
+  composition
+    session_stub()
+end role
+
+role session_stub()
+def=
+  local S,R: channel(dy)
+  composition
+    actor_stub(S,R)
+end role
+
+role actor_stub(SND,RCV: channel(dy))
+def=
+  local State: nat, K: text
+  init State := 0
+  transition
+    1. State = 0 /\ RCV(start) =|>
+       State' := 1 /\ K' := session_key /\
+       secret(K',m4_key,{a,b}) /\
+       witness(a,b,m4_auth,K')
+end role
+
+goal
+  secrecy_of m4_key
+  authentication_on m4_auth
+end goal
+
+environment()

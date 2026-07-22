@@ -1,0 +1,40 @@
+// Scyther abstract port of M2 IBS plus consortium ledger.
+// Ledger entries are public commitments; protected nonces model credential-bound AKE.
+
+hashfunction H;
+hashfunction Ledger;
+
+protocol M2IBSBlockchain(A,B)
+{
+  role A
+  {
+    fresh na: Nonce;
+    var nb: Nonce;
+
+    send_1(A,B, Ledger(A),Ledger(B),{A,B,Ledger(A),Ledger(B),na}pk(B));
+    recv_2(B,A, Ledger(A),Ledger(B),{B,A,Ledger(A),Ledger(B),na,nb}pk(A));
+    send_3(A,B, {A,B,Ledger(A),Ledger(B),na,nb}H(na,nb,Ledger(A),Ledger(B)));
+
+    claim(A, Secret, H(na,nb,Ledger(A),Ledger(B)));
+    claim(A, Alive);
+    claim(A, Weakagree);
+    claim(A, Niagree);
+    claim(A, Nisynch);
+  }
+
+  role B
+  {
+    var na: Nonce;
+    fresh nb: Nonce;
+
+    recv_1(A,B, Ledger(A),Ledger(B),{A,B,Ledger(A),Ledger(B),na}pk(B));
+    send_2(B,A, Ledger(A),Ledger(B),{B,A,Ledger(A),Ledger(B),na,nb}pk(A));
+    recv_3(A,B, {A,B,Ledger(A),Ledger(B),na,nb}H(na,nb,Ledger(A),Ledger(B)));
+
+    claim(B, Secret, H(na,nb,Ledger(A),Ledger(B)));
+    claim(B, Alive);
+    claim(B, Weakagree);
+    claim(B, Niagree);
+    claim(B, Nisynch);
+  }
+}

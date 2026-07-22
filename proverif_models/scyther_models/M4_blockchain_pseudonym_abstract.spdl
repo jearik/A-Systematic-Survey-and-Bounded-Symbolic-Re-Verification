@@ -1,0 +1,36 @@
+// Scyther abstract M4 pseudonym model.
+// Checks secrecy/authentication over pseudonym handles only; not unlinkability or ledger consensus.
+
+hashfunction H;
+hashfunction Pseudo;
+
+protocol M4BlockchainPseudonymAbstract(A,B)
+{
+  role A
+  {
+    fresh n: Nonce;
+    var m: Nonce;
+
+    send_1(A,B, Pseudo(A),{Pseudo(A),B,n}pk(B));
+    recv_2(B,A, {B,Pseudo(A),n,m}pk(A));
+    send_3(A,B, {Pseudo(A),B,n,m}H(n,m));
+
+    claim(A, Secret, H(n,m));
+    claim(A, Niagree);
+    claim(A, Nisynch);
+  }
+
+  role B
+  {
+    var n: Nonce;
+    fresh m: Nonce;
+
+    recv_1(A,B, Pseudo(A),{Pseudo(A),B,n}pk(B));
+    send_2(B,A, {B,Pseudo(A),n,m}pk(A));
+    recv_3(A,B, {Pseudo(A),B,n,m}H(n,m));
+
+    claim(B, Secret, H(n,m));
+    claim(B, Niagree);
+    claim(B, Nisynch);
+  }
+}

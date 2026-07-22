@@ -1,0 +1,53 @@
+ProVerif re-verification run  Thu Jun 18 02:28:24 +08 2026
+proverif version: Proverif 2.05. Cryptographic protocol verifier, by Bruno Blanchet, Vincent Cheval, and Marc Sylvestre
+--------------------------------------------
+### M1_certificate_based_ECDHE
+RESULT not attacker(secretA[]) is true.
+RESULT not attacker(secretB[]) is true.
+RESULT inj-event(respAccept(a,b,k_2)) ==> inj-event(initRunning(a,b,k_2)) is true.
+RESULT inj-event(initAccept(a,b,k_2)) ==> inj-event(respRunning(a,b,k_2)) is true.
+Query not attacker(secretA[]) is true.
+Query not attacker(secretB[]) is true.
+Query inj-event(respAccept(a,b,k_2)) ==> inj-event(initRunning(a,b,k_2)) is true.
+Query inj-event(initAccept(a,b,k_2)) ==> inj-event(respRunning(a,b,k_2)) is true.
+
+### M2_IBS_blockchain
+RESULT not attacker(skA_secret[]) is true.
+RESULT inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2)) is true.
+RESULT inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2)) is true.
+Query not attacker(skA_secret[]) is true.
+Query inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2)) is true.
+Query inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2)) is true.
+
+### M3_certificateless_AKA
+RESULT not attacker_p1(secret_sess[]) is true.
+RESULT inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+RESULT inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+Query not attacker_p1(secret_sess[]) is true.
+Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+### M4_blockchain_pseudonym
+RESULT not attacker(realIdA[]) is true.
+RESULT not attacker(sess_secret[]) is true.
+RESULT inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+RESULT inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+Query not attacker(realIdA[]) is true.
+Query not attacker(sess_secret[]) is true.
+Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+### M5_PUF_keyestab
+RESULT not attacker(sess_secret[]) is true.
+RESULT inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2)) is true.
+Query not attacker(sess_secret[]) is true.
+Query inj-event(verAcc(c_3,k_2)) ==> inj-event(devAuth(c_3,k_2)) is true.
+
+### M6_anonymous_ZKP
+RESULT not attacker(realId[]) is true.
+RESULT not attacker(sess_secret[]) is true.
+RESULT inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2)) is true.
+Query not attacker(realId[]) is true.
+Query not attacker(sess_secret[]) is true.
+Query inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2)) is true.
+

@@ -1,0 +1,40 @@
+// Scyther abstract port of M3 certificateless AKA.
+// KGC public material is known; secrecy depends on protected fresh peer values.
+
+hashfunction H;
+const kgcpublic: Nonce;
+
+protocol M3CertificatelessAKA(A,B)
+{
+  role A
+  {
+    fresh xa: Nonce;
+    var xb: Nonce;
+
+    send_1(A,B, kgcpublic,{A,B,kgcpublic,xa}pk(B));
+    recv_2(B,A, kgcpublic,{B,A,kgcpublic,xa,xb}pk(A));
+    send_3(A,B, {A,B,kgcpublic,xa,xb}H(xa,xb,kgcpublic));
+
+    claim(A, Secret, H(xa,xb,kgcpublic));
+    claim(A, Alive);
+    claim(A, Weakagree);
+    claim(A, Niagree);
+    claim(A, Nisynch);
+  }
+
+  role B
+  {
+    var xa: Nonce;
+    fresh xb: Nonce;
+
+    recv_1(A,B, kgcpublic,{A,B,kgcpublic,xa}pk(B));
+    send_2(B,A, kgcpublic,{B,A,kgcpublic,xa,xb}pk(A));
+    recv_3(A,B, {A,B,kgcpublic,xa,xb}H(xa,xb,kgcpublic));
+
+    claim(B, Secret, H(xa,xb,kgcpublic));
+    claim(B, Alive);
+    claim(B, Weakagree);
+    claim(B, Niagree);
+    claim(B, Nisynch);
+  }
+}

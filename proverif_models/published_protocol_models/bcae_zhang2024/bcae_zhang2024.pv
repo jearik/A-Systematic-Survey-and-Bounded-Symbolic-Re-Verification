@@ -1,0 +1,110 @@
+(* =====================================================================
+   Published-protocol re-verification case P3
+   Protocol: BCAE, Zhang et al., "BCAE: A Blockchain-Based Cross Domain
+   Authentication Scheme for Edge Computing", IEEE Internet of Things
+   Journal, 2024, DOI: 10.1109/JIOT.2024.3387934.
+
+   Source mapping:
+   - Algorithm 1: User registration and blockchain certificate issuance.
+   - Algorithm 3: Cross-domain authentication through ES_A, ES_B, and BCCA.
+   - Algorithm 4: Key agreement with Qa, IDa, certificate (ra,sa), N6P/N7P,
+     and responder values N8P/N9P.
+
+   Modeling boundary:
+   The model preserves blockchain-certificate lookup, cross-domain server
+   authorization, static-ECDH plus ephemeral-ECDH key derivation, and the
+   absence of an explicit final key-confirmation message from Ea to Eb. It
+   abstracts ECDSA certificate arithmetic, ECES details, DPoS consensus, and
+   certificate revocation-list freshness into a signed certificate predicate
+   and private BCCA lookup.
+
+   Queries:
+   Q1: session payload secrecy for Ea after receiving Eb's encrypted response.
+   Q2: Ea acceptance has a preceding Eb response for the same transcript.
+   Q3: Eb acceptance has a preceding BCCA registration lookup.
+   Q4: Eb acceptance does not imply Ea acceptance, exposing the missing final
+       key-confirmation boundary in the printed Algorithm 4 flow.
+   ===================================================================== *)
+
+free net: channel.
+type skey.
+type pkey.
+type cert.
+type id.
+type G.
+type exponent.
+
+const gen: G.
+const cross_domain_ok: bitstring.
+
+fun gexp(G, exponent): G.
+equation forall x: exponent, y: exponent;
+    gexp(gexp(gen, x), y) = gexp(gexp(gen, y), x).
+
+fun pk_static(skey): pkey.
+
+fun issuecert(id, G, skey): cert.
+reduc forall i: id, q: G, ca: skey;
+    verifycert(issuecert(i, q, ca), i, q, pk_static(ca)) = true.
+
+fun kdf(G, G, id, id): bitstring.
+fun respmsg(id, G, G): bitstring.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+free secret_payload: bitstring [private].
+
+event BCCARegistered(id, G).
+event EaStart(id, id, G, G).
+event EbAccept(id, id, G, G, bitstring).
+event EbResponse(id, id, G, G, G, bitstring).
+event EaAccept(id, id, G, G, G, bitstring).
+
+query attacker(secret_payload).
+query a: id, b: id, q: G, e7: G, e8: G, k: bitstring;
+    event(EaAccept(a, b, q, e7, e8, k)) ==> event(EbResponse(a, b, q, e7, e8, k)).
+query a: id, b: id, q: G, e7: G, k: bitstring;
+    event(EbAccept(a, b, q, e7, k)) ==> event(BCCARegistered(a, q)).
+query a: id, b: id, q: G, e7: G, k: bitstring;
+    event(EbAccept(a, b, q, e7, k)) ==> event(EaStart(a, b, q, e7)).
+event EaAcceptKeyOnly(id, id, G, G, bitstring).
+query a: id, b: id, q: G, e7: G, k: bitstring;
+    event(EbAccept(a, b, q, e7, k)) ==> event(EaAcceptKeyOnly(a, b, q, e7, k)).
+
+let EntityA(idA: id, da: exponent, idB: id, qB: G, caPK: pkey, cA: cert) =
+    let qA = gexp(gen, da) in
+    if verifycert(cA, idA, qA, caPK) = true then
+    new n7: exponent;
+    let e7 = gexp(gen, n7) in
+    event EaStart(idA, idB, qA, e7);
+    out(net, (idA, qA, cA, e7));
+    in(net, (=idB, e8: G, enc: bitstring));
+    let k = kdf(gexp(qB, da), gexp(e8, n7), idA, idB) in
+    if sdec(enc, k) = respmsg(idB, e7, e8) then
+    event EaAccept(idA, idB, qA, e7, e8, k);
+    event EaAcceptKeyOnly(idA, idB, qA, e7, k);
+    out(net, senc(secret_payload, k)).
+
+let EntityB(idB: id, db: exponent, caPK: pkey) =
+    in(net, (idA: id, qA: G, cA: cert, e7: G));
+    if verifycert(cA, idA, qA, caPK) = true then
+    new n8: exponent;
+    let e8 = gexp(gen, n8) in
+    let k = kdf(gexp(qA, db), gexp(e7, n8), idA, idB) in
+    event EbAccept(idA, idB, qA, e7, k);
+    event EbResponse(idA, idB, qA, e7, e8, k);
+    out(net, (idB, e8, senc(respmsg(idB, e7, e8), k))).
+
+process
+    new ca: skey;
+    new idA: id;
+    new idB: id;
+    new da: exponent;
+    new db: exponent;
+    let qA = gexp(gen, da) in
+    let qB = gexp(gen, db) in
+    let cA = issuecert(idA, qA, ca) in
+    event BCCARegistered(idA, qA);
+    out(net, (idA, idB, qA, qB, pk_static(ca)));
+    ( EntityA(idA, da, idB, qB, pk_static(ca), cA)
+    | !EntityB(idB, db, pk_static(ca)) )

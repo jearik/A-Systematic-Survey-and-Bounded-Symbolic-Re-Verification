@@ -1,0 +1,68 @@
+(* =====================================================================
+   M6 - Anonymous cross-domain authentication via zero-knowledge proof of
+        credential possession (XAuth / DCAGS-style abstraction).
+        A device proves it holds a domain-issued credential WITHOUT revealing
+        its identity; the verifier in another domain checks the proof against
+        the issuing domain's public key (shared via ledger). A final key-
+        confirmation binds the verifier's ephemeral and the session key.
+   Run:  proverif M6_anonymous_ZKP.pv
+   Q1 session-key secrecy, Q2 authentication (only valid-credential holders pass),
+   Q3 unlinkability/anonymity (real identity not revealed).
+   ===================================================================== *)
+free net: channel.
+type skey. type pkey. type G. type exp. type id.
+
+const gen:G.
+fun gexp(G,exp):G.
+equation forall x:exp,y:exp; gexp(gexp(gen,x),y)=gexp(gexp(gen,y),x).
+
+fun pk(skey):pkey.
+(* credential issued by domain authority on a device identity *)
+fun cred(id, skey): bitstring [private].               (* issued under the authority secret key *)
+(* NIZK proof: prove knowledge of cred(id,issuerSk) bound to ephemeral X,
+   without revealing id. Verifiable with issuer public key. *)
+fun zkp(bitstring, id, G): bitstring [private].        (* attacker cannot forge w/o credential *)
+reduc forall i:id, isk:skey, X:G;
+      zkverify(zkp(cred(i,isk), i, X), pk(isk), X) = true.
+
+fun h(bitstring): bitstring.
+fun kdf(G):bitstring.
+fun senc(bitstring,bitstring):bitstring.
+reduc forall m:bitstring,k:bitstring; sdec(senc(m,k),k)=m.
+
+event proverRun(G, bitstring). event verifierAcc(G, bitstring).
+free realId: id [private].
+free sess_secret: bitstring [private].
+query attacker(realId).                  (* anonymity *)
+query attacker(sess_secret).             (* key secrecy *)
+query X:G,k:bitstring; inj-event(verifierAcc(X,k)) ==> inj-event(proverRun(X,k)).
+
+(* Prover: holds credential cr = cred(realId, issuerSk_A); proves anonymously,
+   then confirms the key over (X, Y). *)
+let prover(realId: id, cr: bitstring, issuerPkA: pkey) =
+    new x: exp; let X = gexp(gen, x) in
+    let pf = zkp(cr, realId, X) in
+    out(net, (X, pf));
+    in(net, (Y: G));
+    let k = kdf(gexp(Y, x)) in
+    event proverRun(X, k);
+    out(net, h((X, Y, k))).                              (* key confirmation binds Y and k *)
+
+(* Verifier in another domain: trusts issuer public key from ledger. *)
+let verifier(issuerPkA: pkey) =
+    in(net, (X: G, pf: bitstring));
+    if zkverify(pf, issuerPkA, X) = true then           (* valid credential, identity hidden *)
+    new y: exp; let Y = gexp(gen, y) in
+    out(net, Y);
+    let k = kdf(gexp(X, y)) in
+    in(net, conf: bitstring);
+    if conf = h((X, Y, k)) then                          (* require prover key-confirmation *)
+    event verifierAcc(X, k);
+    out(net, senc(sess_secret, k)).                      (* secret flows to the authenticated key *)
+
+process
+    new issuerSkA: skey;                                (* domain A authority *)
+    out(net, pk(issuerSkA));                            (* issuer public key on ledger *)
+    let cr = cred(realId, issuerSkA) in
+    ( (! prover(realId, cr, pk(issuerSkA)))
+    | (! verifier(pk(issuerSkA))) )

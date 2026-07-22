@@ -1,0 +1,111 @@
+(* =====================================================================
+   CL-BASA re-verification follow-up: transcript-bound response variant.
+
+   This file is not claimed to be the published protocol. It is a minimal
+   hardening experiment derived from the ProVerif counterexample for
+   clbasa_wang2022.pv. The only modeled change is that V signs U's nonce,
+   U's pseudonym, and U's ECDHE public value inside Token_VU.
+   ===================================================================== *)
+
+free net: channel.
+free chA: channel [private].
+free chB: channel [private].
+
+type skey.
+type pkey.
+type G.
+type exponent.
+type pid.
+type domain.
+type nonce.
+
+const gen: G.
+const domA: domain.
+const domB: domain.
+const reqinfA: bitstring.
+const reqinfB: bitstring.
+
+fun gexp(G, exponent): G.
+equation forall x: exponent, y: exponent;
+    gexp(gexp(gen, x), y) = gexp(gexp(gen, y), x).
+
+fun pk(skey): pkey.
+fun packU(nonce, domain, pid, G): bitstring.
+fun packV_bound(nonce, domain, pid, G, nonce, pid, G): bitstring.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, sk: skey;
+    verify(sign(m, sk), m, pk(sk)) = true.
+
+fun kdf(G, pid, pid, domain, domain): bitstring.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+free secret_payload: bitstring [private].
+
+event BASB_validation_success(pid, pid, pkey).
+event U_token_sent(pid, pid, nonce, G).
+event V_token_sent(pid, pid, nonce, G, G, bitstring).
+event U_accept(pid, pid, nonce, G, G, bitstring).
+event V_accept(pid, pid, nonce, G, bitstring).
+event V_accept_keyed(pid, pid, nonce, G, bitstring, pkey).
+
+query attacker(secret_payload).
+query u: pid, v: pid, nu: nonce, eu: G, k: bitstring;
+    event(V_accept(u, v, nu, eu, k)) ==> event(U_token_sent(u, v, nu, eu)).
+query u: pid, v: pid, nu: nonce, eu: G, ev: G, k: bitstring;
+    inj-event(U_accept(u, v, nu, eu, ev, k)) ==> inj-event(V_token_sent(u, v, nu, eu, ev, k)).
+query u: pid, v: pid, nu: nonce, eu: G, k: bitstring, pku: pkey;
+    event(V_accept_keyed(u, v, nu, eu, k, pku)) ==> event(BASB_validation_success(u, v, pku)).
+
+let BASA_directory(pidU: pid, pidV: pid, pkV: pkey) =
+    in(chA, (=pidU, =pidV, =reqinfA));
+    out(chA, (pidV, domB, pkV)).
+
+let BASB_directory(pidU: pid, pidV: pid, pkU: pkey) =
+    in(chB, (=pidV, =pidU, eu: G, =reqinfB));
+    event BASB_validation_success(pidU, pidV, pkU);
+    out(chB, (pidU, domA, pkU)).
+
+let User_U(pidU: pid, skU: skey, pidV: pid) =
+    out(chA, (pidU, pidV, reqinfA));
+    in(chA, (=pidV, =domB, pkV: pkey));
+    new nU: nonce;
+    new rU: exponent;
+    let epkU = gexp(gen, rU) in
+    let mU = packU(nU, domA, pidU, epkU) in
+    event U_token_sent(pidU, pidV, nU, epkU);
+    out(net, (pidU, nU, domA, epkU, sign(mU, skU)));
+    in(net, (=pidV, nV: nonce, =domB, epkV: G, sigV: bitstring));
+    let mV = packV_bound(nV, domB, pidV, epkV, nU, pidU, epkU) in
+    if verify(sigV, mV, pkV) = true then
+    let k = kdf(gexp(epkV, rU), pidU, pidV, domA, domB) in
+    event U_accept(pidU, pidV, nU, epkU, epkV, k);
+    out(net, senc(secret_payload, k)).
+
+let User_V(pidV: pid, skV: skey) =
+    in(net, (pidU: pid, nU: nonce, =domA, epkU: G, sigU: bitstring));
+    out(chB, (pidV, pidU, epkU, reqinfB));
+    in(chB, (=pidU, =domA, pkU: pkey));
+    let mU = packU(nU, domA, pidU, epkU) in
+    if verify(sigU, mU, pkU) = true then
+    new nV: nonce;
+    new rV: exponent;
+    let epkV = gexp(gen, rV) in
+    let k = kdf(gexp(epkU, rV), pidU, pidV, domA, domB) in
+    event V_accept(pidU, pidV, nU, epkU, k);
+    event V_accept_keyed(pidU, pidV, nU, epkU, k, pkU);
+    let mV = packV_bound(nV, domB, pidV, epkV, nU, pidU, epkU) in
+    event V_token_sent(pidU, pidV, nU, epkU, epkV, k);
+    out(net, (pidV, nV, domB, epkV, sign(mV, skV))).
+
+process
+    new skU: skey;
+    new skV: skey;
+    new pidU: pid;
+    new pidV: pid;
+    out(net, (pidU, pk(skU), pidV, pk(skV)));
+    ( !BASA_directory(pidU, pidV, pk(skV))
+    | !BASB_directory(pidU, pidV, pk(skU))
+    | !User_U(pidU, skU, pidV)
+    | !User_V(pidV, skV)
+    | phase 1; out(net, (skU, skV)) )

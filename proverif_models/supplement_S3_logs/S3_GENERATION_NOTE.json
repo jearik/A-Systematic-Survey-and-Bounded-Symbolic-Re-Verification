@@ -1,0 +1,13 @@
+{
+  "status": "compatibility filenames retained; interpretation normalized for v17.1",
+  "authoritative_status": "S3_MODEL_VALIDITY_STATUS.csv",
+  "generated_files": [
+    "S3_ABLATION_LOG_MANIFEST.csv",
+    "S3_ABLATION_QUANTITATIVE_ANALYSIS.csv",
+    "S3_ABLATION_FULL_LOGS.txt",
+    "S3_ABLATION_FULL_LOGS.zip",
+    "S3_TOOL_METRIC_FRAMEWORK.csv",
+    "S3_HANDSHAKE_BYTE_ACCOUNTING.csv"
+  ],
+  "boundary": "explicit-fault parser/runner sanity checks; not component-removal ablations"
+}

@@ -1,0 +1,39 @@
+// Scyther abstract port of M1 certificate-based ECDHE.
+// Scope: key secrecy and authentication over a protected AKE skeleton.
+
+hashfunction H;
+
+protocol M1CertificateECDHE(A,B)
+{
+  role A
+  {
+    fresh ea: Nonce;
+    var eb: Nonce;
+
+    send_1(A,B, {A,B,ea}pk(B));
+    recv_2(B,A, {B,A,ea,eb}pk(A));
+    send_3(A,B, {A,B,ea,eb}H(ea,eb));
+
+    claim(A, Secret, H(ea,eb));
+    claim(A, Alive);
+    claim(A, Weakagree);
+    claim(A, Niagree);
+    claim(A, Nisynch);
+  }
+
+  role B
+  {
+    var ea: Nonce;
+    fresh eb: Nonce;
+
+    recv_1(A,B, {A,B,ea}pk(B));
+    send_2(B,A, {B,A,ea,eb}pk(A));
+    recv_3(A,B, {A,B,ea,eb}H(ea,eb));
+
+    claim(B, Secret, H(ea,eb));
+    claim(B, Alive);
+    claim(B, Weakagree);
+    claim(B, Niagree);
+    claim(B, Nisynch);
+  }
+}

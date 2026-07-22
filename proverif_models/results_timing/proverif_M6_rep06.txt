@@ -1,0 +1,101 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new issuerSkA: skey;
+{2}out(net, pk(issuerSkA));
+{3}let cr: bitstring = cred(realId,issuerSkA) in
+(
+    {4}!
+    {5}let realId_1: id = realId in
+    {6}let issuerPkA: pkey = pk(issuerSkA) in
+    {7}new x: exp;
+    {8}let X: G = gexp(gen,x) in
+    {9}let pf: bitstring = zkp(cr,realId_1,X) in
+    {10}out(net, (X,pf));
+    {11}in(net, Y: G);
+    {12}let k: bitstring = kdf(gexp(Y,x)) in
+    {13}event proverRun(X,k);
+    {14}out(net, h((X,Y,k)))
+) | (
+    {15}!
+    {16}let issuerPkA_1: pkey = pk(issuerSkA) in
+    {17}in(net, (X_1: G,pf_1: bitstring));
+    {18}if (zkverify(pf_1,issuerPkA_1,X_1) = true) then
+    {19}new y: exp;
+    {20}let Y_1: G = gexp(gen,y) in
+    {21}out(net, Y_1);
+    {22}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {23}in(net, conf: bitstring);
+    {24}if (conf = h((X_1,Y_1,k_1))) then
+    {25}event verifierAcc(X_1,k_1);
+    {26}out(net, senc(sess_secret,k_1))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new issuerSkA: skey;
+{2}out(net, pk(issuerSkA));
+(
+    {4}!
+    {7}new x: exp;
+    {8}let X: G = gexp(gen,x) in
+    {5}let realId_1: id = realId in
+    {3}let cr: bitstring = cred(realId,issuerSkA) in
+    {9}let pf: bitstring = zkp(cr,realId_1,X) in
+    {10}out(net, (X,pf));
+    {11}in(net, Y: G);
+    {12}let k: bitstring = kdf(gexp(Y,x)) in
+    {13}event proverRun(X,k);
+    {14}out(net, h((X,Y,k)))
+) | (
+    {15}!
+    {17}in(net, (X_1: G,pf_1: bitstring));
+    {16}let issuerPkA_1: pkey = pk(issuerSkA) in
+    {18}if (zkverify(pf_1,issuerPkA_1,X_1) = true) then
+    {19}new y: exp;
+    {20}let Y_1: G = gexp(gen,y) in
+    {21}out(net, Y_1);
+    {23}in(net, conf: bitstring);
+    {22}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {24}if (conf = h((X_1,Y_1,k_1))) then
+    {25}event verifierAcc(X_1,k_1);
+    {26}out(net, senc(sess_secret,k_1))
+)
+
+-- Query not attacker(realId[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(realId[])
+RESULT not attacker(realId[]) is true.
+-- Query not attacker(sess_secret[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(sess_secret[])
+RESULT not attacker(sess_secret[]) is true.
+-- Query inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2))
+goal reachable: b-inj-event(proverRun(gexp(gen,x_1),kdf(gexp(gexp(gen,y_1),x_1))),@occ13_1) -> inj-event(verifierAcc(gexp(gen,x_1),kdf(gexp(gexp(gen,y_1),x_1))),@occ25_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+x_1 = x[!1 = @sid]
+y_1 = y[pf_1 = zkp(cred(realId[],issuerSkA[]),realId[],gexp(gen,x_1)),X_1 = gexp(gen,x_1),!1 = @sid_1]
+@occ25_1 = @occ25[conf = h((gexp(gen,x_1),gexp(gen,y_1),kdf(gexp(gexp(gen,y_1),x_1)))),pf_1 = zkp(cred(realId[],issuerSkA[]),realId[],gexp(gen,x_1)),X_1 = gexp(gen,x_1),!1 = @sid_1]
+@occ13_1 = @occ13[Y = gexp(gen,y_1),!1 = @sid]
+RESULT inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(realId[]) is true.
+
+Query not attacker(sess_secret[]) is true.
+
+Query inj-event(verifierAcc(X_2,k_2)) ==> inj-event(proverRun(X_2,k_2)) is true.
+
+--------------------------------------------------------------
+

@@ -1,0 +1,45 @@
+theory M2_IBS_blockchain
+begin
+
+builtins: hashing, signing
+
+/* Abstract Tamarin port of the ProVerif M2 identity-based-signature plus
+   consortium-ledger pattern. The ledger is modeled as a persistent authenticated
+   state fact. Consensus, validator collusion, and smart-contract bugs are not
+   modeled here. */
+
+rule Ledger_Publish:
+  [ Fr(~cred) ]
+  --[ LedgerPublish($A, ~cred) ]->
+  [ !Ledger($A, ~cred), Out(<$A, 'ledger_index'>) ]
+
+rule Init_Start:
+  [ Fr(~k), !Ledger($I, credI), !Ledger($R, credR) ]
+  --[ InitRunning($I, $R, ~k), LedgerRead($I, credI), LedgerRead($R, credR) ]->
+  [ !St_Init($I, $R, ~k), Out(<$I, $R, 'ibs_init'>) ]
+
+rule Resp_Accept:
+  [ !St_Init(I, R, k), !Ledger(I, credI), !Ledger(R, credR) ]
+  --[ RespRunning(R, I, k), RespAccept(R, I, k), Secret(k),
+      LedgerRead(I, credI), LedgerRead(R, credR) ]->
+  [ !St_Resp(R, I, k), Out(<R, I, 'ibs_resp'>) ]
+
+rule Init_Accept:
+  [ !St_Init(I, R, k), !St_Resp(R, I, k) ]
+  --[ InitAccept(I, R, k), Secret(k) ]->
+  [ ]
+
+lemma session_key_secrecy:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma responder_agreement:
+  "All I R k #i.
+     RespAccept(R, I, k) @ i
+     ==> (Ex #j. InitRunning(I, R, k) @ j & j < i)"
+
+lemma initiator_agreement:
+  "All I R k #i.
+     InitAccept(I, R, k) @ i
+     ==> (Ex #j. RespRunning(R, I, k) @ j & j < i)"
+
+end

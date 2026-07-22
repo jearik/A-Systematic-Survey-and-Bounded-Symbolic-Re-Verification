@@ -1,0 +1,751 @@
+round,category,operation,inner_iterations,mean_us
+1,crypto,SHA-256 (256 B),2000,1.1165999999999998
+1,crypto,HMAC-SHA256 (256 B),2000,1.5903
+1,crypto,AES-128-GCM encrypt (256 B),2000,0.6636
+1,crypto,AES-128-GCM decrypt (256 B),2000,0.58025
+1,crypto,ECDSA-P256 sign,300,18.770333333333333
+1,crypto,ECDSA-P256 verify,300,48.88633333333333
+1,crypto,ECDH-P256 shared secret,300,36.447
+1,crypto,ECC-P256 key generation,80,12.2625
+1,crypto,X25519 shared secret,600,23.090833333333332
+1,crypto,RSA-2048 sign,50,425.852
+1,crypto,RSA-2048 verify,300,17.996333333333332
+1,hash_path,Merkle-style hash-path lookup N=1,1000,0.8207000000000001
+1,hash_path,Merkle-style hash-path update N=1,1000,2.2319
+1,hash_path,Merkle-style hash-path lookup N=10,1000,2.6474
+1,hash_path,Merkle-style hash-path update N=10,1000,3.9551999999999996
+1,hash_path,Merkle-style hash-path lookup N=50,1000,3.905
+1,hash_path,Merkle-style hash-path update N=50,1000,5.196
+1,hash_path,Merkle-style hash-path lookup N=100,1000,4.715199999999999
+1,hash_path,Merkle-style hash-path update N=100,1000,6.1581
+1,hash_path,Merkle-style hash-path lookup N=200,1000,4.8323
+1,hash_path,Merkle-style hash-path update N=200,1000,6.602600000000001
+1,hash_path,Merkle-style hash-path lookup N=500,1000,5.7889
+1,hash_path,Merkle-style hash-path update N=500,1000,7.4996
+1,hash_path,Merkle-style hash-path lookup N=1000,1000,6.3043000000000005
+1,hash_path,Merkle-style hash-path update N=1000,1000,7.8689
+2,crypto,SHA-256 (256 B),2000,1.24785
+2,crypto,HMAC-SHA256 (256 B),2000,1.71595
+2,crypto,AES-128-GCM encrypt (256 B),2000,0.5932000000000001
+2,crypto,AES-128-GCM decrypt (256 B),2000,0.6093500000000001
+2,crypto,ECDSA-P256 sign,300,19.66933333333333
+2,crypto,ECDSA-P256 verify,300,52.181666666666665
+2,crypto,ECDH-P256 shared secret,300,39.30533333333334
+2,crypto,ECC-P256 key generation,80,12.48625
+2,crypto,X25519 shared secret,600,24.197
+2,crypto,RSA-2048 sign,50,425.488
+2,crypto,RSA-2048 verify,300,16.249
+2,hash_path,Merkle-style hash-path lookup N=1,1000,0.7948999999999999
+2,hash_path,Merkle-style hash-path update N=1,1000,2.2715
+2,hash_path,Merkle-style hash-path lookup N=10,1000,2.6761
+2,hash_path,Merkle-style hash-path update N=10,1000,4.3806
+2,hash_path,Merkle-style hash-path lookup N=50,1000,3.8258
+2,hash_path,Merkle-style hash-path update N=50,1000,5.3772
+2,hash_path,Merkle-style hash-path lookup N=100,1000,4.6902
+2,hash_path,Merkle-style hash-path update N=100,1000,6.151
+2,hash_path,Merkle-style hash-path lookup N=200,1000,5.0773
+2,hash_path,Merkle-style hash-path update N=200,1000,6.962
+2,hash_path,Merkle-style hash-path lookup N=500,1000,5.858899999999999
+2,hash_path,Merkle-style hash-path update N=500,1000,6.696899999999999
+2,hash_path,Merkle-style hash-path lookup N=1000,1000,6.4626
+2,hash_path,Merkle-style hash-path update N=1000,1000,9.2136
+3,crypto,SHA-256 (256 B),2000,1.19795
+3,crypto,HMAC-SHA256 (256 B),2000,1.7291500000000002
+3,crypto,AES-128-GCM encrypt (256 B),2000,0.6108
+3,crypto,AES-128-GCM decrypt (256 B),2000,0.62325
+3,crypto,ECDSA-P256 sign,300,19.643
+3,crypto,ECDSA-P256 verify,300,54.21666666666666
+3,crypto,ECDH-P256 shared secret,300,40.047
+3,crypto,ECC-P256 key generation,80,12.9775
+3,crypto,X25519 shared secret,600,24.050666666666668
+3,crypto,RSA-2048 sign,50,435.478
+3,crypto,RSA-2048 verify,300,16.343
+3,hash_path,Merkle-style hash-path lookup N=1,1000,0.7995
+3,hash_path,Merkle-style hash-path update N=1,1000,2.3015
+3,hash_path,Merkle-style hash-path lookup N=10,1000,2.7264
+3,hash_path,Merkle-style hash-path update N=10,1000,3.9408000000000003
+3,hash_path,Merkle-style hash-path lookup N=50,1000,3.6903
+3,hash_path,Merkle-style hash-path update N=50,1000,5.109100000000001
+3,hash_path,Merkle-style hash-path lookup N=100,1000,4.3532
+3,hash_path,Merkle-style hash-path update N=100,1000,5.660699999999999
+3,hash_path,Merkle-style hash-path lookup N=200,1000,4.957199999999999
+3,hash_path,Merkle-style hash-path update N=200,1000,6.6128
+3,hash_path,Merkle-style hash-path lookup N=500,1000,5.7605
+3,hash_path,Merkle-style hash-path update N=500,1000,6.8406
+3,hash_path,Merkle-style hash-path lookup N=1000,1000,6.0758
+3,hash_path,Merkle-style hash-path update N=1000,1000,7.4813
+4,crypto,SHA-256 (256 B),2000,1.104
+4,crypto,HMAC-SHA256 (256 B),2000,1.6782000000000001
+4,crypto,AES-128-GCM encrypt (256 B),2000,0.56875
+4,crypto,AES-128-GCM decrypt (256 B),2000,0.5779500000000001
+4,crypto,ECDSA-P256 sign,300,18.65566666666667
+4,crypto,ECDSA-P256 verify,300,49.722
+4,crypto,ECDH-P256 shared secret,300,36.87133333333333
+4,crypto,ECC-P256 key generation,80,11.65875
+4,crypto,X25519 shared secret,600,22.322666666666667
+4,crypto,RSA-2048 sign,50,400.258
+4,crypto,RSA-2048 verify,300,16.54566666666667
+4,hash_path,Merkle-style hash-path lookup N=1,1000,0.7902
+4,hash_path,Merkle-style hash-path update N=1,1000,2.1079
+4,hash_path,Merkle-style hash-path lookup N=10,1000,2.5269
+4,hash_path,Merkle-style hash-path update N=10,1000,3.8395
+4,hash_path,Merkle-style hash-path lookup N=50,1000,3.7516
+4,hash_path,Merkle-style hash-path update N=50,1000,5.2128000000000005
+4,hash_path,Merkle-style hash-path lookup N=100,1000,4.2942
+4,hash_path,Merkle-style hash-path update N=100,1000,5.5738
+4,hash_path,Merkle-style hash-path lookup N=200,1000,5.3138000000000005
+4,hash_path,Merkle-style hash-path update N=200,1000,6.183
+4,hash_path,Merkle-style hash-path lookup N=500,1000,5.353800000000001
+4,hash_path,Merkle-style hash-path update N=500,1000,7.2585
+4,hash_path,Merkle-style hash-path lookup N=1000,1000,5.961600000000001
+4,hash_path,Merkle-style hash-path update N=1000,1000,7.9574
+5,crypto,SHA-256 (256 B),2000,1.09655
+5,crypto,HMAC-SHA256 (256 B),2000,1.61965
+5,crypto,AES-128-GCM encrypt (256 B),2000,0.5701
+5,crypto,AES-128-GCM decrypt (256 B),2000,0.5898
+5,crypto,ECDSA-P256 sign,300,19.498
+5,crypto,ECDSA-P256 verify,300,48.851
+5,crypto,ECDH-P256 shared secret,300,35.98
+5,crypto,ECC-P256 key generation,80,11.6775
+5,crypto,X25519 shared secret,600,22.523
+5,crypto,RSA-2048 sign,50,410.384
+5,crypto,RSA-2048 verify,300,17.102666666666668
+5,hash_path,Merkle-style hash-path lookup N=1,1000,0.8314
+5,hash_path,Merkle-style hash-path update N=1,1000,2.1477
+5,hash_path,Merkle-style hash-path lookup N=10,1000,2.6383
+5,hash_path,Merkle-style hash-path update N=10,1000,3.9406999999999996
+5,hash_path,Merkle-style hash-path lookup N=50,1000,3.6912
+5,hash_path,Merkle-style hash-path update N=50,1000,5.1079
+5,hash_path,Merkle-style hash-path lookup N=100,1000,4.531
+5,hash_path,Merkle-style hash-path update N=100,1000,5.6543
+5,hash_path,Merkle-style hash-path lookup N=200,1000,5.007899999999999
+5,hash_path,Merkle-style hash-path update N=200,1000,6.4341
+5,hash_path,Merkle-style hash-path lookup N=500,1000,5.3685
+5,hash_path,Merkle-style hash-path update N=500,1000,7.113
+5,hash_path,Merkle-style hash-path lookup N=1000,1000,6.3426
+5,hash_path,Merkle-style hash-path update N=1000,1000,7.549
+6,crypto,SHA-256 (256 B),2000,1.1158
+6,crypto,HMAC-SHA256 (256 B),2000,1.72475
+6,crypto,AES-128-GCM encrypt (256 B),2000,0.5837
+6,crypto,AES-128-GCM decrypt (256 B),2000,0.60335
+6,crypto,ECDSA-P256 sign,300,18.810333333333332
+6,crypto,ECDSA-P256 verify,300,49.55766666666666
+6,crypto,ECDH-P256 shared secret,300,36.66433333333334
+6,crypto,ECC-P256 key generation,80,14.98
+6,crypto,X25519 shared secret,600,22.3005
+6,crypto,RSA-2048 sign,50,405.968
+6,crypto,RSA-2048 verify,300,17.76366666666667
+6,hash_path,Merkle-style hash-path lookup N=1,1000,0.915
+6,hash_path,Merkle-style hash-path update N=1,1000,2.1147
+6,hash_path,Merkle-style hash-path lookup N=10,1000,2.6542
+6,hash_path,Merkle-style hash-path update N=10,1000,3.9795
+6,hash_path,Merkle-style hash-path lookup N=50,1000,4.0364
+6,hash_path,Merkle-style hash-path update N=50,1000,5.2156
+6,hash_path,Merkle-style hash-path lookup N=100,1000,4.292800000000001
+6,hash_path,Merkle-style hash-path update N=100,1000,5.8104
+6,hash_path,Merkle-style hash-path lookup N=200,1000,5.0596000000000005
+6,hash_path,Merkle-style hash-path update N=200,1000,6.2085
+6,hash_path,Merkle-style hash-path lookup N=500,1000,5.584
+6,hash_path,Merkle-style hash-path update N=500,1000,7.1528
+6,hash_path,Merkle-style hash-path lookup N=1000,1000,5.932
+6,hash_path,Merkle-style hash-path update N=1000,1000,8.000399999999999
+7,crypto,SHA-256 (256 B),2000,1.1077000000000001
+7,crypto,HMAC-SHA256 (256 B),2000,1.6112
+7,crypto,AES-128-GCM encrypt (256 B),2000,0.58205
+7,crypto,AES-128-GCM decrypt (256 B),2000,0.5995
+7,crypto,ECDSA-P256 sign,300,19.184
+7,crypto,ECDSA-P256 verify,300,48.816
+7,crypto,ECDH-P256 shared secret,300,35.90533333333334
+7,crypto,ECC-P256 key generation,80,11.64375
+7,crypto,X25519 shared secret,600,22.6165
+7,crypto,RSA-2048 sign,50,432.404
+7,crypto,RSA-2048 verify,300,15.995666666666667
+7,hash_path,Merkle-style hash-path lookup N=1,1000,0.7992999999999999
+7,hash_path,Merkle-style hash-path update N=1,1000,2.1515999999999997
+7,hash_path,Merkle-style hash-path lookup N=10,1000,2.5264
+7,hash_path,Merkle-style hash-path update N=10,1000,3.8049
+7,hash_path,Merkle-style hash-path lookup N=50,1000,3.9612
+7,hash_path,Merkle-style hash-path update N=50,1000,5.160399999999999
+7,hash_path,Merkle-style hash-path lookup N=100,1000,4.4239
+7,hash_path,Merkle-style hash-path update N=100,1000,5.9632
+7,hash_path,Merkle-style hash-path lookup N=200,1000,4.8553999999999995
+7,hash_path,Merkle-style hash-path update N=200,1000,6.364199999999999
+7,hash_path,Merkle-style hash-path lookup N=500,1000,5.452
+7,hash_path,Merkle-style hash-path update N=500,1000,6.8893
+7,hash_path,Merkle-style hash-path lookup N=1000,1000,6.033600000000001
+7,hash_path,Merkle-style hash-path update N=1000,1000,7.3751999999999995
+8,crypto,SHA-256 (256 B),2000,1.193
+8,crypto,HMAC-SHA256 (256 B),2000,1.64215
+8,crypto,AES-128-GCM encrypt (256 B),2000,0.5872999999999999
+8,crypto,AES-128-GCM decrypt (256 B),2000,0.60265
+8,crypto,ECDSA-P256 sign,300,18.95433333333333
+8,crypto,ECDSA-P256 verify,300,50.09766666666666
+8,crypto,ECDH-P256 shared secret,300,40.754
+8,crypto,ECC-P256 key generation,80,14.6475
+8,crypto,X25519 shared secret,600,24.123166666666666
+8,crypto,RSA-2048 sign,50,424.532
+8,crypto,RSA-2048 verify,300,16.236666666666665
+8,hash_path,Merkle-style hash-path lookup N=1,1000,0.8001
+8,hash_path,Merkle-style hash-path update N=1,1000,2.0796
+8,hash_path,Merkle-style hash-path lookup N=10,1000,2.5206
+8,hash_path,Merkle-style hash-path update N=10,1000,4.0294
+8,hash_path,Merkle-style hash-path lookup N=50,1000,3.6584
+8,hash_path,Merkle-style hash-path update N=50,1000,4.964
+8,hash_path,Merkle-style hash-path lookup N=100,1000,4.2193000000000005
+8,hash_path,Merkle-style hash-path update N=100,1000,5.698300000000001
+8,hash_path,Merkle-style hash-path lookup N=200,1000,4.777399999999999
+8,hash_path,Merkle-style hash-path update N=200,1000,6.4335
+8,hash_path,Merkle-style hash-path lookup N=500,1000,5.7474
+8,hash_path,Merkle-style hash-path update N=500,1000,6.979
+8,hash_path,Merkle-style hash-path lookup N=1000,1000,6.5506
+8,hash_path,Merkle-style hash-path update N=1000,1000,8.280299999999999
+9,crypto,SHA-256 (256 B),2000,1.19255
+9,crypto,HMAC-SHA256 (256 B),2000,1.742
+9,crypto,AES-128-GCM encrypt (256 B),2000,0.6608999999999999
+9,crypto,AES-128-GCM decrypt (256 B),2000,0.6673
+9,crypto,ECDSA-P256 sign,300,20.050666666666668
+9,crypto,ECDSA-P256 verify,300,49.08533333333334
+9,crypto,ECDH-P256 shared secret,300,36.373333333333335
+9,crypto,ECC-P256 key generation,80,11.70375
+9,crypto,X25519 shared secret,600,22.236833333333333
+9,crypto,RSA-2048 sign,50,403.836
+9,crypto,RSA-2048 verify,300,17.15066666666667
+9,hash_path,Merkle-style hash-path lookup N=1,1000,0.8647
+9,hash_path,Merkle-style hash-path update N=1,1000,2.1875
+9,hash_path,Merkle-style hash-path lookup N=10,1000,2.6615
+9,hash_path,Merkle-style hash-path update N=10,1000,3.836
+9,hash_path,Merkle-style hash-path lookup N=50,1000,3.6693000000000002
+9,hash_path,Merkle-style hash-path update N=50,1000,5.5152
+9,hash_path,Merkle-style hash-path lookup N=100,1000,4.293
+9,hash_path,Merkle-style hash-path update N=100,1000,5.7466
+9,hash_path,Merkle-style hash-path lookup N=200,1000,5.4533000000000005
+9,hash_path,Merkle-style hash-path update N=200,1000,6.5275
+9,hash_path,Merkle-style hash-path lookup N=500,1000,5.5809
+9,hash_path,Merkle-style hash-path update N=500,1000,6.9873
+9,hash_path,Merkle-style hash-path lookup N=1000,1000,5.9506000000000006
+9,hash_path,Merkle-style hash-path update N=1000,1000,7.5511
+10,crypto,SHA-256 (256 B),2000,1.1153499999999998
+10,crypto,HMAC-SHA256 (256 B),2000,1.61525
+10,crypto,AES-128-GCM encrypt (256 B),2000,0.57785
+10,crypto,AES-128-GCM decrypt (256 B),2000,0.59045
+10,crypto,ECDSA-P256 sign,300,19.014333333333333
+10,crypto,ECDSA-P256 verify,300,48.61866666666666
+10,crypto,ECDH-P256 shared secret,300,36.510666666666665
+10,crypto,ECC-P256 key generation,80,13.075
+10,crypto,X25519 shared secret,600,24.87066666666667
+10,crypto,RSA-2048 sign,50,420.068
+10,crypto,RSA-2048 verify,300,16.025666666666666
+10,hash_path,Merkle-style hash-path lookup N=1,1000,0.8042
+10,hash_path,Merkle-style hash-path update N=1,1000,2.1048
+10,hash_path,Merkle-style hash-path lookup N=10,1000,2.691
+10,hash_path,Merkle-style hash-path update N=10,1000,4.2441
+10,hash_path,Merkle-style hash-path lookup N=50,1000,3.9349000000000003
+10,hash_path,Merkle-style hash-path update N=50,1000,5.257
+10,hash_path,Merkle-style hash-path lookup N=100,1000,4.5083
+10,hash_path,Merkle-style hash-path update N=100,1000,5.8969
+10,hash_path,Merkle-style hash-path lookup N=200,1000,4.9997
+10,hash_path,Merkle-style hash-path update N=200,1000,6.8785
+10,hash_path,Merkle-style hash-path lookup N=500,1000,5.6372
+10,hash_path,Merkle-style hash-path update N=500,1000,7.582
+10,hash_path,Merkle-style hash-path lookup N=1000,1000,6.163600000000001
+10,hash_path,Merkle-style hash-path update N=1000,1000,8.3529
+11,crypto,SHA-256 (256 B),2000,1.2137
+11,crypto,HMAC-SHA256 (256 B),2000,1.81945
+11,crypto,AES-128-GCM encrypt (256 B),2000,0.5965
+11,crypto,AES-128-GCM decrypt (256 B),2000,0.6312000000000001
+11,crypto,ECDSA-P256 sign,300,19.89033333333333
+11,crypto,ECDSA-P256 verify,300,55.43966666666667
+11,crypto,ECDH-P256 shared secret,300,39.20133333333334
+11,crypto,ECC-P256 key generation,80,17.05125
+11,crypto,X25519 shared secret,600,26.02133333333333
+11,crypto,RSA-2048 sign,50,453.43
+11,crypto,RSA-2048 verify,300,18.71166666666667
+11,hash_path,Merkle-style hash-path lookup N=1,1000,0.8583999999999999
+11,hash_path,Merkle-style hash-path update N=1,1000,2.2528
+11,hash_path,Merkle-style hash-path lookup N=10,1000,2.8571
+11,hash_path,Merkle-style hash-path update N=10,1000,5.4412
+11,hash_path,Merkle-style hash-path lookup N=50,1000,4.2993999999999994
+11,hash_path,Merkle-style hash-path update N=50,1000,5.5451999999999995
+11,hash_path,Merkle-style hash-path lookup N=100,1000,4.511
+11,hash_path,Merkle-style hash-path update N=100,1000,6.1429
+11,hash_path,Merkle-style hash-path lookup N=200,1000,5.269
+11,hash_path,Merkle-style hash-path update N=200,1000,6.7383999999999995
+11,hash_path,Merkle-style hash-path lookup N=500,1000,5.7266
+11,hash_path,Merkle-style hash-path update N=500,1000,7.195399999999999
+11,hash_path,Merkle-style hash-path lookup N=1000,1000,6.6703
+11,hash_path,Merkle-style hash-path update N=1000,1000,8.3917
+12,crypto,SHA-256 (256 B),2000,1.161
+12,crypto,HMAC-SHA256 (256 B),2000,1.7643
+12,crypto,AES-128-GCM encrypt (256 B),2000,0.7129500000000001
+12,crypto,AES-128-GCM decrypt (256 B),2000,0.68935
+12,crypto,ECDSA-P256 sign,300,21.522
+12,crypto,ECDSA-P256 verify,300,51.916666666666664
+12,crypto,ECDH-P256 shared secret,300,38.586666666666666
+12,crypto,ECC-P256 key generation,80,12.35375
+12,crypto,X25519 shared secret,600,23.992
+12,crypto,RSA-2048 sign,50,436.862
+12,crypto,RSA-2048 verify,300,18.276666666666667
+12,hash_path,Merkle-style hash-path lookup N=1,1000,0.8923
+12,hash_path,Merkle-style hash-path update N=1,1000,2.2454
+12,hash_path,Merkle-style hash-path lookup N=10,1000,2.7131
+12,hash_path,Merkle-style hash-path update N=10,1000,4.298
+12,hash_path,Merkle-style hash-path lookup N=50,1000,4.1385
+12,hash_path,Merkle-style hash-path update N=50,1000,5.3422
+12,hash_path,Merkle-style hash-path lookup N=100,1000,4.4079
+12,hash_path,Merkle-style hash-path update N=100,1000,5.8107
+12,hash_path,Merkle-style hash-path lookup N=200,1000,4.8638
+12,hash_path,Merkle-style hash-path update N=200,1000,6.591
+12,hash_path,Merkle-style hash-path lookup N=500,1000,5.627
+12,hash_path,Merkle-style hash-path update N=500,1000,7.5123
+12,hash_path,Merkle-style hash-path lookup N=1000,1000,6.323300000000001
+12,hash_path,Merkle-style hash-path update N=1000,1000,7.593100000000001
+13,crypto,SHA-256 (256 B),2000,1.13435
+13,crypto,HMAC-SHA256 (256 B),2000,1.65655
+13,crypto,AES-128-GCM encrypt (256 B),2000,0.6567000000000001
+13,crypto,AES-128-GCM decrypt (256 B),2000,0.60445
+13,crypto,ECDSA-P256 sign,300,18.828666666666667
+13,crypto,ECDSA-P256 verify,300,50.398
+13,crypto,ECDH-P256 shared secret,300,37.217666666666666
+13,crypto,ECC-P256 key generation,80,11.79125
+13,crypto,X25519 shared secret,600,22.866
+13,crypto,RSA-2048 sign,50,435.296
+13,crypto,RSA-2048 verify,300,19.631666666666668
+13,hash_path,Merkle-style hash-path lookup N=1,1000,0.9261
+13,hash_path,Merkle-style hash-path update N=1,1000,2.3436
+13,hash_path,Merkle-style hash-path lookup N=10,1000,2.7441999999999998
+13,hash_path,Merkle-style hash-path update N=10,1000,4.0451
+13,hash_path,Merkle-style hash-path lookup N=50,1000,4.2833000000000006
+13,hash_path,Merkle-style hash-path update N=50,1000,5.3753
+13,hash_path,Merkle-style hash-path lookup N=100,1000,4.5978
+13,hash_path,Merkle-style hash-path update N=100,1000,6.2684
+13,hash_path,Merkle-style hash-path lookup N=200,1000,5.0563
+13,hash_path,Merkle-style hash-path update N=200,1000,6.8101
+13,hash_path,Merkle-style hash-path lookup N=500,1000,6.1388
+13,hash_path,Merkle-style hash-path update N=500,1000,7.1587
+13,hash_path,Merkle-style hash-path lookup N=1000,1000,6.2433000000000005
+13,hash_path,Merkle-style hash-path update N=1000,1000,7.725
+14,crypto,SHA-256 (256 B),2000,1.11785
+14,crypto,HMAC-SHA256 (256 B),2000,1.62595
+14,crypto,AES-128-GCM encrypt (256 B),2000,0.62505
+14,crypto,AES-128-GCM decrypt (256 B),2000,0.62385
+14,crypto,ECDSA-P256 sign,300,19.217
+14,crypto,ECDSA-P256 verify,300,50.24633333333333
+14,crypto,ECDH-P256 shared secret,300,37.788666666666664
+14,crypto,ECC-P256 key generation,80,12.12875
+14,crypto,X25519 shared secret,600,22.89966666666667
+14,crypto,RSA-2048 sign,50,409.844
+14,crypto,RSA-2048 verify,300,16.933333333333334
+14,hash_path,Merkle-style hash-path lookup N=1,1000,0.8135
+14,hash_path,Merkle-style hash-path update N=1,1000,2.1247
+14,hash_path,Merkle-style hash-path lookup N=10,1000,2.6335
+14,hash_path,Merkle-style hash-path update N=10,1000,4.1845
+14,hash_path,Merkle-style hash-path lookup N=50,1000,4.0294
+14,hash_path,Merkle-style hash-path update N=50,1000,5.5127
+14,hash_path,Merkle-style hash-path lookup N=100,1000,4.6549
+14,hash_path,Merkle-style hash-path update N=100,1000,6.1837
+14,hash_path,Merkle-style hash-path lookup N=200,1000,5.2686
+14,hash_path,Merkle-style hash-path update N=200,1000,6.846100000000001
+14,hash_path,Merkle-style hash-path lookup N=500,1000,5.9111
+14,hash_path,Merkle-style hash-path update N=500,1000,7.915100000000001
+14,hash_path,Merkle-style hash-path lookup N=1000,1000,6.4909
+14,hash_path,Merkle-style hash-path update N=1000,1000,8.1265
+15,crypto,SHA-256 (256 B),2000,1.17045
+15,crypto,HMAC-SHA256 (256 B),2000,1.7499500000000001
+15,crypto,AES-128-GCM encrypt (256 B),2000,0.60475
+15,crypto,AES-128-GCM decrypt (256 B),2000,0.64295
+15,crypto,ECDSA-P256 sign,300,21.289
+15,crypto,ECDSA-P256 verify,300,50.353
+15,crypto,ECDH-P256 shared secret,300,36.551
+15,crypto,ECC-P256 key generation,80,12.16375
+15,crypto,X25519 shared secret,600,22.5915
+15,crypto,RSA-2048 sign,50,414.354
+15,crypto,RSA-2048 verify,300,19.31533333333333
+15,hash_path,Merkle-style hash-path lookup N=1,1000,0.9072
+15,hash_path,Merkle-style hash-path update N=1,1000,2.1705
+15,hash_path,Merkle-style hash-path lookup N=10,1000,2.6677
+15,hash_path,Merkle-style hash-path update N=10,1000,4.1511000000000005
+15,hash_path,Merkle-style hash-path lookup N=50,1000,4.2379
+15,hash_path,Merkle-style hash-path update N=50,1000,6.2814
+15,hash_path,Merkle-style hash-path lookup N=100,1000,4.9554
+15,hash_path,Merkle-style hash-path update N=100,1000,6.3628
+15,hash_path,Merkle-style hash-path lookup N=200,1000,5.0868
+15,hash_path,Merkle-style hash-path update N=200,1000,6.5375
+15,hash_path,Merkle-style hash-path lookup N=500,1000,6.4669
+15,hash_path,Merkle-style hash-path update N=500,1000,7.4375
+15,hash_path,Merkle-style hash-path lookup N=1000,1000,6.3973
+15,hash_path,Merkle-style hash-path update N=1000,1000,8.410200000000001
+16,crypto,SHA-256 (256 B),2000,1.137
+16,crypto,HMAC-SHA256 (256 B),2000,1.7754
+16,crypto,AES-128-GCM encrypt (256 B),2000,0.6432
+16,crypto,AES-128-GCM decrypt (256 B),2000,1.15825
+16,crypto,ECDSA-P256 sign,300,20.363
+16,crypto,ECDSA-P256 verify,300,51.963
+16,crypto,ECDH-P256 shared secret,300,38.513
+16,crypto,ECC-P256 key generation,80,12.2875
+16,crypto,X25519 shared secret,600,23.35083333333333
+16,crypto,RSA-2048 sign,50,442.072
+16,crypto,RSA-2048 verify,300,16.962333333333333
+16,hash_path,Merkle-style hash-path lookup N=1,1000,0.8905
+16,hash_path,Merkle-style hash-path update N=1,1000,2.2222
+16,hash_path,Merkle-style hash-path lookup N=10,1000,2.7346
+16,hash_path,Merkle-style hash-path update N=10,1000,4.1918
+16,hash_path,Merkle-style hash-path lookup N=50,1000,4.0118
+16,hash_path,Merkle-style hash-path update N=50,1000,5.4527
+16,hash_path,Merkle-style hash-path lookup N=100,1000,4.5123999999999995
+16,hash_path,Merkle-style hash-path update N=100,1000,5.879899999999999
+16,hash_path,Merkle-style hash-path lookup N=200,1000,4.9567
+16,hash_path,Merkle-style hash-path update N=200,1000,6.4306
+16,hash_path,Merkle-style hash-path lookup N=500,1000,5.7701
+16,hash_path,Merkle-style hash-path update N=500,1000,7.2284
+16,hash_path,Merkle-style hash-path lookup N=1000,1000,6.4313
+16,hash_path,Merkle-style hash-path update N=1000,1000,7.5255
+17,crypto,SHA-256 (256 B),2000,1.11565
+17,crypto,HMAC-SHA256 (256 B),2000,1.6206500000000001
+17,crypto,AES-128-GCM encrypt (256 B),2000,0.5857
+17,crypto,AES-128-GCM decrypt (256 B),2000,0.64755
+17,crypto,ECDSA-P256 sign,300,18.59933333333333
+17,crypto,ECDSA-P256 verify,300,48.348
+17,crypto,ECDH-P256 shared secret,300,36.342666666666666
+17,crypto,ECC-P256 key generation,80,11.93
+17,crypto,X25519 shared secret,600,22.013
+17,crypto,RSA-2048 sign,50,422.204
+17,crypto,RSA-2048 verify,300,19.846
+17,hash_path,Merkle-style hash-path lookup N=1,1000,0.964
+17,hash_path,Merkle-style hash-path update N=1,1000,2.089
+17,hash_path,Merkle-style hash-path lookup N=10,1000,2.5014000000000003
+17,hash_path,Merkle-style hash-path update N=10,1000,3.8644000000000003
+17,hash_path,Merkle-style hash-path lookup N=50,1000,3.8679
+17,hash_path,Merkle-style hash-path update N=50,1000,5.065300000000001
+17,hash_path,Merkle-style hash-path lookup N=100,1000,4.2055
+17,hash_path,Merkle-style hash-path update N=100,1000,5.6465
+17,hash_path,Merkle-style hash-path lookup N=200,1000,4.9127
+17,hash_path,Merkle-style hash-path update N=200,1000,6.2763
+17,hash_path,Merkle-style hash-path lookup N=500,1000,5.4616999999999996
+17,hash_path,Merkle-style hash-path update N=500,1000,6.9394
+17,hash_path,Merkle-style hash-path lookup N=1000,1000,5.961
+17,hash_path,Merkle-style hash-path update N=1000,1000,7.4662
+18,crypto,SHA-256 (256 B),2000,1.1126500000000001
+18,crypto,HMAC-SHA256 (256 B),2000,1.61325
+18,crypto,AES-128-GCM encrypt (256 B),2000,0.6339
+18,crypto,AES-128-GCM decrypt (256 B),2000,0.6251
+18,crypto,ECDSA-P256 sign,300,19.154
+18,crypto,ECDSA-P256 verify,300,48.96633333333334
+18,crypto,ECDH-P256 shared secret,300,39.065666666666665
+18,crypto,ECC-P256 key generation,80,14.96875
+18,crypto,X25519 shared secret,600,22.7085
+18,crypto,RSA-2048 sign,50,422.502
+18,crypto,RSA-2048 verify,300,16.092
+18,hash_path,Merkle-style hash-path lookup N=1,1000,0.799
+18,hash_path,Merkle-style hash-path update N=1,1000,2.0536999999999996
+18,hash_path,Merkle-style hash-path lookup N=10,1000,2.5806
+18,hash_path,Merkle-style hash-path update N=10,1000,4.0301
+18,hash_path,Merkle-style hash-path lookup N=50,1000,3.634
+18,hash_path,Merkle-style hash-path update N=50,1000,4.9498999999999995
+18,hash_path,Merkle-style hash-path lookup N=100,1000,4.3836
+18,hash_path,Merkle-style hash-path update N=100,1000,5.8843000000000005
+18,hash_path,Merkle-style hash-path lookup N=200,1000,4.7738000000000005
+18,hash_path,Merkle-style hash-path update N=200,1000,6.3553999999999995
+18,hash_path,Merkle-style hash-path lookup N=500,1000,5.3688
+18,hash_path,Merkle-style hash-path update N=500,1000,7.0513
+18,hash_path,Merkle-style hash-path lookup N=1000,1000,6.2717
+18,hash_path,Merkle-style hash-path update N=1000,1000,7.400399999999999
+19,crypto,SHA-256 (256 B),2000,1.18105
+19,crypto,HMAC-SHA256 (256 B),2000,1.65125
+19,crypto,AES-128-GCM encrypt (256 B),2000,0.5712
+19,crypto,AES-128-GCM decrypt (256 B),2000,0.59735
+19,crypto,ECDSA-P256 sign,300,18.342666666666666
+19,crypto,ECDSA-P256 verify,300,48.46033333333334
+19,crypto,ECDH-P256 shared secret,300,37.574333333333335
+19,crypto,ECC-P256 key generation,80,11.62125
+19,crypto,X25519 shared secret,600,22.3215
+19,crypto,RSA-2048 sign,50,403.506
+19,crypto,RSA-2048 verify,300,16.82466666666667
+19,hash_path,Merkle-style hash-path lookup N=1,1000,0.8122
+19,hash_path,Merkle-style hash-path update N=1,1000,2.0923000000000003
+19,hash_path,Merkle-style hash-path lookup N=10,1000,2.9688000000000003
+19,hash_path,Merkle-style hash-path update N=10,1000,3.8508
+19,hash_path,Merkle-style hash-path lookup N=50,1000,3.7546
+19,hash_path,Merkle-style hash-path update N=50,1000,5.7317
+19,hash_path,Merkle-style hash-path lookup N=100,1000,4.4473
+19,hash_path,Merkle-style hash-path update N=100,1000,5.6293
+19,hash_path,Merkle-style hash-path lookup N=200,1000,5.0339
+19,hash_path,Merkle-style hash-path update N=200,1000,6.3222
+19,hash_path,Merkle-style hash-path lookup N=500,1000,5.3873999999999995
+19,hash_path,Merkle-style hash-path update N=500,1000,7.208399999999999
+19,hash_path,Merkle-style hash-path lookup N=1000,1000,6.1955
+19,hash_path,Merkle-style hash-path update N=1000,1000,7.932300000000001
+20,crypto,SHA-256 (256 B),2000,1.2118499999999999
+20,crypto,HMAC-SHA256 (256 B),2000,1.7932000000000001
+20,crypto,AES-128-GCM encrypt (256 B),2000,0.57225
+20,crypto,AES-128-GCM decrypt (256 B),2000,0.5902999999999999
+20,crypto,ECDSA-P256 sign,300,19.113666666666667
+20,crypto,ECDSA-P256 verify,300,48.68933333333334
+20,crypto,ECDH-P256 shared secret,300,35.82066666666667
+20,crypto,ECC-P256 key generation,80,11.68125
+20,crypto,X25519 shared secret,600,22.75766666666667
+20,crypto,RSA-2048 sign,50,405.744
+20,crypto,RSA-2048 verify,300,15.985333333333333
+20,hash_path,Merkle-style hash-path lookup N=1,1000,0.8046
+20,hash_path,Merkle-style hash-path update N=1,1000,2.0936999999999997
+20,hash_path,Merkle-style hash-path lookup N=10,1000,2.6302
+20,hash_path,Merkle-style hash-path update N=10,1000,3.8525
+20,hash_path,Merkle-style hash-path lookup N=50,1000,3.6886
+20,hash_path,Merkle-style hash-path update N=50,1000,5.027
+20,hash_path,Merkle-style hash-path lookup N=100,1000,4.4995
+20,hash_path,Merkle-style hash-path update N=100,1000,5.8057
+20,hash_path,Merkle-style hash-path lookup N=200,1000,4.902100000000001
+20,hash_path,Merkle-style hash-path update N=200,1000,6.44
+20,hash_path,Merkle-style hash-path lookup N=500,1000,5.3811
+20,hash_path,Merkle-style hash-path update N=500,1000,6.9723999999999995
+20,hash_path,Merkle-style hash-path lookup N=1000,1000,6.0404
+20,hash_path,Merkle-style hash-path update N=1000,1000,7.6196
+21,crypto,SHA-256 (256 B),2000,1.12515
+21,crypto,HMAC-SHA256 (256 B),2000,1.6613
+21,crypto,AES-128-GCM encrypt (256 B),2000,0.5812999999999999
+21,crypto,AES-128-GCM decrypt (256 B),2000,0.5895499999999999
+21,crypto,ECDSA-P256 sign,300,18.695666666666668
+21,crypto,ECDSA-P256 verify,300,49.118
+21,crypto,ECDH-P256 shared secret,300,36.413
+21,crypto,ECC-P256 key generation,80,11.66625
+21,crypto,X25519 shared secret,600,22.358
+21,crypto,RSA-2048 sign,50,407.174
+21,crypto,RSA-2048 verify,300,16.845333333333333
+21,hash_path,Merkle-style hash-path lookup N=1,1000,0.9334
+21,hash_path,Merkle-style hash-path update N=1,1000,2.1545
+21,hash_path,Merkle-style hash-path lookup N=10,1000,2.6837
+21,hash_path,Merkle-style hash-path update N=10,1000,3.8455
+21,hash_path,Merkle-style hash-path lookup N=50,1000,3.7645999999999997
+21,hash_path,Merkle-style hash-path update N=50,1000,5.561100000000001
+21,hash_path,Merkle-style hash-path lookup N=100,1000,4.2677
+21,hash_path,Merkle-style hash-path update N=100,1000,5.9036
+21,hash_path,Merkle-style hash-path lookup N=200,1000,5.1921
+21,hash_path,Merkle-style hash-path update N=200,1000,6.3576999999999995
+21,hash_path,Merkle-style hash-path lookup N=500,1000,5.6153
+21,hash_path,Merkle-style hash-path update N=500,1000,6.922
+21,hash_path,Merkle-style hash-path lookup N=1000,1000,5.926699999999999
+21,hash_path,Merkle-style hash-path update N=1000,1000,7.632899999999999
+22,crypto,SHA-256 (256 B),2000,1.1145
+22,crypto,HMAC-SHA256 (256 B),2000,1.6070499999999999
+22,crypto,AES-128-GCM encrypt (256 B),2000,0.5856
+22,crypto,AES-128-GCM decrypt (256 B),2000,0.58935
+22,crypto,ECDSA-P256 sign,300,20.869666666666667
+22,crypto,ECDSA-P256 verify,300,49.89233333333333
+22,crypto,ECDH-P256 shared secret,300,36.499
+22,crypto,ECC-P256 key generation,80,11.86625
+22,crypto,X25519 shared secret,600,22.618333333333332
+22,crypto,RSA-2048 sign,50,422.374
+22,crypto,RSA-2048 verify,300,16.072666666666667
+22,hash_path,Merkle-style hash-path lookup N=1,1000,0.8107000000000001
+22,hash_path,Merkle-style hash-path update N=1,1000,2.1704
+22,hash_path,Merkle-style hash-path lookup N=10,1000,2.583
+22,hash_path,Merkle-style hash-path update N=10,1000,3.8876
+22,hash_path,Merkle-style hash-path lookup N=50,1000,3.764
+22,hash_path,Merkle-style hash-path update N=50,1000,5.038
+22,hash_path,Merkle-style hash-path lookup N=100,1000,4.404
+22,hash_path,Merkle-style hash-path update N=100,1000,5.6193
+22,hash_path,Merkle-style hash-path lookup N=200,1000,4.7882
+22,hash_path,Merkle-style hash-path update N=200,1000,6.426699999999999
+22,hash_path,Merkle-style hash-path lookup N=500,1000,5.392600000000001
+22,hash_path,Merkle-style hash-path update N=500,1000,6.9308000000000005
+22,hash_path,Merkle-style hash-path lookup N=1000,1000,6.016100000000001
+22,hash_path,Merkle-style hash-path update N=1000,1000,7.457
+23,crypto,SHA-256 (256 B),2000,1.0714000000000001
+23,crypto,HMAC-SHA256 (256 B),2000,1.64435
+23,crypto,AES-128-GCM encrypt (256 B),2000,0.5698
+23,crypto,AES-128-GCM decrypt (256 B),2000,0.7217
+23,crypto,ECDSA-P256 sign,300,18.743
+23,crypto,ECDSA-P256 verify,300,49.128
+23,crypto,ECDH-P256 shared secret,300,37.184666666666665
+23,crypto,ECC-P256 key generation,80,11.71
+23,crypto,X25519 shared secret,600,22.1875
+23,crypto,RSA-2048 sign,50,403.706
+23,crypto,RSA-2048 verify,300,16.431
+23,hash_path,Merkle-style hash-path lookup N=1,1000,0.7968
+23,hash_path,Merkle-style hash-path update N=1,1000,2.0382000000000002
+23,hash_path,Merkle-style hash-path lookup N=10,1000,2.4932
+23,hash_path,Merkle-style hash-path update N=10,1000,3.8156999999999996
+23,hash_path,Merkle-style hash-path lookup N=50,1000,3.8741
+23,hash_path,Merkle-style hash-path update N=50,1000,5.022600000000001
+23,hash_path,Merkle-style hash-path lookup N=100,1000,4.204
+23,hash_path,Merkle-style hash-path update N=100,1000,6.0871
+23,hash_path,Merkle-style hash-path lookup N=200,1000,5.161
+23,hash_path,Merkle-style hash-path update N=200,1000,8.5707
+23,hash_path,Merkle-style hash-path lookup N=500,1000,7.2818000000000005
+23,hash_path,Merkle-style hash-path update N=500,1000,7.4905
+23,hash_path,Merkle-style hash-path lookup N=1000,1000,6.3687
+23,hash_path,Merkle-style hash-path update N=1000,1000,7.4517
+24,crypto,SHA-256 (256 B),2000,1.1382999999999999
+24,crypto,HMAC-SHA256 (256 B),2000,1.7125
+24,crypto,AES-128-GCM encrypt (256 B),2000,0.6233
+24,crypto,AES-128-GCM decrypt (256 B),2000,0.63775
+24,crypto,ECDSA-P256 sign,300,18.483
+24,crypto,ECDSA-P256 verify,300,52.614666666666665
+24,crypto,ECDH-P256 shared secret,300,39.028
+24,crypto,ECC-P256 key generation,80,12.3375
+24,crypto,X25519 shared secret,600,23.104166666666668
+24,crypto,RSA-2048 sign,50,425.434
+24,crypto,RSA-2048 verify,300,17.790666666666667
+24,hash_path,Merkle-style hash-path lookup N=1,1000,0.8036
+24,hash_path,Merkle-style hash-path update N=1,1000,2.1039
+24,hash_path,Merkle-style hash-path lookup N=10,1000,2.5256
+24,hash_path,Merkle-style hash-path update N=10,1000,3.8448
+24,hash_path,Merkle-style hash-path lookup N=50,1000,3.8306
+24,hash_path,Merkle-style hash-path update N=50,1000,5.198600000000001
+24,hash_path,Merkle-style hash-path lookup N=100,1000,4.1985
+24,hash_path,Merkle-style hash-path update N=100,1000,5.9162
+24,hash_path,Merkle-style hash-path lookup N=200,1000,5.0845
+24,hash_path,Merkle-style hash-path update N=200,1000,6.2156
+24,hash_path,Merkle-style hash-path lookup N=500,1000,5.532
+24,hash_path,Merkle-style hash-path update N=500,1000,7.0084
+24,hash_path,Merkle-style hash-path lookup N=1000,1000,6.0922
+24,hash_path,Merkle-style hash-path update N=1000,1000,7.7513000000000005
+25,crypto,SHA-256 (256 B),2000,1.1178
+25,crypto,HMAC-SHA256 (256 B),2000,1.6253499999999999
+25,crypto,AES-128-GCM encrypt (256 B),2000,0.5640499999999999
+25,crypto,AES-128-GCM decrypt (256 B),2000,0.6011
+25,crypto,ECDSA-P256 sign,300,22.282
+25,crypto,ECDSA-P256 verify,300,54.443
+25,crypto,ECDH-P256 shared secret,300,37.470666666666666
+25,crypto,ECC-P256 key generation,80,13.48375
+25,crypto,X25519 shared secret,600,23.688333333333333
+25,crypto,RSA-2048 sign,50,439.918
+25,crypto,RSA-2048 verify,300,17.47866666666667
+25,hash_path,Merkle-style hash-path lookup N=1,1000,0.8202
+25,hash_path,Merkle-style hash-path update N=1,1000,2.0761999999999996
+25,hash_path,Merkle-style hash-path lookup N=10,1000,2.5866
+25,hash_path,Merkle-style hash-path update N=10,1000,4.2353000000000005
+25,hash_path,Merkle-style hash-path lookup N=50,1000,4.109100000000001
+25,hash_path,Merkle-style hash-path update N=50,1000,5.4348
+25,hash_path,Merkle-style hash-path lookup N=100,1000,4.8205
+25,hash_path,Merkle-style hash-path update N=100,1000,6.2248
+25,hash_path,Merkle-style hash-path lookup N=200,1000,5.3755
+25,hash_path,Merkle-style hash-path update N=200,1000,6.7844
+25,hash_path,Merkle-style hash-path lookup N=500,1000,5.735399999999999
+25,hash_path,Merkle-style hash-path update N=500,1000,7.0539
+25,hash_path,Merkle-style hash-path lookup N=1000,1000,5.9715
+25,hash_path,Merkle-style hash-path update N=1000,1000,7.663
+26,crypto,SHA-256 (256 B),2000,1.1907
+26,crypto,HMAC-SHA256 (256 B),2000,1.7296500000000001
+26,crypto,AES-128-GCM encrypt (256 B),2000,0.5969500000000001
+26,crypto,AES-128-GCM decrypt (256 B),2000,0.6263500000000001
+26,crypto,ECDSA-P256 sign,300,20.10033333333333
+26,crypto,ECDSA-P256 verify,300,49.992333333333335
+26,crypto,ECDH-P256 shared secret,300,39.012
+26,crypto,ECC-P256 key generation,80,13.95125
+26,crypto,X25519 shared secret,600,22.419833333333333
+26,crypto,RSA-2048 sign,50,421.274
+26,crypto,RSA-2048 verify,300,17.06
+26,hash_path,Merkle-style hash-path lookup N=1,1000,0.9687
+26,hash_path,Merkle-style hash-path update N=1,1000,2.2251
+26,hash_path,Merkle-style hash-path lookup N=10,1000,2.571
+26,hash_path,Merkle-style hash-path update N=10,1000,3.9306
+26,hash_path,Merkle-style hash-path lookup N=50,1000,3.7945
+26,hash_path,Merkle-style hash-path update N=50,1000,5.334899999999999
+26,hash_path,Merkle-style hash-path lookup N=100,1000,4.3037
+26,hash_path,Merkle-style hash-path update N=100,1000,5.7302
+26,hash_path,Merkle-style hash-path lookup N=200,1000,5.03
+26,hash_path,Merkle-style hash-path update N=200,1000,6.2998
+26,hash_path,Merkle-style hash-path lookup N=500,1000,5.5193
+26,hash_path,Merkle-style hash-path update N=500,1000,7.1265
+26,hash_path,Merkle-style hash-path lookup N=1000,1000,6.1475
+26,hash_path,Merkle-style hash-path update N=1000,1000,7.653899999999999
+27,crypto,SHA-256 (256 B),2000,1.1316
+27,crypto,HMAC-SHA256 (256 B),2000,1.62275
+27,crypto,AES-128-GCM encrypt (256 B),2000,0.60225
+27,crypto,AES-128-GCM decrypt (256 B),2000,0.71125
+27,crypto,ECDSA-P256 sign,300,18.686
+27,crypto,ECDSA-P256 verify,300,50.708666666666666
+27,crypto,ECDH-P256 shared secret,300,37.56
+27,crypto,ECC-P256 key generation,80,11.71125
+27,crypto,X25519 shared secret,600,22.3765
+27,crypto,RSA-2048 sign,50,418.76
+27,crypto,RSA-2048 verify,300,16.164666666666665
+27,hash_path,Merkle-style hash-path lookup N=1,1000,0.8285
+27,hash_path,Merkle-style hash-path update N=1,1000,2.0734
+27,hash_path,Merkle-style hash-path lookup N=10,1000,2.5759000000000003
+27,hash_path,Merkle-style hash-path update N=10,1000,4.1693999999999996
+27,hash_path,Merkle-style hash-path lookup N=50,1000,3.7413000000000003
+27,hash_path,Merkle-style hash-path update N=50,1000,5.2223999999999995
+27,hash_path,Merkle-style hash-path lookup N=100,1000,4.4933000000000005
+27,hash_path,Merkle-style hash-path update N=100,1000,6.2283
+27,hash_path,Merkle-style hash-path lookup N=200,1000,5.0759
+27,hash_path,Merkle-style hash-path update N=200,1000,6.8228
+27,hash_path,Merkle-style hash-path lookup N=500,1000,5.396100000000001
+27,hash_path,Merkle-style hash-path update N=500,1000,6.9643999999999995
+27,hash_path,Merkle-style hash-path lookup N=1000,1000,6.7073
+27,hash_path,Merkle-style hash-path update N=1000,1000,7.4357
+28,crypto,SHA-256 (256 B),2000,1.13365
+28,crypto,HMAC-SHA256 (256 B),2000,1.7353
+28,crypto,AES-128-GCM encrypt (256 B),2000,0.57635
+28,crypto,AES-128-GCM decrypt (256 B),2000,0.6035
+28,crypto,ECDSA-P256 sign,300,19.282
+28,crypto,ECDSA-P256 verify,300,51.650333333333336
+28,crypto,ECDH-P256 shared secret,300,39.894666666666666
+28,crypto,ECC-P256 key generation,80,12.16875
+28,crypto,X25519 shared secret,600,22.92233333333333
+28,crypto,RSA-2048 sign,50,420.244
+28,crypto,RSA-2048 verify,300,16.281
+28,hash_path,Merkle-style hash-path lookup N=1,1000,0.8119
+28,hash_path,Merkle-style hash-path update N=1,1000,2.1424000000000003
+28,hash_path,Merkle-style hash-path lookup N=10,1000,2.6023
+28,hash_path,Merkle-style hash-path update N=10,1000,4.3228
+28,hash_path,Merkle-style hash-path lookup N=50,1000,3.8878000000000004
+28,hash_path,Merkle-style hash-path update N=50,1000,5.5015
+28,hash_path,Merkle-style hash-path lookup N=100,1000,4.5427
+28,hash_path,Merkle-style hash-path update N=100,1000,10.372399999999999
+28,hash_path,Merkle-style hash-path lookup N=200,1000,8.4336
+28,hash_path,Merkle-style hash-path update N=200,1000,8.539
+28,hash_path,Merkle-style hash-path lookup N=500,1000,7.3678
+28,hash_path,Merkle-style hash-path update N=500,1000,8.9231
+28,hash_path,Merkle-style hash-path lookup N=1000,1000,6.6334
+28,hash_path,Merkle-style hash-path update N=1000,1000,8.6044
+29,crypto,SHA-256 (256 B),2000,1.2115
+29,crypto,HMAC-SHA256 (256 B),2000,1.7524000000000002
+29,crypto,AES-128-GCM encrypt (256 B),2000,0.63085
+29,crypto,AES-128-GCM decrypt (256 B),2000,0.66925
+29,crypto,ECDSA-P256 sign,300,21.203333333333333
+29,crypto,ECDSA-P256 verify,300,53.204
+29,crypto,ECDH-P256 shared secret,300,39.20066666666666
+29,crypto,ECC-P256 key generation,80,12.77625
+29,crypto,X25519 shared secret,600,23.409166666666668
+29,crypto,RSA-2048 sign,50,435.12
+29,crypto,RSA-2048 verify,300,17.71666666666667
+29,hash_path,Merkle-style hash-path lookup N=1,1000,0.8359
+29,hash_path,Merkle-style hash-path update N=1,1000,2.1307
+29,hash_path,Merkle-style hash-path lookup N=10,1000,2.5465
+29,hash_path,Merkle-style hash-path update N=10,1000,4.0792
+29,hash_path,Merkle-style hash-path lookup N=50,1000,4.3201
+29,hash_path,Merkle-style hash-path update N=50,1000,5.794899999999999
+29,hash_path,Merkle-style hash-path lookup N=100,1000,4.7246999999999995
+29,hash_path,Merkle-style hash-path update N=100,1000,6.1887
+29,hash_path,Merkle-style hash-path lookup N=200,1000,5.037100000000001
+29,hash_path,Merkle-style hash-path update N=200,1000,6.7343
+29,hash_path,Merkle-style hash-path lookup N=500,1000,5.834899999999999
+29,hash_path,Merkle-style hash-path update N=500,1000,7.1411999999999995
+29,hash_path,Merkle-style hash-path lookup N=1000,1000,6.1183000000000005
+29,hash_path,Merkle-style hash-path update N=1000,1000,7.519699999999999
+30,crypto,SHA-256 (256 B),2000,1.1494000000000002
+30,crypto,HMAC-SHA256 (256 B),2000,1.6286500000000002
+30,crypto,AES-128-GCM encrypt (256 B),2000,0.5854
+30,crypto,AES-128-GCM decrypt (256 B),2000,0.63915
+30,crypto,ECDSA-P256 sign,300,19.178
+30,crypto,ECDSA-P256 verify,300,53.33866666666666
+30,crypto,ECDH-P256 shared secret,300,38.815333333333335
+30,crypto,ECC-P256 key generation,80,12.255
+30,crypto,X25519 shared secret,600,23.6295
+30,crypto,RSA-2048 sign,50,424.522
+30,crypto,RSA-2048 verify,300,17.706
+30,hash_path,Merkle-style hash-path lookup N=1,1000,0.8548
+30,hash_path,Merkle-style hash-path update N=1,1000,2.1357
+30,hash_path,Merkle-style hash-path lookup N=10,1000,2.5970999999999997
+30,hash_path,Merkle-style hash-path update N=10,1000,3.8955
+30,hash_path,Merkle-style hash-path lookup N=50,1000,3.9048000000000003
+30,hash_path,Merkle-style hash-path update N=50,1000,5.3449
+30,hash_path,Merkle-style hash-path lookup N=100,1000,4.44
+30,hash_path,Merkle-style hash-path update N=100,1000,5.8071
+30,hash_path,Merkle-style hash-path lookup N=200,1000,5.3901
+30,hash_path,Merkle-style hash-path update N=200,1000,6.2932
+30,hash_path,Merkle-style hash-path lookup N=500,1000,5.7921000000000005
+30,hash_path,Merkle-style hash-path update N=500,1000,7.2054
+30,hash_path,Merkle-style hash-path lookup N=1000,1000,6.2478
+30,hash_path,Merkle-style hash-path update N=1000,1000,8.0413

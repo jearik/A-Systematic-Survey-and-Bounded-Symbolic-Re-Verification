@@ -1,0 +1,17 @@
+(* Explicit-fault parser/runner sanity template for M2, labelled consortium-ledger trust anchor; not a component-removal ablation.
+   This is deliberately unsafe: it directly releases a secret and/or permits
+   acceptance without a prior run so parser/runner detection can be checked. *)
+free net: channel.
+type id.
+const devA: id.
+const devB: id.
+free compromised_secret: bitstring [private].
+event expectedRun(id,id).
+event accept(id,id).
+
+query attacker(compromised_secret).
+query a:id,b:id; event(accept(a,b)) ==> event(expectedRun(a,b)).
+
+process
+  out(net, compromised_secret);
+  event accept(devA, devB)

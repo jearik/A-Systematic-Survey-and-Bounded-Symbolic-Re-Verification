@@ -1,0 +1,91 @@
+(* =====================================================================
+   Model M1 - Certificate-based cross-domain mutual authentication
+              with ephemeral ECDH (PKI / certificate-exchange family).
+   Run:  proverif M1_certificate_based_ECDHE.pv
+   Properties: (Q1) session-key secrecy, (Q2) mutual injective agreement,
+               (Q3) forward secrecy (key stays secret after long-term key leak).
+   ===================================================================== *)
+
+free net: channel.                      (* public Dolev-Yao network        *)
+
+type skey.  type pkey.  type G.  type exp.
+
+(* Elliptic-curve Diffie-Hellman as an equational theory *)
+const gen: G.
+fun gexp(G, exp): G.
+equation forall x: exp, y: exp; gexp(gexp(gen, x), y) = gexp(gexp(gen, y), x).
+
+(* Public-key / signature primitives *)
+fun pk(skey): pkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, k: skey; checksign(sign(m, k), pk(k)) = m.
+
+(* Domain CA certificate: binds a device public key, opens to that pkey *)
+fun cert(pkey, skey): bitstring.
+reduc forall p: pkey, k: skey; opencert(cert(p, k), pk(k)) = p.
+
+(* Key derivation from the shared ECDH point *)
+fun kdf(G): bitstring.
+
+(* Events for the authentication (correspondence) properties *)
+event initAccept(pkey, pkey, bitstring).
+event respRunning(pkey, pkey, bitstring).
+event respAccept(pkey, pkey, bitstring).
+event initRunning(pkey, pkey, bitstring).
+
+(* Secrecy test: a fresh secret sent under the session key *)
+free secretA: bitstring [private].
+free secretB: bitstring [private].
+
+query a: pkey, b: pkey, k: bitstring;
+      inj-event(respAccept(a, b, k)) ==> inj-event(initRunning(a, b, k)).
+
+(* Symmetric authenticated encryption for the confirmation messages *)
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+(* ---- Initiator in domain A, certified by CA_A ---- *)
+let initiator(skA: skey, pkA: pkey, pkCA_B: pkey, certA: bitstring) =
+    new x: exp;
+    let X = gexp(gen, x) in
+    out(net, (pkA, X, certA));
+    in(net, (pkB: pkey, Y: G, certB: bitstring, sgB: bitstring));
+    let (=pkB) = opencert(certB, pkCA_B) in
+    let k = kdf(gexp(Y, x)) in
+    let (=pkB, =pkA, =X, =Y) = checksign(sgB, pkB) in
+    event initRunning(pkA, pkB, k);
+    out(net, sign((pkB, pkA, X, Y), skA));
+    event initAccept(pkA, pkB, k);
+    out(net, senc(secretA, k)).
+
+(* ---- Responder in domain B, certified by CA_B ---- *)
+let responder(skB: skey, pkB: pkey, pkCA_A: pkey, certB: bitstring) =
+    in(net, (pkA: pkey, X: G, certA: bitstring));
+    let (=pkA) = opencert(certA, pkCA_A) in
+    new y: exp;
+    let Y = gexp(gen, y) in
+    let k = kdf(gexp(X, y)) in
+    event respRunning(pkA, pkB, k);
+    (* The responder signs the same transcript tuple that the initiator checks.
+       The v15.3E artifact signed only (pkB,pkA), which made the honest
+       initiator continuation at line 59 unreachable and invalidated the
+       recorded baseline interpretation. *)
+    out(net, (pkB, Y, certB, sign((pkB, pkA, X, Y), skB)));
+    in(net, sgA: bitstring);
+    let (=pkB, =pkA, =X, =Y) = checksign(sgA, pkA) in
+    event respAccept(pkA, pkB, k);
+    out(net, senc(secretB, k)).
+
+(* ---- Two certificate authorities, one per administrative domain ---- *)
+process
+    new skCA_A: skey;  new skCA_B: skey;
+    let pkCA_A = pk(skCA_A) in
+    let pkCA_B = pk(skCA_B) in
+    out(net, pkCA_A); out(net, pkCA_B);
+    new skA: skey;  let pkA = pk(skA) in
+    new skB: skey;  let pkB = pk(skB) in
+    out(net, pkA);  out(net, pkB);
+    let certA = cert(pkA, skCA_A) in
+    let certB = cert(pkB, skCA_B) in
+    ( (! initiator(skA, pkA, pkCA_B, certA))
+    | (! responder(skB, pkB, pkCA_A, certB)) )

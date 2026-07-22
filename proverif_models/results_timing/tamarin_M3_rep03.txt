@@ -1,0 +1,158 @@
+maude tool: 'maude'
+ checking version: WARNING:
+
+ 'maude --version' returned unsupported version '3.2'
+ Please install one of the following versions of Maude: 2.7.1, 3.0, 3.1, 3.2.1, 3.2.2, 3.3, 3.3.1, 3.4, 3.5, 3.5.1
+
+Detailed results from testing 'maude'
+ command: maude --version
+ stdin:   
+ stdout:  3.2
+
+ stderr:  
+ checking installation: OK.
+[Theory M3_certificateless_AKA] Theory loaded
+[Theory M3_certificateless_AKA] Theory translated
+[Theory M3_certificateless_AKA] Derivation checks started
+[Theory M3_certificateless_AKA] Derivation checks ended
+[Theory M3_certificateless_AKA] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory M3_certificateless_AKA
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, h/1, pair/2, pk/1, sign/2, snd/1, true/0, verify/3
+equations:
+    fst(<x.1, x.2>) = x.1,
+    snd(<x.1, x.2>) = x.2,
+    verify(sign(x.1, x.2), x.1, pk(x.2)) = true
+
+rule (modulo E) KGC_Setup:
+   [ Fr( ~msk ) ]
+  --[ KGCSetup( ~msk ) ]->
+   [ !KGC( ~msk ), Out( 'kgc_public_params' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) KGC_Reveal:
+   [ !KGC( msk ) ] --[ KGCReveal( msk ) ]-> [ Out( msk ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Init_Start:
+   [ Fr( ~k ), !KGC( msk ) ]
+  --[ InitRunning( $I, $R, ~k ), UsesKGC( $I, msk ) ]->
+   [ !St_Init( $I, $R, ~k ), Out( <$I, $R, 'claka_init'> ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Resp_Accept:
+   [ !St_Init( I, R, k ), !KGC( msk ) ]
+  --[
+  RespRunning( R, I, k ), RespAccept( R, I, k ), Secret( k ),
+  UsesKGC( R, msk )
+  ]->
+   [ !St_Resp( R, I, k ), Out( <R, I, 'claka_resp'> ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Init_Accept:
+   [ !St_Init( I, R, k ), !St_Resp( R, I, k ) ]
+  --[ InitAccept( I, R, k ), Secret( k ) ]->
+   [ ]
+
+  /* has exactly the trivial AC variant */
+
+lemma pfs_after_kgc_reveal:
+  all-traces "∀ k #i. (Secret( k ) @ #i) ⇒ (¬(∃ #j. K( k ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k #i. (Secret( k ) @ #i) ∧ ∃ #j. (K( k ) @ #j)"
+*/
+simplify
+solve( Secret( k ) @ #i )
+  case Init_Accept
+  solve( !St_Init( I, R, k ) ▶₀ #i )
+    case Init_Start
+    solve( !St_Resp( $R, $I, ~k ) ▶₁ #i )
+      case Resp_Accept
+      by solve( !KU( ~k ) @ #vk )
+    qed
+  qed
+next
+  case Resp_Accept
+  solve( !St_Init( I, R, k ) ▶₀ #i )
+    case Init_Start
+    solve( !KGC( msk ) ▶₁ #i )
+      case KGC_Setup
+      by solve( !KU( ~k ) @ #vk )
+    qed
+  qed
+qed
+
+lemma responder_agreement:
+  all-traces
+  "∀ I R k #i.
+    (RespAccept( R, I, k ) @ #i) ⇒
+    (∃ #j. (InitRunning( I, R, k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R k #i.
+  (RespAccept( R, I, k ) @ #i)
+ ∧
+  ∀ #j. (InitRunning( I, R, k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+solve( !St_Init( I, R, k ) ▶₀ #i )
+  case Init_Start
+  by contradiction /* from formulas */
+qed
+
+lemma initiator_agreement:
+  all-traces
+  "∀ I R k #i.
+    (InitAccept( I, R, k ) @ #i) ⇒
+    (∃ #j. (RespRunning( R, I, k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R k #i.
+  (InitAccept( I, R, k ) @ #i)
+ ∧
+  ∀ #j. (RespRunning( R, I, k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+simplify
+solve( !St_Init( I, R, k ) ▶₀ #i )
+  case Init_Start
+  solve( !St_Resp( $R, $I, ~k ) ▶₁ #i )
+    case Resp_Accept
+    by contradiction /* from formulas */
+  qed
+qed
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.2 (unsupported)
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c, branch: HEAD
+Compiled at: 2026-06-18 06:00:25.52423265 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: <REDACTED_WORKSPACE>/M3_certificateless_AKA.spthy
+
+  processing time: 0.20s
+  
+  pfs_after_kgc_reveal (all-traces): verified (8 steps)
+  responder_agreement (all-traces): verified (3 steps)
+  initiator_agreement (all-traces): verified (4 steps)
+
+==============================================================================

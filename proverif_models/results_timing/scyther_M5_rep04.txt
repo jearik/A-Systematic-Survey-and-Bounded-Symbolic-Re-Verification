@@ -1,0 +1,6 @@
+claim	M5PUFKeyEstabAbstract,D	Secret_D1	H(challenge,response)	[32mOk[0m	[proof of correctness]
+claim	M5PUFKeyEstabAbstract,D	Niagree_D2	-	[32mOk[0m	[proof of correctness]
+claim	M5PUFKeyEstabAbstract,D	Nisynch_D3	-	[32mOk[0m	[proof of correctness]
+claim	M5PUFKeyEstabAbstract,V	Secret_V1	H(challenge,response)	[32mOk[0m	[proof of correctness]
+claim	M5PUFKeyEstabAbstract,V	Niagree_V2	-	[32mOk[0m	[proof of correctness]
+claim	M5PUFKeyEstabAbstract,V	Nisynch_V3	-	[32mOk[0m	[proof of correctness]

@@ -1,0 +1,66 @@
+(* Minimal CCAP hardening experiment: bind a fresh authentication nonce to
+   {Authenticate, pid, Sign_SK'_Ai(...)} and consume a replay cache token. This
+   is not the published protocol; it is a negative-control repair for P2. *)
+
+free net: channel.
+free chVSReq: channel [private].
+free chLookupReq: channel [private].
+free chLookupResp: channel [private].
+free cache: channel [private].
+
+type skey.
+type pkey.
+type pid.
+type nonce.
+type zkp.
+
+const verify_tag: bitstring.
+const authenticate: bitstring.
+const ballot_ok: bitstring.
+
+fun pk(skey): pkey.
+fun authmsg(pid, nonce): bitstring.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, sk: skey;
+    checksign(sign(m, sk), m, pk(sk)) = true.
+
+event LedgerPseudonymValid(pid, pkey).
+event DeviceAuthSent(pid, pkey, nonce).
+event PASBAccept(pid, pkey, nonce).
+
+query p: pid, pkA: pkey, n: nonce;
+    inj-event(PASBAccept(p, pkA, n)) ==> inj-event(DeviceAuthSent(p, pkA, n)).
+query p: pid, pkA: pkey, n: nonce;
+    event(PASBAccept(p, pkA, n)) ==> event(LedgerPseudonymValid(p, pkA)).
+
+let VS_Ledger(pidA: pid, pkA: pkey) =
+    new pi: zkp;
+    out(chVSReq, (verify_tag, pidA, pkA, pi));
+    in(chVSReq, (=verify_tag, =pidA, =pkA, pi2: zkp));
+    event LedgerPseudonymValid(pidA, pkA);
+    !(
+      in(chLookupReq, q: pid);
+      if q = pidA then out(chLookupResp, (pidA, pkA, ballot_ok))
+    ).
+
+let DeviceAuthenticate(pidA: pid, skA: skey) =
+    new n: nonce;
+    let pkA = pk(skA) in
+    event DeviceAuthSent(pidA, pkA, n);
+    out(cache, (pidA, n));
+    out(net, (authenticate, pidA, n, sign(authmsg(pidA, n), skA))).
+
+let PASB_Authenticate() =
+    in(net, (=authenticate, pidIn: pid, n: nonce, sig: bitstring));
+    in(cache, (=pidIn, =n));
+    out(chLookupReq, pidIn);
+    in(chLookupResp, (=pidIn, pkIn: pkey, =ballot_ok));
+    if checksign(sig, authmsg(pidIn, n), pkIn) = true then
+    event PASBAccept(pidIn, pkIn, n).
+
+process
+    new skA: skey;
+    new pidA: pid;
+    ( VS_Ledger(pidA, pk(skA))
+    | DeviceAuthenticate(pidA, skA)
+    | !PASB_Authenticate() )

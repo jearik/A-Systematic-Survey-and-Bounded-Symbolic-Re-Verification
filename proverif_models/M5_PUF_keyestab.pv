@@ -1,0 +1,56 @@
+(* =====================================================================
+   M5 - PUF-based cross-domain key establishment (Mahmood-style).
+        The device holds a PUF. Enrollment registers a secret challenge-
+        response pair (c, r) with the cross-domain verifier (the response r
+        is NOT public; the ledger would store only an opaque helper). The
+        verifier authenticates the device by the response and both derive a
+        session key bound to r and to a fresh ECDH exchange.
+   Run:  proverif M5_PUF_keyestab.pv
+   Q1 session-key secrecy, Q2 device authentication / anti-cloning
+   (only the holder of the PUF can produce the response r).
+   ===================================================================== *)
+free net: channel.
+type G. type exp. type chal. type resp.
+
+const gen:G.
+fun gexp(G,exp):G.
+equation forall x:exp,y:exp; gexp(gexp(gen,x),y)=gexp(gexp(gen,y),x).
+
+(* PUF as an unclonable, private function: only the device can evaluate puf. *)
+type pufid.
+fun puf(pufid, chal): resp [private].                 (* attacker cannot evaluate puf *)
+fun h(bitstring): bitstring.
+fun kdf(bitstring): bitstring.
+fun senc(bitstring,bitstring):bitstring.
+reduc forall m:bitstring,k:bitstring; sdec(senc(m,k),k)=m.
+
+event devAuth(chal, bitstring). event verAcc(chal, bitstring).
+free sess_secret: bitstring [private].
+query attacker(sess_secret).
+query c:chal, k:bitstring; inj-event(verAcc(c,k)) ==> inj-event(devAuth(c,k)).
+
+(* Device: receives challenge + verifier nonce, computes PUF response,
+   binds the key to the SECRET response r, proves knowledge of r. *)
+let device(pid: pufid) =
+    in(net, (c: chal, EV: G));
+    let r = puf(pid, c) in
+    new ed: exp; let ED = gexp(gen, ed) in
+    let k = kdf((gexp(EV, ed), r)) in                  (* key bound to secret response r *)
+    event devAuth(c, k);
+    out(net, (ED, h((r, ED, EV)))).                    (* proof requires r; binds both nonces *)
+
+(* Cross-domain verifier: holds the enrolled secret response r0 for challenge c. *)
+let verifier(c: chal, r0: resp) =
+    new ev: exp; let EV = gexp(gen, ev) in
+    out(net, (c, EV));
+    in(net, (ED: G, pf: bitstring));
+    if pf = h((r0, ED, EV)) then
+    let k = kdf((gexp(ED, ev), r0)) in
+    event verAcc(c, k);
+    out(net, senc(sess_secret, k)).
+
+process
+    new pid: pufid;                                    (* device PUF identity (never shared) *)
+    new c: chal;
+    let r0 = puf(pid, c) in                            (* enrollment CRP: kept secret, NOT on net *)
+    ( (! device(pid)) | (! verifier(c, r0)) )

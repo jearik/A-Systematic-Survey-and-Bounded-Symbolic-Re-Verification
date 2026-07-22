@@ -1,0 +1,139 @@
+(* =====================================================================
+   Published-protocol re-verification case P1
+   Protocol: CL-BASA, Wang et al., "A Certificateless-Based Authentication
+   and Key Agreement Scheme for IIoT Cross-Domain", Security and
+   Communication Networks, 2022, DOI: 10.1155/2022/3693748.
+
+   Source mapping:
+   - Section 5.2.2, Figure 3: information request/response through BAS_A/BAS_B.
+   - Figure 5 and Eq. (4): Token_UV and Token_VU signed over nonce, domain,
+     pseudonym, and extension fields.
+   - Figure 6: ECDHE with Pk'_U = r'_U P and Pk'_V = r'_V P.
+   - Figure 7 narrative: U sends (m_U, sigma_U), V verifies through BAS_B,
+     V sends (m_V, sigma_V), and both compute r'_U r'_V P.
+
+   Modeling boundary:
+   This is an independent symbolic abstraction of the published message flow.
+   It keeps the two BAS lookups, pseudonymous identities, transcript-bound
+   certificateless signatures, and ECDHE key agreement. It abstracts the
+   internals of the CL-PKS pairing equations and consortium-chain consensus
+   into authenticated directory responses, matching the authors' own note that
+   their Tamarin model simplifies the certificateless signature algebra.
+
+   Queries:
+   Q1: secrecy of a session payload encrypted under the derived ECDHE key.
+   Q2: if V accepts, U must have emitted the corresponding Token_UV.
+   Q3: if U accepts, V must have emitted the corresponding Token_VU.
+   Q4: if V accepts, BAS_B must have validated U's pseudonym/public key.
+   ===================================================================== *)
+
+free net: channel.
+free chA: channel [private].
+free chB: channel [private].
+
+type skey.
+type pkey.
+type G.
+type exponent.
+type pid.
+type domain.
+type nonce.
+
+const gen: G.
+const domA: domain.
+const domB: domain.
+const reqinfA: bitstring.
+const reqinfB: bitstring.
+
+fun gexp(G, exponent): G.
+equation forall x: exponent, y: exponent;
+    gexp(gexp(gen, x), y) = gexp(gexp(gen, y), x).
+
+fun pk(skey): pkey.
+fun packU(nonce, domain, pid, G): bitstring.
+fun packV(nonce, domain, pid, G): bitstring.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, sk: skey;
+    verify(sign(m, sk), m, pk(sk)) = true.
+
+fun kdf(G, pid, pid, domain, domain): bitstring.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+free secret_payload: bitstring [private].
+
+event BASA_info_request(pid, pid).
+event BASA_info_response(pid, pid, pkey).
+event BASB_validation_request(pid, pid, G).
+event BASB_validation_success(pid, pid, pkey).
+event U_token_sent(pid, pid, G).
+event V_token_sent(pid, pid, G, G, bitstring).
+event U_accept(pid, pid, G, G, bitstring).
+event V_accept(pid, pid, G, bitstring).
+
+query attacker(secret_payload).
+query u: pid, v: pid, eu: G, k: bitstring;
+    inj-event(V_accept(u, v, eu, k)) ==> inj-event(U_token_sent(u, v, eu)).
+query u: pid, v: pid, eu: G, ev: G, k: bitstring;
+    inj-event(U_accept(u, v, eu, ev, k)) ==> inj-event(V_token_sent(u, v, eu, ev, k)).
+
+(* The BASB-validation query carries the returned key into V_accept_keyed. *)
+event V_accept_keyed(pid, pid, G, bitstring, pkey).
+query u: pid, v: pid, eu: G, k: bitstring, pku: pkey;
+    event(V_accept_keyed(u, v, eu, k, pku)) ==> event(BASB_validation_success(u, v, pku)).
+
+let BASA_directory(pidU: pid, pidV: pid, pkV: pkey) =
+    in(chA, (=pidU, =pidV, =reqinfA));
+    event BASA_info_request(pidU, pidV);
+    event BASA_info_response(pidU, pidV, pkV);
+    out(chA, (pidV, domB, pkV)).
+
+let BASB_directory(pidU: pid, pidV: pid, pkU: pkey) =
+    in(chB, (=pidV, =pidU, eu: G, =reqinfB));
+    event BASB_validation_request(pidU, pidV, eu);
+    event BASB_validation_success(pidU, pidV, pkU);
+    out(chB, (pidU, domA, pkU)).
+
+let User_U(pidU: pid, skU: skey, pidV: pid) =
+    out(chA, (pidU, pidV, reqinfA));
+    in(chA, (=pidV, =domB, pkV: pkey));
+    new nU: nonce;
+    new rU: exponent;
+    let epkU = gexp(gen, rU) in
+    let mU = packU(nU, domA, pidU, epkU) in
+    event U_token_sent(pidU, pidV, epkU);
+    out(net, (pidU, nU, domA, epkU, sign(mU, skU)));
+    in(net, (=pidV, nV: nonce, =domB, epkV: G, sigV: bitstring));
+    let mV = packV(nV, domB, pidV, epkV) in
+    if verify(sigV, mV, pkV) = true then
+    let k = kdf(gexp(epkV, rU), pidU, pidV, domA, domB) in
+    event U_accept(pidU, pidV, epkU, epkV, k);
+    out(net, senc(secret_payload, k)).
+
+let User_V(pidV: pid, skV: skey) =
+    in(net, (pidU: pid, nU: nonce, =domA, epkU: G, sigU: bitstring));
+    out(chB, (pidV, pidU, epkU, reqinfB));
+    in(chB, (=pidU, =domA, pkU: pkey));
+    let mU = packU(nU, domA, pidU, epkU) in
+    if verify(sigU, mU, pkU) = true then
+    new nV: nonce;
+    new rV: exponent;
+    let epkV = gexp(gen, rV) in
+    let k = kdf(gexp(epkU, rV), pidU, pidV, domA, domB) in
+    event V_accept(pidU, pidV, epkU, k);
+    event V_accept_keyed(pidU, pidV, epkU, k, pkU);
+    let mV = packV(nV, domB, pidV, epkV) in
+    event V_token_sent(pidU, pidV, epkU, epkV, k);
+    out(net, (pidV, nV, domB, epkV, sign(mV, skV))).
+
+process
+    new skU: skey;
+    new skV: skey;
+    new pidU: pid;
+    new pidV: pid;
+    out(net, (pidU, pk(skU), pidV, pk(skV)));
+    ( !BASA_directory(pidU, pidV, pk(skV))
+    | !BASB_directory(pidU, pidV, pk(skU))
+    | !User_U(pidU, skU, pidV)
+    | !User_V(pidV, skV)
+    | phase 1; out(net, (skU, skV)) )

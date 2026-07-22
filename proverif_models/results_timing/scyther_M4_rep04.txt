@@ -1,0 +1,6 @@
+claim	M4BlockchainPseudonymAbstract,A	Secret_A1	H(n,m)	[32mOk[0m	[proof of correctness]
+claim	M4BlockchainPseudonymAbstract,A	Niagree_A2	-	[32mOk[0m	[proof of correctness]
+claim	M4BlockchainPseudonymAbstract,A	Nisynch_A3	-	[32mOk[0m	[proof of correctness]
+claim	M4BlockchainPseudonymAbstract,B	Secret_B1	H(n,m)	[32mOk[0m	[proof of correctness]
+claim	M4BlockchainPseudonymAbstract,B	Niagree_B2	-	[32mOk[0m	[proof of correctness]
+claim	M4BlockchainPseudonymAbstract,B	Nisynch_B3	-	[32mOk[0m	[proof of correctness]

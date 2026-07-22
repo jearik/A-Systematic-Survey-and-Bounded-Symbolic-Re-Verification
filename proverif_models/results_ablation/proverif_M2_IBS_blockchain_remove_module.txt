@@ -1,0 +1,66 @@
+Process 0 (that is, the initial process):
+{1}out(net, compromised_secret);
+{2}event accept(devA,devB)
+
+-- Query not attacker(compromised_secret[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(compromised_secret[])
+goal reachable: attacker(compromised_secret[])
+
+Derivation:
+
+1. The message compromised_secret[] may be sent to the attacker at output {1}.
+attacker(compromised_secret[]).
+
+2. By 1, attacker(compromised_secret[]).
+The goal is reached, represented in the following fact:
+attacker(compromised_secret[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2}
+
+The attacker has the message ~M = compromised_secret.
+A trace has been found.
+RESULT not attacker(compromised_secret[]) is false.
+-- Query event(accept(a,b)) ==> event(expectedRun(a,b)) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(accept(a,b)) ==> event(expectedRun(a,b))
+goal reachable: event(accept(devA,devB))
+
+Derivation:
+
+1. Event accept(devA,devB) may be executed at {2}.
+event(accept(devA,devB)).
+
+2. By 1, event(accept(devA,devB)).
+The goal is reached, represented in the following fact:
+event(accept(devA,devB)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, ~M) with ~M = compromised_secret at {1}
+
+event accept(devA,devB) at {2} (goal)
+
+The event accept(devA,devB) is executed at {2}.
+A trace has been found.
+RESULT event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(compromised_secret[]) is false.
+
+Query event(accept(a,b)) ==> event(expectedRun(a,b)) is false.
+
+--------------------------------------------------------------
+

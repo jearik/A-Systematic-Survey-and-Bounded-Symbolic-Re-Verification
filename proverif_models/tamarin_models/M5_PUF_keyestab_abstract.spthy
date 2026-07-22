@@ -1,0 +1,34 @@
+theory M5_PUF_keyestab_abstract
+begin
+
+builtins: hashing
+
+/* Abstract Tamarin port of M5. The PUF is represented by a persistent private
+   response fact. This checks that authentication depends on a registered
+   challenge-response relation. It does not model PUF noise, helper-data leakage,
+   machine-learning modeling attacks, or fuzzy-extractor failure probability. */
+
+rule Enroll_PUF:
+  [ Fr(~r) ]
+  --[ Enrolled($D, 'challenge', ~r) ]->
+  [ !PUF($D, 'challenge', ~r) ]
+
+rule Device_Run:
+  [ !PUF($D, c, r), Fr(~k) ]
+  --[ DevAuth(c, ~k), Secret(~k) ]->
+  [ !DeviceSession($D, c, r, ~k), Out(<$D, c, 'puf_proof'>) ]
+
+rule Verifier_Accept:
+  [ !DeviceSession(D, c, r, k), !PUF(D, c, r) ]
+  --[ VerAcc(c, k), Secret(k) ]->
+  [ ]
+
+lemma puf_session_key_secrecy:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma puf_device_authentication:
+  "All c k #i.
+     VerAcc(c, k) @ i
+     ==> (Ex #j. DevAuth(c, k) @ j & j < i)"
+
+end

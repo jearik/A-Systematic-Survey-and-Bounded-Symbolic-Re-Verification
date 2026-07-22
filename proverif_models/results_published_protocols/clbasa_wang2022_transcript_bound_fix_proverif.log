@@ -1,0 +1,193 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new skU: skey;
+{2}new skV: skey;
+{3}new pidU: pid;
+{4}new pidV: pid;
+{5}out(net, (pidU,pk(skU),pidV,pk(skV)));
+(
+    {6}!
+    {7}let pidU_1: pid = pidU in
+    {8}let pidV_1: pid = pidV in
+    {9}let pkV: pkey = pk(skV) in
+    {10}in(chA, (=pidU_1,=pidV_1,=reqinfA));
+    {11}out(chA, (pidV_1,domB,pkV))
+) | (
+    {12}!
+    {13}let pidU_2: pid = pidU in
+    {14}let pidV_2: pid = pidV in
+    {15}let pkU: pkey = pk(skU) in
+    {16}in(chB, (=pidV_2,=pidU_2,eu: G,=reqinfB));
+    {17}event BASB_validation_success(pidU_2,pidV_2,pkU);
+    {18}out(chB, (pidU_2,domA,pkU))
+) | (
+    {19}!
+    {20}let pidU_3: pid = pidU in
+    {21}let skU_1: skey = skU in
+    {22}let pidV_3: pid = pidV in
+    {23}out(chA, (pidU_3,pidV_3,reqinfA));
+    {24}in(chA, (=pidV_3,=domB,pkV_1: pkey));
+    {25}new nU: nonce;
+    {26}new rU: exponent;
+    {27}let epkU: G = gexp(gen,rU) in
+    {28}let mU: bitstring = packU(nU,domA,pidU_3,epkU) in
+    {29}event U_token_sent(pidU_3,pidV_3,nU,epkU);
+    {30}out(net, (pidU_3,nU,domA,epkU,sign(mU,skU_1)));
+    {31}in(net, (=pidV_3,nV: nonce,=domB,epkV: G,sigV: bitstring));
+    {32}let mV: bitstring = packV_bound(nV,domB,pidV_3,epkV,nU,pidU_3,epkU) in
+    {33}if (verify(sigV,mV,pkV_1) = true) then
+    {34}let k: bitstring = kdf(gexp(epkV,rU),pidU_3,pidV_3,domA,domB) in
+    {35}event U_accept(pidU_3,pidV_3,nU,epkU,epkV,k);
+    {36}out(net, senc(secret_payload,k))
+) | (
+    {37}!
+    {38}let pidV_4: pid = pidV in
+    {39}let skV_1: skey = skV in
+    {40}in(net, (pidU_4: pid,nU_1: nonce,=domA,epkU_1: G,sigU: bitstring));
+    {41}out(chB, (pidV_4,pidU_4,epkU_1,reqinfB));
+    {42}in(chB, (=pidU_4,=domA,pkU_1: pkey));
+    {43}let mU_1: bitstring = packU(nU_1,domA,pidU_4,epkU_1) in
+    {44}if (verify(sigU,mU_1,pkU_1) = true) then
+    {45}new nV_1: nonce;
+    {46}new rV: exponent;
+    {47}let epkV_1: G = gexp(gen,rV) in
+    {48}let k_1: bitstring = kdf(gexp(epkU_1,rV),pidU_4,pidV_4,domA,domB) in
+    {49}event V_accept(pidU_4,pidV_4,nU_1,epkU_1,k_1);
+    {50}event V_accept_keyed(pidU_4,pidV_4,nU_1,epkU_1,k_1,pkU_1);
+    {51}let mV_1: bitstring = packV_bound(nV_1,domB,pidV_4,epkV_1,nU_1,pidU_4,epkU_1) in
+    {52}event V_token_sent(pidU_4,pidV_4,nU_1,epkU_1,epkV_1,k_1);
+    {53}out(net, (pidV_4,nV_1,domB,epkV_1,sign(mV_1,skV_1)))
+) | (
+    {54}phase 1;
+    {55}out(net, (skU,skV))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skU: skey;
+{2}new skV: skey;
+{3}new pidU: pid;
+{4}new pidV: pid;
+{5}out(net, (pidU,pk(skU),pidV,pk(skV)));
+(
+    {6}!
+    {8}let pidV_1: pid = pidV in
+    {7}let pidU_1: pid = pidU in
+    {10}in(chA, (=pidU_1,=pidV_1,=reqinfA));
+    {9}let pkV: pkey = pk(skV) in
+    {11}out(chA, (pidV_1,domB,pkV))
+) | (
+    {12}!
+    {14}let pidV_2: pid = pidV in
+    {13}let pidU_2: pid = pidU in
+    {16}in(chB, (=pidV_2,=pidU_2,eu: G,=reqinfB));
+    {15}let pkU: pkey = pk(skU) in
+    {17}event BASB_validation_success(pidU_2,pidV_2,pkU);
+    {18}out(chB, (pidU_2,domA,pkU))
+) | (
+    {19}!
+    {22}let pidV_3: pid = pidV in
+    {20}let pidU_3: pid = pidU in
+    {23}out(chA, (pidU_3,pidV_3,reqinfA));
+    {24}in(chA, (=pidV_3,=domB,pkV_1: pkey));
+    {25}new nU: nonce;
+    {26}new rU: exponent;
+    {27}let epkU: G = gexp(gen,rU) in
+    {29}event U_token_sent(pidU_3,pidV_3,nU,epkU);
+    {28}let mU: bitstring = packU(nU,domA,pidU_3,epkU) in
+    {21}let skU_1: skey = skU in
+    {30}out(net, (pidU_3,nU,domA,epkU,sign(mU,skU_1)));
+    {31}in(net, (=pidV_3,nV: nonce,=domB,epkV: G,sigV: bitstring));
+    {32}let mV: bitstring = packV_bound(nV,domB,pidV_3,epkV,nU,pidU_3,epkU) in
+    {33}if (verify(sigV,mV,pkV_1) = true) then
+    {34}let k: bitstring = kdf(gexp(epkV,rU),pidU_3,pidV_3,domA,domB) in
+    {35}event U_accept(pidU_3,pidV_3,nU,epkU,epkV,k);
+    {36}out(net, senc(secret_payload,k))
+) | (
+    {37}!
+    {40}in(net, (pidU_4: pid,nU_1: nonce,=domA,epkU_1: G,sigU: bitstring));
+    {38}let pidV_4: pid = pidV in
+    {41}out(chB, (pidV_4,pidU_4,epkU_1,reqinfB));
+    {42}in(chB, (=pidU_4,=domA,pkU_1: pkey));
+    {43}let mU_1: bitstring = packU(nU_1,domA,pidU_4,epkU_1) in
+    {44}if (verify(sigU,mU_1,pkU_1) = true) then
+    {45}new nV_1: nonce;
+    {46}new rV: exponent;
+    {48}let k_1: bitstring = kdf(gexp(epkU_1,rV),pidU_4,pidV_4,domA,domB) in
+    {49}event V_accept(pidU_4,pidV_4,nU_1,epkU_1,k_1);
+    {50}event V_accept_keyed(pidU_4,pidV_4,nU_1,epkU_1,k_1,pkU_1);
+    {47}let epkV_1: G = gexp(gen,rV) in
+    {52}event V_token_sent(pidU_4,pidV_4,nU_1,epkU_1,epkV_1,k_1);
+    {51}let mV_1: bitstring = packV_bound(nV_1,domB,pidV_4,epkV_1,nU_1,pidU_4,epkU_1) in
+    {39}let skV_1: skey = skV in
+    {53}out(net, (pidV_4,nV_1,domB,epkV_1,sign(mV_1,skV_1)))
+) | (
+    {54}phase 1;
+    {55}out(net, (skU,skV))
+)
+
+-- Query not attacker_p1(secret_payload[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 148 rules (70 with conclusion selected). Queue: 3 rules.
+Starting query not attacker_p1(secret_payload[])
+RESULT not attacker_p1(secret_payload[]) is true.
+-- Query event(V_accept(u,v,nu,eu_1,k_2)) ==> event(U_token_sent(u,v,nu,eu_1)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 146 rules (64 with conclusion selected). Queue: 12 rules.
+Starting query event(V_accept(u,v,nu,eu_1,k_2)) ==> event(U_token_sent(u,v,nu,eu_1))
+goal reachable: b-event(U_token_sent(pidU[],pidV[],nU_2,gexp(gen,rU_1))) -> event(V_accept(pidU[],pidV[],nU_2,gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)))
+Abbreviations:
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid]
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+RESULT event(V_accept(u,v,nu,eu_1,k_2)) ==> event(U_token_sent(u,v,nu,eu_1)) is true.
+-- Query inj-event(U_accept(u,v,nu,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,nu,eu_1,ev,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 156 rules (64 with conclusion selected). Queue: 25 rules.
+Starting query inj-event(U_accept(u,v,nu,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,nu,eu_1,ev,k_2))
+goal reachable: b-inj-event(V_token_sent(pidU[],pidV[],nU_2,gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rU_1),rV_1),pidU[],pidV[],domA,domB)),@occ52_1) -> inj-event(U_accept(pidU[],pidV[],nU_2,gexp(gen,rU_1),gexp(gen,rV_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB)),@occ35_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid]
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+nV_2 = nV_1[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+@occ35_1 = @occ35[sigV = sign(packV_bound(nV_2,domB,pidV[],gexp(gen,rV_1),nU_2,pidU[],gexp(gen,rU_1)),skV[]),epkV = gexp(gen,rV_1),nV = nV_2,pkV_1 = pk(skV[]),!1 = @sid]
+@occ52_1 = @occ52[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+RESULT inj-event(U_accept(u,v,nu,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,nu,eu_1,ev,k_2)) is true.
+-- Query event(V_accept_keyed(u,v,nu,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 148 rules (64 with conclusion selected). Queue: 16 rules.
+Starting query event(V_accept_keyed(u,v,nu,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku))
+goal reachable: b-event(BASB_validation_success(pidU[],pidV[],pk(skU[]))) -> event(V_accept_keyed(pidU[],pidV[],nU_2,gexp(gen,rU_1),kdf(gexp(gexp(gen,rV_1),rU_1),pidU[],pidV[],domA,domB),pk(skU[])))
+Abbreviations:
+nU_2 = nU[pkV_1 = pk(skV[]),!1 = @sid]
+rU_1 = rU[pkV_1 = pk(skV[]),!1 = @sid]
+rV_1 = rV[pkU_1 = pk(skU[]),sigU = sign(packU(nU_2,domA,pidU[],gexp(gen,rU_1)),skU[]),epkU_1 = gexp(gen,rU_1),nU_1 = nU_2,pidU_4 = pidU[],!1 = @sid_1]
+RESULT event(V_accept_keyed(u,v,nu,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker_p1(secret_payload[]) is true.
+
+Query event(V_accept(u,v,nu,eu_1,k_2)) ==> event(U_token_sent(u,v,nu,eu_1)) is true.
+
+Query inj-event(U_accept(u,v,nu,eu_1,ev,k_2)) ==> inj-event(V_token_sent(u,v,nu,eu_1,ev,k_2)) is true.
+
+Query event(V_accept_keyed(u,v,nu,eu_1,k_2,pku)) ==> event(BASB_validation_success(u,v,pku)) is true.
+
+--------------------------------------------------------------
+
+
+real	0m0.091s
+user	0m0.046s
+sys	0m0.008s

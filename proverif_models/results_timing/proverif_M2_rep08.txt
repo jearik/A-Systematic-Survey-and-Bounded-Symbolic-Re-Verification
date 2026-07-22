@@ -1,0 +1,127 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new mskA: skey;
+{2}new mskB: skey;
+{3}out(net, mpk(mskA));
+{4}out(net, mpk(mskB));
+{5}new idA: id;
+{6}new idB: id;
+{7}let skiA: skey = extract(idA,mskA) in
+{8}let skiB: skey = extract(idB,mskB) in
+(
+    {9}!
+    {10}let idA_1: id = idA in
+    {11}let idB_1: id = idB in
+    {12}let mpkB: pkey = mpk(mskB) in
+    {13}new x: exp;
+    {14}let X: G = gexp(gen,x) in
+    {15}out(net, (idA_1,X,ibsign((idA_1,X),skiA)));
+    {16}in(net, (=idB_1,Y: G,sg: bitstring));
+    {17}if (ibverify(sg,(idB_1,idA_1,X,Y),idB_1,mpkB) = true) then
+    {18}let k: bitstring = kdf(gexp(Y,x)) in
+    {19}event initRun(idA_1,idB_1,k);
+    {20}out(net, ibsign((idA_1,idB_1,X,Y,X),skiA));
+    {21}event initAcc(idA_1,idB_1,k);
+    {22}out(net, senc(skA_secret,k))
+) | (
+    {23}!
+    {24}let idB_2: id = idB in
+    {25}let mpkA: pkey = mpk(mskA) in
+    {26}in(net, (idA_2: id,X_1: G,sgA: bitstring));
+    {27}if (ibverify(sgA,(idA_2,X_1),idA_2,mpkA) = true) then
+    {28}new y: exp;
+    {29}let Y_1: G = gexp(gen,y) in
+    {30}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {31}event respRun(idA_2,idB_2,k_1);
+    {32}out(net, (idB_2,Y_1,ibsign((idB_2,idA_2,X_1,Y_1),skiB)));
+    {33}in(net, conf: bitstring);
+    {34}if (ibverify(conf,(idA_2,idB_2,X_1,Y_1,X_1),idA_2,mpkA) = true) then
+    {35}event respAcc(idA_2,idB_2,k_1)
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new mskA: skey;
+{2}new mskB: skey;
+{3}out(net, mpk(mskA));
+{4}out(net, mpk(mskB));
+{5}new idA: id;
+{6}new idB: id;
+(
+    {9}!
+    {13}new x: exp;
+    {14}let X: G = gexp(gen,x) in
+    {10}let idA_1: id = idA in
+    {7}let skiA: skey = extract(idA,mskA) in
+    {15}out(net, (idA_1,X,ibsign((idA_1,X),skiA)));
+    {11}let idB_1: id = idB in
+    {16}in(net, (=idB_1,Y: G,sg: bitstring));
+    {12}let mpkB: pkey = mpk(mskB) in
+    {17}if (ibverify(sg,(idB_1,idA_1,X,Y),idB_1,mpkB) = true) then
+    {18}let k: bitstring = kdf(gexp(Y,x)) in
+    {19}event initRun(idA_1,idB_1,k);
+    {20}out(net, ibsign((idA_1,idB_1,X,Y,X),skiA));
+    {21}event initAcc(idA_1,idB_1,k);
+    {22}out(net, senc(skA_secret,k))
+) | (
+    {23}!
+    {26}in(net, (idA_2: id,X_1: G,sgA: bitstring));
+    {25}let mpkA: pkey = mpk(mskA) in
+    {27}if (ibverify(sgA,(idA_2,X_1),idA_2,mpkA) = true) then
+    {28}new y: exp;
+    {30}let k_1: bitstring = kdf(gexp(X_1,y)) in
+    {24}let idB_2: id = idB in
+    {31}event respRun(idA_2,idB_2,k_1);
+    {29}let Y_1: G = gexp(gen,y) in
+    {8}let skiB: skey = extract(idB,mskB) in
+    {32}out(net, (idB_2,Y_1,ibsign((idB_2,idA_2,X_1,Y_1),skiB)));
+    {33}in(net, conf: bitstring);
+    {34}if (ibverify(conf,(idA_2,idB_2,X_1,Y_1,X_1),idA_2,mpkA) = true) then
+    {35}event respAcc(idA_2,idB_2,k_1)
+)
+
+-- Query not attacker(skA_secret[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(skA_secret[])
+RESULT not attacker(skA_secret[]) is true.
+-- Query inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2))
+goal reachable: b-inj-event(initRun(idA[],idB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ19_1) -> inj-event(respAcc(idA[],idB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ35_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+x_1 = x[!1 = @sid]
+y_1 = y[sgA = ibsign((idA[],gexp(gen,x_1)),extract(idA[],mskA[])),X_1 = gexp(gen,x_1),idA_2 = idA[],!1 = @sid_1]
+@occ35_1 = @occ35[conf = ibsign((idA[],idB[],gexp(gen,x_1),gexp(gen,y_1),gexp(gen,x_1)),extract(idA[],mskA[])),sgA = ibsign((idA[],gexp(gen,x_1)),extract(idA[],mskA[])),X_1 = gexp(gen,x_1),idA_2 = idA[],!1 = @sid_1]
+@occ19_1 = @occ19[sg = ibsign((idB[],idA[],gexp(gen,x_1),gexp(gen,y_1)),extract(idB[],mskB[])),Y = gexp(gen,y_1),!1 = @sid]
+RESULT inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2)) is true.
+-- Query inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2))
+goal reachable: b-inj-event(respRun(idA[],idB[],kdf(gexp(gexp(gen,x_1),y_1))),@occ31_1) -> inj-event(initAcc(idA[],idB[],kdf(gexp(gexp(gen,y_1),x_1))),@occ21_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+x_1 = x[!1 = @sid]
+y_1 = y[sgA = ibsign((idA[],gexp(gen,x_1)),extract(idA[],mskA[])),X_1 = gexp(gen,x_1),idA_2 = idA[],!1 = @sid_1]
+@occ21_1 = @occ21[sg = ibsign((idB[],idA[],gexp(gen,x_1),gexp(gen,y_1)),extract(idB[],mskB[])),Y = gexp(gen,y_1),!1 = @sid]
+@occ31_1 = @occ31[sgA = ibsign((idA[],gexp(gen,x_1)),extract(idA[],mskA[])),X_1 = gexp(gen,x_1),idA_2 = idA[],!1 = @sid_1]
+RESULT inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(skA_secret[]) is true.
+
+Query inj-event(respAcc(a,b,k_2)) ==> inj-event(initRun(a,b,k_2)) is true.
+
+Query inj-event(initAcc(a,b,k_2)) ==> inj-event(respRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+

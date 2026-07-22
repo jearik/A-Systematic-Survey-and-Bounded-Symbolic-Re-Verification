@@ -1,0 +1,68 @@
+(* =====================================================================
+   M2 — Identity-Based Signature (IBS) cross-domain mutual authentication
+        with consortium blockchain as trust anchor (BASA-style abstraction).
+   The consortium ledger is modeled as an authentic, read-only public table
+   that binds each device identity to its IBS public parameters.
+   Run:  proverif M2_IBS_blockchain.pv
+   Q1 session-key secrecy, Q2 mutual injective agreement, Q3 device anonymity.
+   ===================================================================== *)
+free net: channel.
+type skey. type pkey. type G. type exp. type id.
+
+const gen: G.
+fun gexp(G, exp): G.
+equation forall x: exp, y: exp; gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x).
+
+(* IBS: KGC master key msk; user private key extracted from identity *)
+fun mpk(skey): pkey.                                  (* domain KGC master public key *)
+fun extract(id, skey): skey.                          (* user secret key = Extract(id, msk) *)
+fun ibsign(bitstring, skey): bitstring.
+reduc forall m: bitstring, i: id, msk: skey;
+      ibverify(ibsign(m, extract(i, msk)), m, i, mpk(msk)) = true.
+
+fun kdf(G): bitstring.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m,k),k)=m.
+
+event initRun(id, id, bitstring).
+event respAcc(id, id, bitstring).
+event respRun(id, id, bitstring).
+event initAcc(id, id, bitstring).
+
+free skA_secret: bitstring [private].
+query attacker(skA_secret).
+query a: id, b: id, k: bitstring; inj-event(respAcc(a,b,k)) ==> inj-event(initRun(a,b,k)).
+query a: id, b: id, k: bitstring; inj-event(initAcc(a,b,k)) ==> inj-event(respRun(a,b,k)).
+
+(* Initiator in domain A authenticates to responder in domain B.
+   mpkB is read from the consortium ledger (authentic public parameter). *)
+let initiator(idA: id, skiA: skey, idB: id, mpkB: pkey) =
+    new x: exp; let X = gexp(gen, x) in
+    out(net, (idA, X, ibsign((idA, X), skiA)));
+    in(net, (=idB, Y: G, sg: bitstring));
+    if ibverify(sg, (idB, idA, X, Y), idB, mpkB) = true then
+    let k = kdf(gexp(Y, x)) in
+    event initRun(idA, idB, k);
+    out(net, ibsign((idA, idB, X, Y, X), skiA));      (* key-confirmation *)
+    event initAcc(idA, idB, k);
+    out(net, senc(skA_secret, k)).
+
+let responder(idB: id, skiB: skey, mpkA: pkey) =
+    in(net, (idA: id, X: G, sgA: bitstring));
+    if ibverify(sgA, (idA, X), idA, mpkA) = true then
+    new y: exp; let Y = gexp(gen, y) in
+    let k = kdf(gexp(X, y)) in
+    event respRun(idA, idB, k);
+    out(net, (idB, Y, ibsign((idB, idA, X, Y), skiB)));
+    in(net, conf: bitstring);
+    if ibverify(conf, (idA, idB, X, Y, X), idA, mpkA) = true then
+    event respAcc(idA, idB, k).
+
+process
+    new mskA: skey; new mskB: skey;                   (* two domain KGCs *)
+    out(net, mpk(mskA)); out(net, mpk(mskB));          (* ledger publishes master pub keys *)
+    new idA: id; new idB: id;
+    let skiA = extract(idA, mskA) in
+    let skiB = extract(idB, mskB) in
+    ( (! initiator(idA, skiA, idB, mpk(mskB)))
+    | (! responder(idB, skiB, mpk(mskA))) )

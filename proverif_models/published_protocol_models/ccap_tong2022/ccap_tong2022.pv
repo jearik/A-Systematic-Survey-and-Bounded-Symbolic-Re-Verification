@@ -1,0 +1,109 @@
+(* =====================================================================
+   Published-protocol re-verification case P2
+   Protocol: CCAP, Tong et al., "CCAP: A Complete Cross-Domain
+   Authentication Based on Blockchain for Internet of Things", IEEE TIFS,
+   2022, DOI: 10.1109/TIFS.2022.3214733.
+
+   Source mapping:
+   - Section V-C.1: Cross-domain licensing.
+   - Section V-C.2: On-demand pseudo identity generation, steps 8-15.
+   - Algorithm 2: NIZK proof verification for pseudonym validity.
+   - Section V-C.3: Cross-domain authentication with
+     {Authenticate, pid, Sign_SK'_Ai}.
+
+   Modeling boundary:
+   This is a symbolic message-flow re-verification, not a byte-for-byte
+   implementation of the pairing/NIZK/threshold tracing machinery. The model
+   preserves the licensing-to-pseudonym-to-ledger-to-authentication dependency:
+   PAS_A validates the device and asks VS nodes to accept a pseudonym; the
+   ledger stores (pid, PK'_Ai, ballot, timestamp); PAS_B accepts an
+   Authenticate request only after a ledger lookup and signature verification.
+   The NIZK equations, threshold masks, blacklist accumulator, consensus, and
+   tracing reconstruction are idealized as a private ledger-validation service.
+
+   Queries:
+   Q1: real identity is not derivable from the public authentication flow.
+   Q2: PAS_B acceptance has a preceding ledger validation.
+   Q3: PAS_B non-injective authentication has a preceding device auth token.
+   Q4: PAS_B injective authentication fails when the printed Authenticate
+       message has no nonce/timestamp/replay cache in the model.
+   ===================================================================== *)
+
+free net: channel.
+free chLic: channel [private].
+free chVSReq: channel [private].
+free chLookupReq: channel [private].
+free chLookupResp: channel [private].
+
+type skey.
+type pkey.
+type pid.
+type realid.
+type zkp.
+type timestamp.
+
+const licensing: bitstring.
+const pseudogen: bitstring.
+const verify_tag: bitstring.
+const authenticate: bitstring.
+const ballot_ok: bitstring.
+
+fun pk(skey): pkey.
+fun authmsg(pid): bitstring.
+fun pseudomsg(pid, pkey): bitstring.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, sk: skey;
+    checksign(sign(m, sk), m, pk(sk)) = true.
+
+free secret_real_id: realid [private].
+
+event LicensingIssued(realid, pid, pkey).
+event PseudoRequest(pid, pkey).
+event LedgerPseudonymValid(pid, pkey).
+event DeviceAuthSent(pid, pkey).
+event PASBAccept(pid, pkey).
+
+query attacker(secret_real_id).
+query p: pid, pkA: pkey;
+    event(PASBAccept(p, pkA)) ==> event(LedgerPseudonymValid(p, pkA)).
+query p: pid, pkA: pkey;
+    event(PASBAccept(p, pkA)) ==> event(DeviceAuthSent(p, pkA)).
+query p: pid, pkA: pkey;
+    inj-event(PASBAccept(p, pkA)) ==> inj-event(DeviceAuthSent(p, pkA)).
+
+let LicensingAndPseudoGen(pidA: pid, skA: skey) =
+    let pkA = pk(skA) in
+    event LicensingIssued(secret_real_id, pidA, pkA);
+    out(chLic, (licensing, pidA, pkA));
+    event PseudoRequest(pidA, pkA);
+    new pi: zkp;
+    out(chVSReq, (verify_tag, pidA, pkA, pi)).
+
+let VS_Ledger(pidA: pid, pkA: pkey) =
+    in(chVSReq, (=verify_tag, =pidA, =pkA, pi: zkp));
+    event LedgerPseudonymValid(pidA, pkA);
+    !(
+      in(chLookupReq, q: pid);
+      if q = pidA then out(chLookupResp, (pidA, pkA, ballot_ok))
+    ).
+
+let DeviceAuthenticate(pidA: pid, skA: skey) =
+    let pkA = pk(skA) in
+    event DeviceAuthSent(pidA, pkA);
+    out(net, (authenticate, pidA, sign(authmsg(pidA), skA))).
+
+let PASB_Authenticate() =
+    in(net, (=authenticate, pidIn: pid, sig: bitstring));
+    out(chLookupReq, pidIn);
+    in(chLookupResp, (=pidIn, pkIn: pkey, =ballot_ok));
+    if checksign(sig, authmsg(pidIn), pkIn) = true then
+    event PASBAccept(pidIn, pkIn).
+
+process
+    new skA: skey;
+    new pidA: pid;
+    out(net, pidA);
+    ( LicensingAndPseudoGen(pidA, skA)
+    | VS_Ledger(pidA, pk(skA))
+    | DeviceAuthenticate(pidA, skA)
+    | !PASB_Authenticate() )

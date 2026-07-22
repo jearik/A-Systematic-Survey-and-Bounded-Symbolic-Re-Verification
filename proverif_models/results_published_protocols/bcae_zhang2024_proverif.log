@@ -1,0 +1,323 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new ca: skey;
+{2}new idA: id;
+{3}new idB: id;
+{4}new da: exponent;
+{5}new db: exponent;
+{6}let qA: G = gexp(gen,da) in
+{7}let qB: G = gexp(gen,db) in
+{8}let cA: cert = issuecert(idA,qA,ca) in
+{9}event BCCARegistered(idA,qA);
+{10}out(net, (idA,idB,qA,qB,pk_static(ca)));
+(
+    {11}let idA_1: id = idA in
+    {12}let da_1: exponent = da in
+    {13}let idB_1: id = idB in
+    {14}let caPK: pkey = pk_static(ca) in
+    {15}let qA_1: G = gexp(gen,da_1) in
+    {16}if (verifycert(cA,idA_1,qA_1,caPK) = true) then
+    {17}new n7: exponent;
+    {18}let e7: G = gexp(gen,n7) in
+    {19}event EaStart(idA_1,idB_1,qA_1,e7);
+    {20}out(net, (idA_1,qA_1,cA,e7));
+    {21}in(net, (=idB_1,e8: G,enc: bitstring));
+    {22}let k: bitstring = kdf(gexp(qB,da_1),gexp(e8,n7),idA_1,idB_1) in
+    {23}if (sdec(enc,k) = respmsg(idB_1,e7,e8)) then
+    {24}event EaAccept(idA_1,idB_1,qA_1,e7,e8,k);
+    {25}event EaAcceptKeyOnly(idA_1,idB_1,qA_1,e7,k);
+    {26}out(net, senc(secret_payload,k))
+) | (
+    {27}!
+    {28}let idB_2: id = idB in
+    {29}let db_1: exponent = db in
+    {30}let caPK_1: pkey = pk_static(ca) in
+    {31}in(net, (idA_2: id,qA_2: G,cA_1: cert,e7_1: G));
+    {32}if (verifycert(cA_1,idA_2,qA_2,caPK_1) = true) then
+    {33}new n8: exponent;
+    {34}let e8_1: G = gexp(gen,n8) in
+    {35}let k_1: bitstring = kdf(gexp(qA_2,db_1),gexp(e7_1,n8),idA_2,idB_2) in
+    {36}event EbAccept(idA_2,idB_2,qA_2,e7_1,k_1);
+    {37}event EbResponse(idA_2,idB_2,qA_2,e7_1,e8_1,k_1);
+    {38}out(net, (idB_2,e8_1,senc(respmsg(idB_2,e7_1,e8_1),k_1)))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new ca: skey;
+{2}new idA: id;
+{3}new idB: id;
+{4}new da: exponent;
+{5}new db: exponent;
+{6}let qA: G = gexp(gen,da) in
+{9}event BCCARegistered(idA,qA);
+{7}let qB: G = gexp(gen,db) in
+{10}out(net, (idA,idB,qA,qB,pk_static(ca)));
+(
+    {12}let da_1: exponent = da in
+    {15}let qA_1: G = gexp(gen,da_1) in
+    {14}let caPK: pkey = pk_static(ca) in
+    {11}let idA_1: id = idA in
+    {8}let cA: cert = issuecert(idA,qA,ca) in
+    {16}if (verifycert(cA,idA_1,qA_1,caPK) = true) then
+    {17}new n7: exponent;
+    {18}let e7: G = gexp(gen,n7) in
+    {13}let idB_1: id = idB in
+    {19}event EaStart(idA_1,idB_1,qA_1,e7);
+    {20}out(net, (idA_1,qA_1,cA,e7));
+    {21}in(net, (=idB_1,e8: G,enc: bitstring));
+    {22}let k: bitstring = kdf(gexp(qB,da_1),gexp(e8,n7),idA_1,idB_1) in
+    {23}if (sdec(enc,k) = respmsg(idB_1,e7,e8)) then
+    {24}event EaAccept(idA_1,idB_1,qA_1,e7,e8,k);
+    {25}event EaAcceptKeyOnly(idA_1,idB_1,qA_1,e7,k);
+    {26}out(net, senc(secret_payload,k))
+) | (
+    {27}!
+    {31}in(net, (idA_2: id,qA_2: G,cA_1: cert,e7_1: G));
+    {30}let caPK_1: pkey = pk_static(ca) in
+    {32}if (verifycert(cA_1,idA_2,qA_2,caPK_1) = true) then
+    {33}new n8: exponent;
+    {29}let db_1: exponent = db in
+    {28}let idB_2: id = idB in
+    {35}let k_1: bitstring = kdf(gexp(qA_2,db_1),gexp(e7_1,n8),idA_2,idB_2) in
+    {36}event EbAccept(idA_2,idB_2,qA_2,e7_1,k_1);
+    {34}let e8_1: G = gexp(gen,n8) in
+    {37}event EbResponse(idA_2,idB_2,qA_2,e7_1,e8_1,k_1);
+    {38}out(net, (idB_2,e8_1,senc(respmsg(idB_2,e7_1,e8_1),k_1)))
+)
+
+-- Query not attacker(secret_payload[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 151 rules (45 with conclusion selected). Queue: 50 rules.
+Starting query not attacker(secret_payload[])
+RESULT not attacker(secret_payload[]) is true.
+-- Query event(EaAccept(a,b,q,e7_2,e8_2,k_2)) ==> event(EbResponse(a,b,q,e7_2,e8_2,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+select attacker(gexp(gen,x))/-5000
+200 rules inserted. Base: 162 rules (43 with conclusion selected). Queue: 96 rules.
+400 rules inserted. Base: 239 rules (57 with conclusion selected). Queue: 104 rules.
+600 rules inserted. Base: 381 rules (65 with conclusion selected). Queue: 7 rules.
+Starting query event(EaAccept(a,b,q,e7_2,e8_2,k_2)) ==> event(EbResponse(a,b,q,e7_2,e8_2,k_2))
+goal reachable: b-event(EbResponse(idA[],idB[],gexp(gen,da[]),gexp(gen,n7[]),gexp(gen,n8_1),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),n7[]),idA[],idB[]))) -> event(EaAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,n7[]),gexp(gen,n8_1),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),n7[]),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = gexp(gen,n7[]),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+RESULT event(EaAccept(a,b,q,e7_2,e8_2,k_2)) ==> event(EbResponse(a,b,q,e7_2,e8_2,k_2)) is true.
+-- Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(BCCARegistered(a,q)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 164 rules (47 with conclusion selected). Queue: 53 rules.
+400 rules inserted. Base: 291 rules (61 with conclusion selected). Queue: 6 rules.
+Starting query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(BCCARegistered(a,q))
+goal reachable: attacker(e7_2) && b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+goal reachable: attacker(x) && b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,x),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),x),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = gexp(gen,x),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+goal reachable: attacker(e7_2) && b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,n8_1),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_2),n8_1),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+n8_2 = n8[e7_1 = gexp(gen,n8_1),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid_1]
+goal reachable: b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,n7[]),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),n7[]),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = gexp(gen,n7[]),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+goal reachable: b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),db[]),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = gexp(gen,db[]),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+goal reachable: b-event(BCCARegistered(idA[],gexp(gen,da[]))) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),gexp(gen,da[]),kdf(gexp(gexp(gen,db[]),da[]),gexp(gexp(gen,n8_1),da[]),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = gexp(gen,da[]),cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+RESULT event(EbAccept(a,b,q,e7_2,k_2)) ==> event(BCCARegistered(a,q)) is true.
+-- Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaStart(a,b,q,e7_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 164 rules (47 with conclusion selected). Queue: 53 rules.
+400 rules inserted. Base: 291 rules (61 with conclusion selected). Queue: 6 rules.
+Starting query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaStart(a,b,q,e7_2))
+goal reachable: b-event(EaStart(idA[],idB[],gexp(gen,da[]),gexp(gen,n7[]))) && attacker(e7_2) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+
+Derivation:
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+
+1. We assume as hypothesis that
+attacker(e7_2).
+
+2. The event EaStart(idA[],idB[],gexp(gen,da[]),gexp(gen,n7[])) may be executed at {19}.
+So the message (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[])) may be sent to the attacker at output {20}.
+attacker((idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[]))).
+
+3. By 2, the attacker may know (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[])).
+Using the function 3-proj-4-tuple the attacker may obtain issuecert(idA[],gexp(gen,da[]),ca[]).
+attacker(issuecert(idA[],gexp(gen,da[]),ca[])).
+
+4. The message (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])) may be sent to the attacker at output {10}.
+attacker((idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[]))).
+
+5. By 4, the attacker may know (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])).
+Using the function 3-proj-5-tuple the attacker may obtain gexp(gen,da[]).
+attacker(gexp(gen,da[])).
+
+6. By 4, the attacker may know (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])).
+Using the function 1-proj-5-tuple the attacker may obtain idA[].
+attacker(idA[]).
+
+7. By 6, the attacker may know idA[].
+By 5, the attacker may know gexp(gen,da[]).
+By 3, the attacker may know issuecert(idA[],gexp(gen,da[]),ca[]).
+By 1, the attacker may know e7_2.
+Using the function 4-tuple the attacker may obtain (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2).
+attacker((idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2)).
+
+8. The message (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2) that the attacker may have by 7 may be received at input {31}.
+So event EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[])) may be executed at {36}.
+event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+
+9. By 8, event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+The goal is reached, represented in the following fact:
+event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new ca: skey creating ca_1 at {1}
+
+new idA: id creating idA_3 at {2}
+
+new idB: id creating idB_3 at {3}
+
+new da: exponent creating da_2 at {4}
+
+new db: exponent creating db_2 at {5}
+
+event BCCARegistered(idA_3,gexp(gen,da_2)) at {9}
+
+out(net, (~M,~M_1,~M_2,~M_3,~M_4)) with ~M = idA_3, ~M_1 = idB_3, ~M_2 = gexp(gen,da_2), ~M_3 = gexp(gen,db_2), ~M_4 = pk_static(ca_1) at {10}
+
+new n7: exponent creating n7_1 at {17}
+
+event EaStart(idA_3,idB_3,gexp(gen,da_2),gexp(gen,n7_1)) at {19}
+
+out(net, (~M_5,~M_6,~M_7,~M_8)) with ~M_5 = idA_3, ~M_6 = gexp(gen,da_2), ~M_7 = issuecert(idA_3,gexp(gen,da_2),ca_1), ~M_8 = gexp(gen,n7_1) at {20}
+
+in(net, (~M,~M_2,~M_7,a)) with ~M = idA_3, ~M_2 = gexp(gen,da_2), ~M_7 = issuecert(idA_3,gexp(gen,da_2),ca_1) at {31} in copy a_1
+
+new n8: exponent creating n8_2 at {33} in copy a_1
+
+event EbAccept(idA_3,idB_3,gexp(gen,da_2),a,kdf(gexp(gexp(gen,da_2),db_2),gexp(a,n8_2),idA_3,idB_3)) at {36} in copy a_1 (goal)
+
+The event EbAccept(idA_3,idB_3,gexp(gen,da_2),a,kdf(gexp(gexp(gen,db_2),da_2),gexp(a,n8_2),idA_3,idB_3)) is executed at {36} in copy a_1.
+A trace has been found.
+RESULT event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaStart(a,b,q,e7_2)) is false.
+-- Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaAcceptKeyOnly(a,b,q,e7_2,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 164 rules (47 with conclusion selected). Queue: 53 rules.
+400 rules inserted. Base: 291 rules (61 with conclusion selected). Queue: 6 rules.
+Starting query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaAcceptKeyOnly(a,b,q,e7_2,k_2))
+goal reachable: attacker(e7_2) -> event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[])))
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+
+Derivation:
+Abbreviations:
+n8_1 = n8[e7_1 = e7_2,cA_1 = issuecert(idA[],gexp(gen,da[]),ca[]),qA_2 = gexp(gen,da[]),idA_2 = idA[],!1 = @sid]
+
+1. We assume as hypothesis that
+attacker(e7_2).
+
+2. The message (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[])) may be sent to the attacker at output {20}.
+attacker((idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[]))).
+
+3. By 2, the attacker may know (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),gexp(gen,n7[])).
+Using the function 3-proj-4-tuple the attacker may obtain issuecert(idA[],gexp(gen,da[]),ca[]).
+attacker(issuecert(idA[],gexp(gen,da[]),ca[])).
+
+4. The message (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])) may be sent to the attacker at output {10}.
+attacker((idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[]))).
+
+5. By 4, the attacker may know (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])).
+Using the function 3-proj-5-tuple the attacker may obtain gexp(gen,da[]).
+attacker(gexp(gen,da[])).
+
+6. By 4, the attacker may know (idA[],idB[],gexp(gen,da[]),gexp(gen,db[]),pk_static(ca[])).
+Using the function 1-proj-5-tuple the attacker may obtain idA[].
+attacker(idA[]).
+
+7. By 6, the attacker may know idA[].
+By 5, the attacker may know gexp(gen,da[]).
+By 3, the attacker may know issuecert(idA[],gexp(gen,da[]),ca[]).
+By 1, the attacker may know e7_2.
+Using the function 4-tuple the attacker may obtain (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2).
+attacker((idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2)).
+
+8. The message (idA[],gexp(gen,da[]),issuecert(idA[],gexp(gen,da[]),ca[]),e7_2) that the attacker may have by 7 may be received at input {31}.
+So event EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[])) may be executed at {36}.
+event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+
+9. By 8, event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+The goal is reached, represented in the following fact:
+event(EbAccept(idA[],idB[],gexp(gen,da[]),e7_2,kdf(gexp(gexp(gen,db[]),da[]),gexp(e7_2,n8_1),idA[],idB[]))).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new ca: skey creating ca_1 at {1}
+
+new idA: id creating idA_3 at {2}
+
+new idB: id creating idB_3 at {3}
+
+new da: exponent creating da_2 at {4}
+
+new db: exponent creating db_2 at {5}
+
+event BCCARegistered(idA_3,gexp(gen,da_2)) at {9}
+
+out(net, (~M,~M_1,~M_2,~M_3,~M_4)) with ~M = idA_3, ~M_1 = idB_3, ~M_2 = gexp(gen,da_2), ~M_3 = gexp(gen,db_2), ~M_4 = pk_static(ca_1) at {10}
+
+new n7: exponent creating n7_1 at {17}
+
+event EaStart(idA_3,idB_3,gexp(gen,da_2),gexp(gen,n7_1)) at {19}
+
+out(net, (~M_5,~M_6,~M_7,~M_8)) with ~M_5 = idA_3, ~M_6 = gexp(gen,da_2), ~M_7 = issuecert(idA_3,gexp(gen,da_2),ca_1), ~M_8 = gexp(gen,n7_1) at {20}
+
+in(net, (~M,~M_2,~M_7,a)) with ~M = idA_3, ~M_2 = gexp(gen,da_2), ~M_7 = issuecert(idA_3,gexp(gen,da_2),ca_1) at {31} in copy a_1
+
+new n8: exponent creating n8_2 at {33} in copy a_1
+
+event EbAccept(idA_3,idB_3,gexp(gen,da_2),a,kdf(gexp(gexp(gen,da_2),db_2),gexp(a,n8_2),idA_3,idB_3)) at {36} in copy a_1 (goal)
+
+The event EbAccept(idA_3,idB_3,gexp(gen,da_2),a,kdf(gexp(gexp(gen,db_2),da_2),gexp(a,n8_2),idA_3,idB_3)) is executed at {36} in copy a_1.
+A trace has been found.
+RESULT event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaAcceptKeyOnly(a,b,q,e7_2,k_2)) is false.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(secret_payload[]) is true.
+
+Query event(EaAccept(a,b,q,e7_2,e8_2,k_2)) ==> event(EbResponse(a,b,q,e7_2,e8_2,k_2)) is true.
+
+Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(BCCARegistered(a,q)) is true.
+
+Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaStart(a,b,q,e7_2)) is false.
+
+Query event(EbAccept(a,b,q,e7_2,k_2)) ==> event(EaAcceptKeyOnly(a,b,q,e7_2,k_2)) is false.
+
+--------------------------------------------------------------
+
+
+real	0m0.224s
+user	0m0.146s
+sys	0m0.004s

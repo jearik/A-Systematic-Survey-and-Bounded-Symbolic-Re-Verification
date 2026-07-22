@@ -1,0 +1,6 @@
+claim	M6AnonymousZKPAbstract,P	Secret_P1	H(np,nv)	[32mOk[0m	[proof of correctness]
+claim	M6AnonymousZKPAbstract,P	Niagree_P2	-	[32mOk[0m	[proof of correctness]
+claim	M6AnonymousZKPAbstract,P	Nisynch_P3	-	[32mOk[0m	[proof of correctness]
+claim	M6AnonymousZKPAbstract,V	Secret_V1	H(np,nv)	[32mOk[0m	[proof of correctness]
+claim	M6AnonymousZKPAbstract,V	Niagree_V2	-	[32mOk[0m	[proof of correctness]
+claim	M6AnonymousZKPAbstract,V	Nisynch_V3	-	[32mOk[0m	[proof of correctness]

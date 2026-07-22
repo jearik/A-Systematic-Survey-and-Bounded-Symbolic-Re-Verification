@@ -1,0 +1,143 @@
+Linear part:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Completing equations...
+Completed equations:
+gexp(gexp(gen,x),y) = gexp(gexp(gen,y),x)
+Convergent part: No equation.
+Process 0 (that is, the initial process):
+{1}new mskA: skey;
+{2}new mskB: skey;
+{3}out(net, mpk(mskA));
+{4}out(net, mpk(mskB));
+{5}new idA: id;
+{6}new idB: id;
+{7}new xvA: exp;
+{8}new xvB: exp;
+{9}let dA: skey = partial(idA,mskA) in
+{10}let dB: skey = partial(idB,mskB) in
+(
+    {11}!
+    {12}let idA_1: id = idA in
+    {13}let xvA_1: exp = xvA in
+    {14}let idB_1: id = idB in
+    {15}let mpkB: pkey = mpk(mskB) in
+    {16}new ea: exp;
+    {17}let EA: G = gexp(gen,ea) in
+    {18}out(net, (idA_1,fullpk(idA_1,xvA_1),EA,clsign((idA_1,EA),dA,xvA_1)));
+    {19}in(net, (=idB_1,pkB: pkey,EB: G,sg: bitstring));
+    {20}if (clverify(sg,(idB_1,idA_1,EA,EB),idB_1,pkB,mpkB) = true) then
+    {21}let k: bitstring = kdf(gexp(EB,ea)) in
+    {22}event iRun(idA_1,idB_1,k);
+    {23}out(net, clsign((idA_1,idB_1,EA,EB,EA),dA,xvA_1));
+    {24}event iAcc(idA_1,idB_1,k);
+    {25}out(net, senc(secret_sess,k))
+) | (
+    {26}!
+    {27}let idB_2: id = idB in
+    {28}let xvB_1: exp = xvB in
+    {29}let mpkA: pkey = mpk(mskA) in
+    {30}in(net, (idA_2: id,pkA: pkey,EA_1: G,sgA: bitstring));
+    {31}if (clverify(sgA,(idA_2,EA_1),idA_2,pkA,mpkA) = true) then
+    {32}new eb: exp;
+    {33}let EB_1: G = gexp(gen,eb) in
+    {34}let k_1: bitstring = kdf(gexp(EA_1,eb)) in
+    {35}event rRun(idA_2,idB_2,k_1);
+    {36}out(net, (idB_2,fullpk(idB_2,xvB_1),EB_1,clsign((idB_2,idA_2,EA_1,EB_1),dB,xvB_1)));
+    {37}in(net, c: bitstring);
+    {38}if (clverify(c,(idA_2,idB_2,EA_1,EB_1,EA_1),idA_2,pkA,mpkA) = true) then
+    {39}event rAcc(idA_2,idB_2,k_1)
+) | (
+    {40}phase 1;
+    {41}out(net, (mskA,mskB))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new mskA: skey;
+{2}new mskB: skey;
+{3}out(net, mpk(mskA));
+{4}out(net, mpk(mskB));
+{5}new idA: id;
+{6}new idB: id;
+{7}new xvA: exp;
+{8}new xvB: exp;
+(
+    {11}!
+    {16}new ea: exp;
+    {17}let EA: G = gexp(gen,ea) in
+    {13}let xvA_1: exp = xvA in
+    {12}let idA_1: id = idA in
+    {9}let dA: skey = partial(idA,mskA) in
+    {18}out(net, (idA_1,fullpk(idA_1,xvA_1),EA,clsign((idA_1,EA),dA,xvA_1)));
+    {14}let idB_1: id = idB in
+    {19}in(net, (=idB_1,pkB: pkey,EB: G,sg: bitstring));
+    {15}let mpkB: pkey = mpk(mskB) in
+    {20}if (clverify(sg,(idB_1,idA_1,EA,EB),idB_1,pkB,mpkB) = true) then
+    {21}let k: bitstring = kdf(gexp(EB,ea)) in
+    {22}event iRun(idA_1,idB_1,k);
+    {23}out(net, clsign((idA_1,idB_1,EA,EB,EA),dA,xvA_1));
+    {24}event iAcc(idA_1,idB_1,k);
+    {25}out(net, senc(secret_sess,k))
+) | (
+    {26}!
+    {30}in(net, (idA_2: id,pkA: pkey,EA_1: G,sgA: bitstring));
+    {29}let mpkA: pkey = mpk(mskA) in
+    {31}if (clverify(sgA,(idA_2,EA_1),idA_2,pkA,mpkA) = true) then
+    {32}new eb: exp;
+    {34}let k_1: bitstring = kdf(gexp(EA_1,eb)) in
+    {27}let idB_2: id = idB in
+    {35}event rRun(idA_2,idB_2,k_1);
+    {33}let EB_1: G = gexp(gen,eb) in
+    {28}let xvB_1: exp = xvB in
+    {10}let dB: skey = partial(idB,mskB) in
+    {36}out(net, (idB_2,fullpk(idB_2,xvB_1),EB_1,clsign((idB_2,idA_2,EA_1,EB_1),dB,xvB_1)));
+    {37}in(net, c: bitstring);
+    {38}if (clverify(c,(idA_2,idB_2,EA_1,EB_1,EA_1),idA_2,pkA,mpkA) = true) then
+    {39}event rAcc(idA_2,idB_2,k_1)
+) | (
+    {40}phase 1;
+    {41}out(net, (mskA,mskB))
+)
+
+-- Query not attacker_p1(secret_sess[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker_p1(secret_sess[])
+RESULT not attacker_p1(secret_sess[]) is true.
+-- Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 130 rules (59 with conclusion selected). Queue: 10 rules.
+Starting query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2))
+goal reachable: b-inj-event(iRun(idA[],idB[],kdf(gexp(gexp(gen,eb_1),ea_1))),@occ22_1) -> inj-event(rAcc(idA[],idB[],kdf(gexp(gexp(gen,eb_1),ea_1))),@occ39_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+ea_1 = ea[!1 = @sid]
+eb_1 = eb[sgA = clsign((idA[],gexp(gen,ea_1)),partial(idA[],mskA[]),xvA[]),EA_1 = gexp(gen,ea_1),pkA = fullpk(idA[],xvA[]),idA_2 = idA[],!1 = @sid_1]
+@occ39_1 = @occ39[c = clsign((idA[],idB[],gexp(gen,ea_1),gexp(gen,eb_1),gexp(gen,ea_1)),partial(idA[],mskA[]),xvA[]),sgA = clsign((idA[],gexp(gen,ea_1)),partial(idA[],mskA[]),xvA[]),EA_1 = gexp(gen,ea_1),pkA = fullpk(idA[],xvA[]),idA_2 = idA[],!1 = @sid_1]
+@occ22_1 = @occ22[sg = clsign((idB[],idA[],gexp(gen,ea_1),gexp(gen,eb_1)),partial(idB[],mskB[]),xvB[]),EB = gexp(gen,eb_1),pkB = fullpk(idB[],xvB[]),!1 = @sid]
+RESULT inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+-- Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 141 rules (59 with conclusion selected). Queue: 28 rules.
+Starting query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2))
+goal reachable: b-inj-event(rRun(idA[],idB[],kdf(gexp(gexp(gen,ea_1),eb_1))),@occ35_1) -> inj-event(iAcc(idA[],idB[],kdf(gexp(gexp(gen,eb_1),ea_1))),@occ24_1)
+The hypothesis occurs strictly before the conclusion.
+Abbreviations:
+ea_1 = ea[!1 = @sid]
+eb_1 = eb[sgA = clsign((idA[],gexp(gen,ea_1)),partial(idA[],mskA[]),xvA[]),EA_1 = gexp(gen,ea_1),pkA = fullpk(idA[],xvA[]),idA_2 = idA[],!1 = @sid_1]
+@occ24_1 = @occ24[sg = clsign((idB[],idA[],gexp(gen,ea_1),gexp(gen,eb_1)),partial(idB[],mskB[]),xvB[]),EB = gexp(gen,eb_1),pkB = fullpk(idB[],xvB[]),!1 = @sid]
+@occ35_1 = @occ35[sgA = clsign((idA[],gexp(gen,ea_1)),partial(idA[],mskA[]),xvA[]),EA_1 = gexp(gen,ea_1),pkA = fullpk(idA[],xvA[]),idA_2 = idA[],!1 = @sid_1]
+RESULT inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker_p1(secret_sess[]) is true.
+
+Query inj-event(rAcc(a,b,k_2)) ==> inj-event(iRun(a,b,k_2)) is true.
+
+Query inj-event(iAcc(a,b,k_2)) ==> inj-event(rRun(a,b,k_2)) is true.
+
+--------------------------------------------------------------
+

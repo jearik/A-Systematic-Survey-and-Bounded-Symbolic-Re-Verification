@@ -1,0 +1,10 @@
+artifact,tool,status,authoritative_interpretation,required_next_check
+M1_certificate_based_ECDHE.pv,ProVerif,"PARTIAL after correction: completion PASS; secrecy PASS; responder injective agreement PASS; initiator injective agreement TIMEOUT 120 s","four-field responder signature corrected; old aggregate PASS withdrawn; only query-specific statuses may be cited","reduce or restructure the initiator correspondence model and rerun without treating timeout as PASS"
+M2_IBS_blockchain.pv,ProVerif,ILLUSTRATIVE,"encoded-claim result only; not a complete IBS/ledger protocol proof","add protocol traceability and ledger freshness/finality state"
+M3_certificateless_AKA.pv,ProVerif,ILLUSTRATIVE,"encoded-claim result only; not a Type-I/Type-II or eCK proof","add key-replacement, KGC, peer-secret and timed compromise cases"
+M4_blockchain_pseudonym.pv,ProVerif,ILLUSTRATIVE,"non-derivability only; not unlinkability or ledger safety","add equivalence privacy and ledger-state model"
+M5_PUF_keyestab.pv,ProVerif,ILLUSTRATIVE,"ideal response binding only; not physical PUF security","add empirical noise/helper-data/modeling-attack evidence"
+M6_anonymous_ZKP.pv,ProVerif,ILLUSTRATIVE,"opaque proof-term binding only; not ZK soundness or zero knowledge","add proof-system/circuit assumptions and equivalence model"
+M1-M6 family skeletons,Tamarin,ILLUSTRATIVE,"internal-state rule executability only; no semantic cross-tool inference","rebuild from a shared protocol IR with attacker-controlled message inputs"
+M1-M6 family skeletons,Scyther,ILLUSTRATIVE,"AKE-style role executability only; no semantic cross-tool inference","rebuild from the same messages, roles and claims as the reference model"
+CCAP/CL-BASA/BCAE bounded cases,ProVerif/Scyther,BOUNDED_CASE,"only query-specific printed-flow diagnostics survive","preserve explicit omitted fields and avoid deployed-vulnerability claims"

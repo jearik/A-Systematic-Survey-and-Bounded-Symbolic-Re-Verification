@@ -1,0 +1,65 @@
+// Scyther authentication-only model for the transcript-bound CL-BASA variant.
+// This is a hardening experiment, not the published protocol.
+
+hashfunction H;
+usertype Domain;
+usertype PID;
+usertype EPK;
+
+const domA, domB: Domain;
+const pidU, pidV: PID;
+const reqinfA, reqinfB: Nonce;
+
+protocol CLBASAWang2022Fix(U,V,BASA,BASB)
+{
+  role U
+  {
+    fresh NU: Nonce;
+    fresh eU: EPK;
+    var NV: Nonce;
+    var eV: EPK;
+
+    send_1(U,BASA, {{pidU, pidV, reqinfA}sk(U)}pk(BASA));
+    recv_2(BASA,U, {{pidV, domB, pk(V)}sk(BASA)}pk(U));
+    send_3(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+
+    // Fix: Token_VU signs the initiator transcript (NU, PID_U, Pk'_U).
+    recv_6(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV, NU, pidU, eU}sk(V));
+
+    claim(U, Alive);
+    claim(U, Weakagree);
+    claim(U, Niagree);
+    claim(U, Nisynch);
+  }
+
+  role V
+  {
+    var NU: Nonce;
+    var eU: EPK;
+    fresh NV: Nonce;
+    fresh eV: EPK;
+
+    recv_3(U,V, NU, domA, pidU, eU, {NU, domA, pidU, eU}sk(U));
+    send_4(V,BASB, {{pidV, pidU, eU, reqinfB}sk(V)}pk(BASB));
+    recv_5(BASB,V, {{pidU, domA, pk(U)}sk(BASB)}pk(V));
+    send_6(V,U, NV, domB, pidV, eV, {NV, domB, pidV, eV, NU, pidU, eU}sk(V));
+
+    claim(V, Alive);
+    claim(V, Weakagree);
+    claim(V, Niagree);
+    claim(V, Nisynch);
+  }
+
+  role BASA
+  {
+    recv_1(U,BASA, {{pidU, pidV, reqinfA}sk(U)}pk(BASA));
+    send_2(BASA,U, {{pidV, domB, pk(V)}sk(BASA)}pk(U));
+  }
+
+  role BASB
+  {
+    var eU: EPK;
+    recv_4(V,BASB, {{pidV, pidU, eU, reqinfB}sk(V)}pk(BASB));
+    send_5(BASB,V, {{pidU, domA, pk(U)}sk(BASB)}pk(V));
+  }
+}

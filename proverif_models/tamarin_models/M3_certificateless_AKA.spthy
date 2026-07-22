@@ -1,0 +1,49 @@
+theory M3_certificateless_AKA
+begin
+
+builtins: hashing, signing
+
+/* Abstract Tamarin port of the ProVerif M3 certificateless AKA pattern.
+   The KGC compromise is represented by a reveal action for master material.
+   The session key remains a fresh per-session value that is never output; this
+   is independent of revealed KGC material; the lemma name is legacy and this is not a valid PFS test. */
+
+rule KGC_Setup:
+  [ Fr(~msk) ]
+  --[ KGCSetup(~msk) ]->
+  [ !KGC(~msk), Out('kgc_public_params') ]
+
+rule KGC_Reveal:
+  [ !KGC(msk) ]
+  --[ KGCReveal(msk) ]->
+  [ Out(msk) ]
+
+rule Init_Start:
+  [ Fr(~k), !KGC(msk) ]
+  --[ InitRunning($I, $R, ~k), UsesKGC($I, msk) ]->
+  [ !St_Init($I, $R, ~k), Out(<$I, $R, 'claka_init'>) ]
+
+rule Resp_Accept:
+  [ !St_Init(I, R, k), !KGC(msk) ]
+  --[ RespRunning(R, I, k), RespAccept(R, I, k), Secret(k), UsesKGC(R, msk) ]->
+  [ !St_Resp(R, I, k), Out(<R, I, 'claka_resp'>) ]
+
+rule Init_Accept:
+  [ !St_Init(I, R, k), !St_Resp(R, I, k) ]
+  --[ InitAccept(I, R, k), Secret(k) ]->
+  [ ]
+
+lemma pfs_after_kgc_reveal:
+  "All k #i. Secret(k) @ i ==> not (Ex #j. K(k) @ j)"
+
+lemma responder_agreement:
+  "All I R k #i.
+     RespAccept(R, I, k) @ i
+     ==> (Ex #j. InitRunning(I, R, k) @ j & j < i)"
+
+lemma initiator_agreement:
+  "All I R k #i.
+     InitAccept(I, R, k) @ i
+     ==> (Ex #j. RespRunning(R, I, k) @ j & j < i)"
+
+end
