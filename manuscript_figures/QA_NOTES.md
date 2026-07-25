@@ -4,7 +4,7 @@
 
 | Figure | Core conclusion | Evidence chain | Archetype |
 |---|---|---|---|
-| `image4` | Primary family, overlapping deployment facets, and verification evidence are distinct classification axes. | Panel a gives one family per study; panel b permits overlapping facets; panel c gives the orthogonal A-E totals. | Quantitative grid |
+| `image4` | Primary family, overlapping deployment facets, and verification evidence are distinct classification axes. | Panel a gives one family per study; panel b permits overlapping facets; panel c defines the orthogonal A-E category axis without duplicating the counts in `image5`. | Quantitative grid |
 | `image5` | The final A-E distribution is 21, 31, 10, 20, and 27 out of 109 studies. | Direct count and percentage labels on one bar per category. | Quantitative single panel |
 | `image6` | Mechanism families have different verification-evidence profiles. | Annotated family-by-category cells, with row and column totals visible in axis labels. | Quantitative heatmap |
 | `image8` | Assumed link latency dominates the illustrative P1 projection on slow links. | Totals are recomputed from three one-way flights, 1036 bytes, 247.993 microseconds of host time, and the six declared link profiles. | Analytical projection |
@@ -27,12 +27,13 @@
   image 6 uses 7.0-7.2 pt labels/cell values and an 8.2-pt title; image 9 uses
   7.0-7.2 pt workflow labels. Long family labels are line-wrapped rather than
   reduced below the final-size readability target.
-- PNG resolution: all four manuscript rasters are 300 dpi. Pixel dimensions
-  are `1050x2475`, `1050x945`, `1050x1275`, and `1050x1575` for images 4, 5,
-  6, and 9, respectively.
+- PNG resolution: all six generated manuscript rasters are 300 dpi. Pixel
+  dimensions are `1050x1305`, `1050x2475`, `1050x945`, `1050x1275`,
+  `1050x540`, and `1050x1575` for images 1, 4, 5, 6, 8, and 9,
+  respectively.
 - Editable exports: each SVG contains live text elements. Each PDF contains
   extractable text and embedded Arial regular/bold font subsets.
-- Visual inspection: all four regenerated PNGs were opened at high detail and
+- Visual inspection: all six regenerated PNGs were opened at high detail and
   again as 3.5-in-wide, 110-dpi single-column previews. Labels, count
   annotations, heatmap values, arrows, and section names remain legible at the
   latter size; no clipping or overlap remains.

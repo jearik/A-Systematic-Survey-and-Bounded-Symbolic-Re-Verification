@@ -24,3 +24,15 @@ rules for text and SVG files, regenerates `MANIFEST_SHA256.csv`, and adds a
 shared manifest-generation rule used by the validator. Study records, coding
 decisions, aggregate results, symbolic models, and retained execution evidence
 are unchanged from v1.0.0.
+
+## v1.0.2 manuscript-figure mapping correction
+
+Version 1.0.2 adds the missing PNG previews generated for the six current
+manuscript figures, adds the exact PDF and PNG used for the manuscript PRISMA
+figure, and documents a one-to-one mapping between manuscript figure numbers
+and public files. Earlier date-prefixed PNGs are retained as legacy analytical
+renderings and are explicitly distinguished from the current manuscript
+figures. It also corrects stale generator paths and Figure 4 wording in the
+figure documentation. Study records, coding decisions, aggregate results,
+symbolic models, execution evidence, and the manuscript figures themselves are
+unchanged from v1.0.1.

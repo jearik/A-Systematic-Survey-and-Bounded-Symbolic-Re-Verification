@@ -53,6 +53,23 @@ def main() -> None:
     summary = json.loads((ROOT / "validation/20260720_FINAL_STATISTICAL_SUMMARY.json").read_text(encoding="utf-8-sig"))
     check(summary["verification_counts"] == expected_levels, "Final JSON evidence totals differ from S1")
 
+    manuscript_figure_pairs = {
+        "figures/image1.png": "manuscript_figures/exports/image1.pdf",
+        "figures/image9.png": "manuscript_figures/exports/image9.pdf",
+        "figures/fig3_prisma_flow.png": "figures/fig3_prisma_flow.pdf",
+        "figures/image4.png": "manuscript_figures/exports/image4.pdf",
+        "figures/image5.png": "manuscript_figures/exports/image5.pdf",
+        "figures/image6.png": "manuscript_figures/exports/image6.pdf",
+        "figures/image8.png": "manuscript_figures/exports/image8.pdf",
+    }
+    for preview, manuscript_pdf in manuscript_figure_pairs.items():
+        check((ROOT / preview).is_file(), f"Current manuscript preview is missing: {preview}")
+        check((ROOT / manuscript_pdf).is_file(), f"Current manuscript PDF is missing: {manuscript_pdf}")
+    figure_mapping = (ROOT / "figures/README.md").read_text(encoding="utf-8")
+    for preview, manuscript_pdf in manuscript_figure_pairs.items():
+        check(preview in figure_mapping, f"Figure mapping omits preview: {preview}")
+        check(manuscript_pdf in figure_mapping, f"Figure mapping omits PDF: {manuscript_pdf}")
+
     manifest_rows = rows("MANIFEST_SHA256.csv")
     manifest = {row["path"]: row for row in manifest_rows}
     actual = {p.relative_to(ROOT).as_posix() for p in payload_files()}

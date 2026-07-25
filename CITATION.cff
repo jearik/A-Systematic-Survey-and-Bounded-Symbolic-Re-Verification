@@ -9,7 +9,7 @@ authors:
     given-names: Rosilah
   - family-names: Abdul Karim
     given-names: Nor Shahriza
-version: 1.0.1
+version: 1.0.2
 date-released: 2026-07-25
 license: CC-BY-4.0
 repository-code: "https://github.com/jearik/A-Systematic-Survey-and-Bounded-Symbolic-Re-Verification"

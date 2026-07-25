@@ -10,7 +10,8 @@ Public data, analysis artifacts, and bounded symbolic models accompanying the ma
 - `validation/`: correction records, final statistical summaries, and cross-file validation outputs.
 - `proverif_models/`: bounded ProVerif models, illustrative Tamarin/Scyther skeletons, published-protocol abstractions, runner scripts, and sanitized result logs.
 - `performance/`: desktop primitive timings and analytical network projections. These are not industrial-device or field-network measurements.
-- `manuscript_figures/`: CSV inputs, generator, and PNG/PDF/SVG exports for the current manuscript figures.
+- `manuscript_figures/`: CSV inputs, Python generator, editable PDF/SVG exports, and QA records for the current manuscript figures.
+- `figures/`: current manuscript PNG previews, the current PRISMA PDF/PNG, and clearly identified legacy analytical renderings; see `figures/README.md`.
 - `MANIFEST_SHA256.csv`: size and SHA-256 digest for every repository payload file.
 
 ## Key denominators and invariants
@@ -42,6 +43,10 @@ Regenerate the current manuscript figures with NumPy and Matplotlib:
 python -m pip install -r requirements-figures.txt
 python manuscript_figures/generate_corrected_figures.py
 ```
+
+The manuscript-to-file mapping is documented in `figures/README.md`. Files
+whose names begin with `20260712_` or `20260717_` are retained legacy
+analytical renderings and are not the current manuscript figure files.
 
 Formal-tool execution requires the corresponding external tools. See `proverif_models/HOW_TO_RUN.md` and the model-scope notices before interpreting any result.
 

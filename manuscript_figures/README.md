@@ -1,13 +1,14 @@
 # Reproducible manuscript figures
 
-Run `python figure_sources/generate_corrected_figures.py` from the project root.
+Run `python manuscript_figures/generate_corrected_figures.py` from the project
+root.
 
-The script reads only the CSV files in `figure_sources/data`, validates the
+The script reads only the CSV files in `manuscript_figures/data`, validates the
 109-study totals, and writes the manuscript PNGs to `figures/`. Editable PDF
-and SVG companions are written to `figure_sources/exports/`. All rendering is
-performed with Python and matplotlib. Every canvas is exactly 3.5 in wide so
-the declared 7-8 pt labels retain that size when inserted at the manuscript's
-single-column width.
+and SVG companions are written to `manuscript_figures/exports/`. All rendering
+is performed with Python and matplotlib. Every canvas is exactly 3.5 in wide
+so the declared 7-8 pt labels retain that size when inserted at the
+manuscript's single-column width.
 
 Figure logic:
 
@@ -27,3 +28,9 @@ Figure logic:
 - `image9`: methods create four distinguishable RQ-linked evidence streams,
   which converge into claim-boundary synthesis and research priorities. This
   is an evidence-logic workflow rather than a duplicate section directory.
+
+The current paper maps `image1`, `image9`, `image4`, `image5`, `image6`, and
+`image8` to manuscript Figures 1, 2, 4, 5, 6, and 7, respectively. Manuscript
+Figure 3 is the separately supplied `figures/fig3_prisma_flow.pdf`. See
+`figures/README.md` for the complete mapping and the status of date-prefixed
+legacy renderings.
