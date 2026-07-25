@@ -8,10 +8,9 @@ import hashlib
 import json
 import re
 from collections import Counter
-from pathlib import Path
 
+from release_inventory import ROOT, payload_files
 
-ROOT = Path(__file__).resolve().parents[1]
 
 
 def rows(rel: str) -> list[dict[str, str]]:
@@ -56,13 +55,7 @@ def main() -> None:
 
     manifest_rows = rows("MANIFEST_SHA256.csv")
     manifest = {row["path"]: row for row in manifest_rows}
-    actual = {
-        p.relative_to(ROOT).as_posix()
-        for p in ROOT.rglob("*")
-        if p.is_file()
-        and p.name != "MANIFEST_SHA256.csv"
-        and ".git" not in p.relative_to(ROOT).parts
-    }
+    actual = {p.relative_to(ROOT).as_posix() for p in payload_files()}
     check(set(manifest) == actual, "Manifest path set does not match repository files")
     for rel, row in manifest.items():
         data = (ROOT / rel).read_bytes()
@@ -71,13 +64,7 @@ def main() -> None:
 
     forbidden = re.compile(r"(?:[A-Za-z]:\\|/mnt/[a-zA-Z]/|/home/(?:jeari|jearik)/|\buser=(?:jeari|jearik)\b)", re.I)
     findings = []
-    for path in ROOT.rglob("*"):
-        if (
-            not path.is_file()
-            or path.name == "MANIFEST_SHA256.csv"
-            or ".git" in path.relative_to(ROOT).parts
-        ):
-            continue
+    for path in payload_files():
         try:
             text = path.read_text(encoding="utf-8-sig")
         except UnicodeDecodeError:

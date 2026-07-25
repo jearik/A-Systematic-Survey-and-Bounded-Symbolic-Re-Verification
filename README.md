@@ -28,8 +28,13 @@ The evidence categories record the strongest reported artifact under the study's
 Python 3.10 or later is sufficient for the repository-level integrity checks:
 
 ```bash
+python scripts/rebuild_manifest.py
 python scripts/validate_public_release.py
 ```
+
+The manifest generator and validator use the same payload-selection rules.
+For release testing, run the validator again after extracting the tagged archive
+into a clean directory.
 
 Regenerate the current manuscript figures with NumPy and Matplotlib:
 
