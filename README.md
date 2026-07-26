@@ -53,7 +53,7 @@ Formal-tool execution requires the corresponding external tools. See `proverif_m
 
 ## Citation
 
-Use `CITATION.cff` and cite the tagged v1.0.6 repository state. The version-independent Zenodo concept DOI is `10.5281/zenodo.21483602`; the version-specific DOI assigned to v1.0.6 is shown on the corresponding Zenodo version record.
+Use `CITATION.cff` and cite the tagged v1.0.7 repository state. The version-independent Zenodo concept DOI is `10.5281/zenodo.21483602`; the version-specific DOI assigned to v1.0.7 will be shown on the corresponding Zenodo version record after publication.
 
 ## License
 
