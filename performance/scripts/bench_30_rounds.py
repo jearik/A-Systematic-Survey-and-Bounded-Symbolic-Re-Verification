@@ -59,6 +59,57 @@ def hash_path_update(n_state: int) -> None:
         x = hashlib.sha256(x + b"|" + i.to_bytes(4, "little")).digest()
 
 
+def _cpu_model() -> str:
+    """Best-effort CPU model string, captured in the timing run itself."""
+    if platform.system() == "Windows":
+        name = os.environ.get("PROCESSOR_IDENTIFIER", "")
+        try:
+            import subprocess
+
+            out = subprocess.run(
+                ["powershell", "-NoProfile", "-Command",
+                 "(Get-CimInstance Win32_Processor).Name"],
+                capture_output=True, text=True, timeout=30,
+            ).stdout.strip()
+            if out:
+                return out.splitlines()[0].strip()
+        except Exception:
+            pass
+        return name or platform.processor() or "unavailable"
+    try:
+        for line in Path("/proc/cpuinfo").read_text().splitlines():
+            if line.lower().startswith("model name"):
+                return line.split(":", 1)[1].strip()
+    except Exception:
+        pass
+    return platform.processor() or "unavailable"
+
+
+def _openssl_version() -> str:
+    """OpenSSL build actually backing the measured primitives."""
+    try:
+        from cryptography.hazmat.backends.openssl.backend import backend
+
+        return backend.openssl_version_text()
+    except Exception:
+        pass
+    try:
+        import ssl
+
+        return ssl.OPENSSL_VERSION
+    except Exception:
+        return "unavailable"
+
+
+def _cryptography_version() -> str:
+    try:
+        import cryptography
+
+        return cryptography.__version__
+    except Exception:
+        return "unavailable"
+
+
 def main() -> None:
     raw_rows: list[dict[str, str | int | float]] = []
 
@@ -129,6 +180,12 @@ def main() -> None:
             "payload": "256-byte message for cryptographic primitives",
             "platform": platform.platform(),
             "python": platform.python_version(),
+            "cpu_model": _cpu_model(),
+            "cpu_arch": platform.machine(),
+            "cpu_logical_cores": os.cpu_count(),
+            "openssl_version": _openssl_version(),
+            "cryptography_version": _cryptography_version(),
+            "metadata_provenance": "Captured in the same process and run that produced the timing rows.",
             "note": "Entries are repeated SHA-256 operations along a Merkle-style path; no live ledger, storage I/O, consensus, or finality is measured.",
         },
         "results": {},

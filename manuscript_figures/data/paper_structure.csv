@@ -1,8 +1,0 @@
-﻿node_id,stage,label,section,color
-methods_search,methods,"Search, screening, and 108-study corpus",Sec. III,#E2EFD8
-methods_coding,methods,Three-dimensional coding,Sec. V,#E2EFD8
-rq1,evidence,RQ1 Verification-evidence distribution,Sec. VII-A/B,#DDE7F1
-rq2,evidence,RQ2 Mechanism/property/threat gaps,Secs. VI/VII-C/D,#FFF0C7
-rq3,evidence,RQ3 Bounded symbolic re-verification,Sec. VIII,#F3DDE8
-rq4,evidence,RQ4 Boundary-aware cost evidence,Sec. IX,#DDEDEB
-synthesis,synthesis,Claim-boundary synthesis and research priorities,Secs. X-XI,#E7E2ED

@@ -42,16 +42,13 @@
 
 ## Residual limitations
 
-- The 271-to-170 database-identification checkpoint was reproduced from frozen
-  Web of Science and Scopus exports. Those licensed exports are retained in a
-  separately marked private audit bundle rather than the public supplement.
-- The combined author-collection and backward-snowballing inputs were not
-  retained as separate route-specific lists, so the 304-to-131 cross-source
-  deduplication checkpoint is not fully replayable row by row.
+- The public deposit does not include the original Web of Science/Scopus
+  exports or the full 304-record pre-deduplication candidate table.
 - Single-reviewer screening/coding remains a methodological limitation;
   automated consistency checks are not an independent reassessment.
 - Formal-model outcomes retain their query-specific and encoded-model
   boundaries.
 
-Run `python scripts/validate_public_release.py` and
-`python scripts/validate_v15_3d_codex.py` for the structural checks.
+The structural checks reported here were run before release. Their outputs are
+retained in `validation/`, and `MANIFEST_SHA256.csv` allows every payload file
+to be re-verified independently.

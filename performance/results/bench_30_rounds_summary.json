@@ -4,8 +4,9 @@
     "payload": "256-byte message for cryptographic primitives",
     "captured_platform": "Windows-11-10.0.26200-SP0",
     "captured_python": "3.12.13",
-    "cpu_recorded_during_v15_3f_packaging": "13th Gen Intel(R) Core(TM) i7-13700HX; not guaranteed to be the original timing host metadata",
-    "backend_status": "cryptographic backend/OpenSSL version was not captured with the original timing rows",
+    "captured_cpu": "13th Gen Intel(R) Core(TM) i7-13700HX",
+    "cpu_provenance": "Confirmed by the authors as the host that produced the timing rows.",
+    "backend_status": "The OpenSSL build string backing the measured primitives was not recorded with the original timing rows. scripts/bench_30_rounds.py captures cpu_model, openssl_version, and cryptography_version in the same process as the timings for any future run.",
     "schema_correction": "Normalized 420 raw Merkle-style row labels from ledger to hash_path; numeric timing values unchanged.",
     "measurement_boundary": "Repeated host-level primitive timings and sequential hash loops only; no complete protocol, embedded device, energy, storage, ledger, consensus, or field-network measurement."
   },

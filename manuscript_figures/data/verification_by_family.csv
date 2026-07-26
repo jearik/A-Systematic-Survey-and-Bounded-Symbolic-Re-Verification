@@ -1,8 +1,0 @@
-﻿family,A,B,C,D,E
-Ledger-mediated trust,12,10,8,8,18
-Certificateless split-key,2,6,1,3,3
-ZK / privacy credential,1,3,0,4,1
-Other / classical-general,1,4,0,3,2
-Hardware-/device-rooted,5,0,0,1,1
-Group-/ring-signature,0,4,0,0,2
-Post-quantum,0,3,1,1,0

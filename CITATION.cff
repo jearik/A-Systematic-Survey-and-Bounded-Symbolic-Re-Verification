@@ -9,8 +9,9 @@ authors:
     given-names: Rosilah
   - family-names: Abdul Karim
     given-names: Nor Shahriza
-version: 1.0.5
-date-released: 2026-07-26
+version: 1.0.6
+date-released: 2026-07-27
 license: CC-BY-4.0
 repository-code: "https://github.com/jearik/A-Systematic-Survey-and-Bounded-Symbolic-Re-Verification"
-abstract: "Row-level review coding, validation tables, bounded symbolic models, execution evidence, analytical performance projections, and reproducible manuscript figures for a systematic review of cross-domain authentication in the Industrial Internet of Things."
+doi: "10.5281/zenodo.21483602"
+abstract: "Row-level review coding, validation tables, bounded symbolic models, execution evidence, analytical performance projections, and reproducible manuscript figures for a systematic survey of cross-domain authentication in the Industrial Internet of Things."

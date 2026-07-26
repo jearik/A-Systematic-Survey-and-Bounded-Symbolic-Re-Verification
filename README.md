@@ -2,7 +2,7 @@
 
 Public data, analysis artifacts, and bounded symbolic models accompanying the manuscript:
 
-> Security Assurance for Cross-Domain Authentication in the Industrial Internet of Things: A Systematic Review and Bounded Symbolic Re-Verification
+> Security Assurance for Cross-Domain Authentication in the Industrial Internet of Things: A Systematic Survey and Bounded Symbolic Re-Verification
 
 ## Contents
 
@@ -10,8 +10,7 @@ Public data, analysis artifacts, and bounded symbolic models accompanying the ma
 - `validation/`: correction records, final statistical summaries, and cross-file validation outputs.
 - `proverif_models/`: bounded ProVerif models, illustrative Tamarin/Scyther skeletons, published-protocol abstractions, runner scripts, and sanitized result logs.
 - `performance/`: desktop primitive timings and analytical network projections. These are not industrial-device or field-network measurements.
-- `manuscript_figures/`: CSV inputs, generator, and PNG/PDF/SVG exports for the current manuscript figures.
-- `MANUSCRIPT_ARTIFACT_MAP.md`: mapping from Supplements S1--S10 and supporting files to manuscript sections, figures, tables, and research questions.
+- `figures/`: the seven manuscript figures, each as vector PDF and SVG plus a PNG preview; `figures/README.md` maps the file stems to the printed figure numbers.
 - `MANIFEST_SHA256.csv`: size and SHA-256 digest for every repository payload file.
 
 ## Key denominators and invariants
@@ -26,24 +25,19 @@ The evidence categories record the strongest reported artifact under the study's
 
 ## Quick validation
 
-Python 3.10 or later is sufficient for the repository-level integrity checks:
+Every payload file is listed in `MANIFEST_SHA256.csv` with its size and SHA-256
+digest. Recompute the digests to confirm that the archive is intact, for example:
 
 ```bash
-python scripts/validate_public_release.py
-```
-
-Regenerate the current manuscript figures with NumPy and Matplotlib. The
-dedicated PRISMA generator validates the documented selection arithmetic and
-writes Fig. 3 at its final IEEE single-column size. The other
-`manuscript_figures` generator writes the remaining manuscript composites,
-including Fig. 4; the row-level script writes the corresponding Fig. 4--6
-audit exports:
-
-```bash
-python -m pip install -r requirements-figures.txt
-python manuscript_figures/generate_fig3_prisma.py
-python manuscript_figures/generate_corrected_figures.py
-python scripts/generate_v15_figures.py
+python - <<'EOF'
+import csv, hashlib, pathlib
+bad = 0
+for row in csv.DictReader(open("MANIFEST_SHA256.csv", encoding="utf-8")):
+    data = pathlib.Path(row["path"]).read_bytes()
+    if hashlib.sha256(data).hexdigest() != row["sha256"]:
+        print("MISMATCH", row["path"]); bad += 1
+print("checked manifest;", bad, "mismatches")
+EOF
 ```
 
 Formal-tool execution requires the corresponding external tools. See `proverif_models/HOW_TO_RUN.md` and the model-scope notices before interpreting any result.
@@ -51,8 +45,7 @@ Formal-tool execution requires the corresponding external tools. See `proverif_m
 ## Scope and provenance boundaries
 
 - Screening and coding were performed by one reviewer; no independent dual-screening agreement statistic is claimed.
-- The database-identification stage was reproduced from frozen Web of Science and Scopus exports, yielding 271 database records and 170 unique records. The licensed source exports are retained in a separately marked private audit bundle rather than this public archive.
-- The combined author-collection and backward-snowballing inputs were not retained as separate route-specific lists. The 304-to-131 cross-source deduplication checkpoint is therefore arithmetically auditable but not fully replayable row by row.
+- The original Web of Science and Scopus exports and the full 304-record pre-deduplication candidate table are not deposited. Early database-stage counts are therefore reported provenance, not a fully replayable raw-export transformation.
 - Published-protocol models are bounded abstractions. PASS, ATTACK (model-level), PARTIAL, TIMEOUT, and INCONCLUSIVE apply only to the named query and encoded model.
 - M2-M6 and the cross-tool family files are illustrative and do not establish algorithm-level or family-wide security.
 - Absolute local paths and usernames in retained text logs were replaced with placeholders for public release. Installation logs and a nested duplicate raw-log ZIP were excluded. Numerical outputs and model source files were not changed by that sanitization step.
@@ -60,12 +53,7 @@ Formal-tool execution requires the corresponding external tools. See `proverif_m
 
 ## Citation
 
-Use `CITATION.cff` and cite the tagged v1.0.5 repository state:
-
-`https://github.com/jearik/A-Systematic-Survey-and-Bounded-Symbolic-Re-Verification/tree/v1.0.5`
-
-The existing Zenodo DOI archives the earlier v1.0.2 release and should not be
-used as the identifier for the scope-corrected v1.0.5 dataset.
+Use `CITATION.cff` and cite the tagged v1.0.6 repository state. The version-independent Zenodo concept DOI is `10.5281/zenodo.21483602`; the version-specific DOI assigned to v1.0.6 is shown on the corresponding Zenodo version record.
 
 ## License
 
