@@ -2,36 +2,56 @@
 
 ## Dataset and grain
 
-- S1: 109 included primary studies, one row per `paper_id`.
+- S1: 108 included primary studies, one row per `paper_id`.
 - S2 and S7: 131 unique screened reports, one row per `paper_id`.
-- Intended use: reproduce descriptive counts, inspect screening/coding decisions, trace bounded model evidence, and regenerate manuscript figures.
+- Intended use: reproduce descriptive counts, inspect screening/coding
+  decisions, trace bounded model evidence, and regenerate manuscript figures.
 
 ## Checks performed
 
 - row counts and candidate-key uniqueness;
 - exact-row, normalized DOI, and normalized-title duplication;
 - required identifier coverage across S1, S2, and S7;
-- accepted values and aggregate totals for evidence category, primary family, year, and venue type;
+- accepted values and aggregate totals for evidence category, primary family,
+  year, venue, facets, and reported security properties;
 - cross-file agreement with the final statistical JSON and derived matrices;
-- missing-value profiling;
-- local-path, username, and obvious credential-pattern scanning;
-- repository manifest path, byte-count, and SHA-256 verification.
+- first-online publication-year agreement between S1 and the screening ledger,
+  including correct derivation of the two analysis periods;
+- explicit verification that P207 contributes zero to the primary denominator;
+- missing-value profiling, local-path scanning, and release-manifest validation.
 
 ## Findings
 
-1. **Core denominators and aggregates: PASS.** S1 contains 109 unique IDs; S2 and S7 contain 131. Evidence totals are 21/31/10/20/27, family totals are 57/15/9/10/7/6/5, and venue totals are 54/37/18.
-2. **Duplicates: PASS.** No exact duplicate rows, duplicate normalized DOI values, or duplicate normalized titles were found in S1 or S2.
-3. **Bibliographic cleanup: corrected in the public derivative.** Three titles (`P122`, `P176`, and `P198`) were truncated or contained OCR spacing in the validated submission payload. They were normalized from the manuscript bibliography/DOI metadata without changing any coding or aggregate result.
-4. **Expected missingness: documented.** Eight S1 rows have blank `properties`; these blanks mean the field has no retained coded value, not that the paper claims no properties. Sixty-three blank `correction_reason` values mean no final correction was applied. One excluded preprint-only S2 record has no DOI.
-5. **Public-release hygiene: PASS.** Tool-installation logs and a nested duplicate raw-log ZIP were excluded. Remaining text logs were sanitized for absolute paths and local usernames. No obvious access token, API key, or password value was detected by the release check.
+1. **Core denominators and aggregates: PASS.** S1 contains 108 unique IDs; S2
+   and S7 contain 131. Evidence totals are 21/30/10/20/27, family totals are
+   56/15/9/10/7/6/5, and venue totals are 53/37/18.
+2. **P207 scope correction: PASS.** P207 is retained in S2/S7 as
+   `exclude_out_of_scope_full_text`, contributes zero to the primary
+   denominator, and is absent from S1/S8/S10 and all derived aggregates.
+3. **Screening-status cleanup: PASS.** P195, P158, P139, and P178 are confirmed
+   as included, and obsolete borderline markers were removed.
+4. **Bibliographic synchronization: PASS.** The P178 title is synchronized
+   across the primary tables, screening ledger, manifest, mapping, and
+   validation table.
+5. **Publication-year synchronization: PASS.** Publication year is defined as
+   the year of first peer-reviewed online publication, including early access.
+   P190 is coded as 2025 and P198 as 2023; the resulting period denominators
+   are 40 for 2021--2023 and 68 for 2024--2026.
+6. **Duplicates and public-release hygiene: PASS.** No duplicate primary IDs,
+   unsanitized absolute user paths, or manifest mismatches remain.
 
 ## Residual limitations
 
-- The public deposit does not include the original Web of Science/Scopus exports or the full 304-record pre-deduplication candidate table. The earliest search/deduplication transformation cannot therefore be replayed from raw exports.
-- Bibliographic metadata were not independently revalidated field by field for all 131 reports during public-release preparation.
-- Single-reviewer screening/coding remains a methodological limitation; automated consistency checks are not an independent reassessment.
-- Formal-model outcomes retain their query-specific and encoded-model boundaries.
+- The 271-to-170 database-identification checkpoint was reproduced from frozen
+  Web of Science and Scopus exports. Those licensed exports are retained in a
+  separately marked private audit bundle rather than the public supplement.
+- The combined author-collection and backward-snowballing inputs were not
+  retained as separate route-specific lists, so the 304-to-131 cross-source
+  deduplication checkpoint is not fully replayable row by row.
+- Single-reviewer screening/coding remains a methodological limitation;
+  automated consistency checks are not an independent reassessment.
+- Formal-model outcomes retain their query-specific and encoded-model
+  boundaries.
 
-## Automated check
-
-Run `python scripts/validate_public_release.py`. A passing run validates structural integrity and reported invariants; it does not independently establish the substantive correctness of every study-level judgment.
+Run `python scripts/validate_public_release.py` and
+`python scripts/validate_v15_3d_codex.py` for the structural checks.

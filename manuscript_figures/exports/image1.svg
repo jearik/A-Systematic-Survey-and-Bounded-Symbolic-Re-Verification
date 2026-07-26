@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-07-22T10:41:52.831779</dc:date>
+    <dc:date>2026-07-26T01:37:56.718501</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -40,7 +40,7 @@ Q 19.728207 30.801797 19.728207 36.945787
 L 19.728207 73.50253 
 Q 19.728207 79.64652 24.648198 79.64652 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #d9e7f5; stroke: #285d8f; stroke-linejoin: miter"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #d9e7f5; stroke: #285d8f; stroke-linejoin: miter"/>
    </g>
    <g id="patch_3">
     <path d="M 24.648198 144.158419 
@@ -53,7 +53,7 @@ Q 19.728207 95.313696 19.728207 101.457686
 L 19.728207 138.014429 
 Q 19.728207 144.158419 24.648198 144.158419 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #e1efdf; stroke: #285d8f; stroke-linejoin: miter"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #e1efdf; stroke: #285d8f; stroke-linejoin: miter"/>
    </g>
    <g id="patch_4">
     <path d="M 24.648198 208.670319 
@@ -66,7 +66,7 @@ Q 19.728207 159.825595 19.728207 165.969585
 L 19.728207 202.526328 
 Q 19.728207 208.670319 24.648198 208.670319 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #fff0c8; stroke: #285d8f; stroke-linejoin: miter"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #fff0c8; stroke: #285d8f; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
     <path d="M 24.648198 273.182218 
@@ -79,37 +79,37 @@ Q 19.728207 224.337494 19.728207 230.481485
 L 19.728207 267.038227 
 Q 19.728207 273.182218 24.648198 273.182218 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #e9dff5; stroke: #285d8f; stroke-linejoin: miter"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #e9dff5; stroke: #285d8f; stroke-linejoin: miter"/>
    </g>
    <g id="patch_6">
     <path d="M 126 79.801995 
 Q 126 87.477385 126 94.034741 
-" clip-path="url(#p978d29d4e5)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
     <path d="M 128 90.034741 
 L 126 94.034741 
 L 124 90.034741 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
    </g>
    <g id="patch_7">
     <path d="M 126 144.313894 
 Q 126 151.989284 126 158.54664 
-" clip-path="url(#p978d29d4e5)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
     <path d="M 128 154.54664 
 L 126 158.54664 
 L 124 154.54664 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
    </g>
    <g id="patch_8">
     <path d="M 126 208.825793 
 Q 126 216.501183 126 223.058539 
-" clip-path="url(#p978d29d4e5)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: none; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
     <path d="M 128 219.058539 
 L 126 223.058539 
 L 124 219.058539 
 z
-" clip-path="url(#p978d29d4e5)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
+" clip-path="url(#p5ed2ef20c0)" style="fill: #62778b; stroke-dasharray: 4,2; stroke-dashoffset: 0; stroke: #62778b; stroke-linecap: round"/>
    </g>
    <g id="text_1">
     <text style="font-weight: 700; font-size: 8.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="126" y="16.86846" transform="rotate(-0 126 16.86846)">Cross-domain authentication audit-relevance path</text>
@@ -156,7 +156,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p978d29d4e5">
+  <clipPath id="p5ed2ef20c0">
    <rect x="3.00024" y="3.00024" width="245.99952" height="307.19952"/>
   </clipPath>
  </defs>

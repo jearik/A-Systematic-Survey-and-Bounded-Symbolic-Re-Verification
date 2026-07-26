@@ -1,18 +1,18 @@
-panel,category,count
-mechanism,Ledger-mediated trust,57
+﻿panel,category,count
+mechanism,Ledger-mediated trust,56
 mechanism,Certificateless split-key,15
 mechanism,Zero-knowledge/privacy credential,9
 mechanism,Other/classical-general,10
 mechanism,Hardware-/device-rooted,7
 mechanism,Group-/ring-signature,6
 mechanism,Post-quantum,5
-facet,ledger-present,101
-facet,privacy/anonymity-layer,65
+facet,ledger-present,100
+facet,privacy/anonymity-layer,64
 facet,edge/fog-mediated,35
 facet,multi-ledger,18
 facet,no-ledger,8
 verification,A,21
-verification,B,31
+verification,B,30
 verification,C,10
 verification,D,20
 verification,E,27

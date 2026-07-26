@@ -1,5 +1,5 @@
-mechanism,count,color
-Ledger-mediated trust,57,#1F5A96
+﻿mechanism,count,color
+Ledger-mediated trust,56,#1F5A96
 Certificateless split-key,15,#3F7FBE
 ZK / privacy credential,9,#4C9AA6
 Other / classical-general,10,#99539A

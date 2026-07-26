@@ -1,13 +1,13 @@
-family_or_facet,type,trust_shifted_to,count_of_109
-Ledger-mediated trust,primary mechanism,"validator set, ledger finality, contract governance, and revocation state",57
+﻿family_or_facet,type,trust_shifted_to,count_of_108
+Ledger-mediated trust,primary mechanism,"validator set, ledger finality, contract governance, and revocation state",56
 Certificateless split-key,primary mechanism,KGC partial-key issuance and public-parameter binding,15
 Zero-knowledge/privacy credential,primary mechanism,"issuer/setup behavior, proof-system soundness, and credential revocation",9
 Other/classical-general,primary mechanism,"mechanism-specific threshold, attribute, accumulator, biometric, or physical predicate",10
 Hardware-/device-rooted,primary mechanism,"physical response stability, enrollment, helper data, and hardware lifecycle",7
 Group-/ring-signature,primary mechanism,"opener or manager policy, anonymity, tracing, and revocation freshness",6
 Post-quantum,primary mechanism,"parameter choice, downgrade binding, state management, and side channels",5
-ledger-present,deployment/cross-cutting facet,ledger-mediated or ledger-assisted state,101
+ledger-present,deployment/cross-cutting facet,ledger-mediated or ledger-assisted state,100
 multi-ledger,deployment/cross-cutting facet,"relay validity, source finality, and bridge governance",18
 edge/fog-mediated,deployment/cross-cutting facet,"edge compromise, availability, and cache freshness",35
-privacy/anonymity-layer,deployment/cross-cutting facet,"issuer, opener, setup, proof, and revocation assumptions",65
+privacy/anonymity-layer,deployment/cross-cutting facet,"issuer, opener, setup, proof, and revocation assumptions",64
 no-ledger,deployment/cross-cutting facet,non-ledger authority or direct peer trust,8

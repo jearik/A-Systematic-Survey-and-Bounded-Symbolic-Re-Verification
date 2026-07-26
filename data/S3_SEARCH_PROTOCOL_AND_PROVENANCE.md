@@ -1,6 +1,6 @@
 # S3 Search Protocol and Provenance Boundary
 
-Search date: 13 June 2026. Quantitative window: 2021-2026. Language: English. Document types: journal articles, proceedings papers, and review articles for contextual comparison.
+Search date: 13 June 2026. Quantitative window: 2021-2026. Publication year is the year of first peer-reviewed online publication, including early-access publication; a later issue year is retained only as bibliographic metadata. Language: English. Document types: journal articles, proceedings papers, and review articles for contextual comparison.
 
 ## Web of Science Core Collection
 
@@ -23,9 +23,13 @@ Refined hit count: 156.
 - Candidate reports before cross-source deduplication: 304.
 - Cross-source duplicates removed by SHA-256, DOI, and normalized-title checks: 173.
 - Unique reports in the corrected screening ledger: 131.
-- Included primary studies: 109.
-- Contextual or excluded records: 22.
+- Included primary studies: 108.
+- Contextual or excluded records: 23.
+
+## Database-stage reproduction status
+
+The 271-to-170 database-identification checkpoint was independently reproduced from the frozen 13 June 2026 Web of Science and Scopus exports and the deduplication audit. The licensed source exports are retained in a separately marked private audit bundle and are not part of the public supplementary archive. This public archive retains the exact queries, search date, source-specific counts, deduplication arithmetic, and final row-level screening records.
 
 ## Provenance limitation
 
-The surviving source exports do not preserve a reliable row-level distinction between the pre-existing author collection and backward-snowballing routes. These 134 reports are therefore reported as one supplementary source. They are not treated as an independent database denominator. Screening and coding were performed by the author; no dual-screening agreement statistic is claimed.
+The surviving source records do not preserve a reliable row-level distinction between the pre-existing author collection and backward-snowballing routes. These 134 reports are therefore reported as one supplementary source. The 304-to-131 cross-source deduplication checkpoint is arithmetically auditable but not fully replayable as separate route-specific input lists. Screening and coding were performed by the author; no dual-screening agreement statistic is claimed.

@@ -1,0 +1,36 @@
+﻿family,level,count
+Ledger-mediated trust,A,12
+Ledger-mediated trust,B,10
+Ledger-mediated trust,C,8
+Ledger-mediated trust,D,8
+Ledger-mediated trust,E,18
+Certificateless split-key,A,2
+Certificateless split-key,B,6
+Certificateless split-key,C,1
+Certificateless split-key,D,3
+Certificateless split-key,E,3
+Zero-knowledge/privacy credential,A,1
+Zero-knowledge/privacy credential,B,3
+Zero-knowledge/privacy credential,C,0
+Zero-knowledge/privacy credential,D,4
+Zero-knowledge/privacy credential,E,1
+Other/classical-general,A,1
+Other/classical-general,B,4
+Other/classical-general,C,0
+Other/classical-general,D,3
+Other/classical-general,E,2
+Hardware-/device-rooted,A,5
+Hardware-/device-rooted,B,0
+Hardware-/device-rooted,C,0
+Hardware-/device-rooted,D,1
+Hardware-/device-rooted,E,1
+Group-/ring-signature,A,0
+Group-/ring-signature,B,4
+Group-/ring-signature,C,0
+Group-/ring-signature,D,0
+Group-/ring-signature,E,2
+Post-quantum,A,0
+Post-quantum,B,3
+Post-quantum,C,1
+Post-quantum,D,1
+Post-quantum,E,0

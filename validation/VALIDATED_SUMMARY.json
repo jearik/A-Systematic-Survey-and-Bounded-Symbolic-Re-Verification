@@ -1,8 +1,18 @@
 {
-  "primary_n": 109,
+  "release_version": "v1.0.5",
+  "publication_year_convention": "year of first peer-reviewed online publication, including early-access publication",
+  "primary_n": 108,
   "screening_n": 131,
+  "excluded_full_text_n": 23,
+  "verification_counts": {
+    "A": 21,
+    "B": 30,
+    "C": 10,
+    "D": 20,
+    "E": 27
+  },
   "family_counts": {
-    "Ledger-mediated trust": 57,
+    "Ledger-mediated trust": 56,
     "Certificateless split-key": 15,
     "Zero-knowledge/privacy credential": 9,
     "Other/classical-general": 10,
@@ -10,33 +20,21 @@
     "Group-/ring-signature": 6,
     "Post-quantum": 5
   },
-  "verification_counts": {
-    "A": 21,
-    "B": 31,
-    "C": 10,
-    "D": 20,
-    "E": 27
+  "facet_counts": {
+    "ledger-present": 100,
+    "privacy/anonymity-layer": 64,
+    "edge/fog-mediated": 35,
+    "multi-ledger": 18,
+    "no-ledger": 8
   },
-  "property_counts": {
-    "Anonymity": 92,
-    "Replay resistance": 77,
-    "Revocation": 76,
-    "Mutual authentication": 69,
-    "Session-key secrecy": 63,
-    "MITM resistance": 61,
-    "Impersonation resistance": 47,
-    "Unlinkability": 41,
-    "Perfect forward secrecy": 31,
-    "Key-compromise impersonation": 1
-  },
-  "venue_type_counts": {
-    "IEEE transaction / flagship journal": 54,
+  "venue_counts": {
+    "IEEE transaction / flagship journal": 53,
     "other journal": 37,
     "conference / proceedings": 18
   },
   "year_group_counts": {
     "2021-2023": 40,
-    "2024-2026": 69
+    "2024-2026": 68
   },
-  "status": "superseded by final v17.1 evidence and venue reassessment on 2026-07-20"
+  "status": "PASS"
 }

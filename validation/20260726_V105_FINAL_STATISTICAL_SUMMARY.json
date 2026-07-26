@@ -1,0 +1,299 @@
+{
+  "generated_on": "2026-07-26",
+  "release_version": "v1.0.5",
+  "publication_year_convention": "year of first peer-reviewed online publication, including early-access publication",
+  "primary_n": 108,
+  "screening_n": 131,
+  "n": 108,
+  "verification_counts": {
+    "A": 21,
+    "B": 30,
+    "C": 10,
+    "D": 20,
+    "E": 27
+  },
+  "family_counts": {
+    "Ledger-mediated trust": 56,
+    "Certificateless split-key": 15,
+    "Zero-knowledge/privacy credential": 9,
+    "Other/classical-general": 10,
+    "Hardware-/device-rooted": 7,
+    "Group-/ring-signature": 6,
+    "Post-quantum": 5
+  },
+  "facet_counts": {
+    "ledger-present": 100,
+    "privacy/anonymity-layer": 64,
+    "edge/fog-mediated": 35,
+    "multi-ledger": 18,
+    "no-ledger": 8
+  },
+  "family_matrix": {
+    "Ledger-mediated trust": [
+      12,
+      10,
+      8,
+      8,
+      18
+    ],
+    "Certificateless split-key": [
+      2,
+      6,
+      1,
+      3,
+      3
+    ],
+    "Zero-knowledge/privacy credential": [
+      1,
+      3,
+      0,
+      4,
+      1
+    ],
+    "Other/classical-general": [
+      1,
+      4,
+      0,
+      3,
+      2
+    ],
+    "Hardware-/device-rooted": [
+      5,
+      0,
+      0,
+      1,
+      1
+    ],
+    "Group-/ring-signature": [
+      0,
+      4,
+      0,
+      0,
+      2
+    ],
+    "Post-quantum": [
+      0,
+      3,
+      1,
+      1,
+      0
+    ]
+  },
+  "year_matrix": {
+    "2021": [
+      0,
+      1,
+      0,
+      2,
+      4
+    ],
+    "2022": [
+      1,
+      3,
+      3,
+      2,
+      6
+    ],
+    "2023": [
+      4,
+      3,
+      0,
+      5,
+      6
+    ],
+    "2024": [
+      6,
+      5,
+      2,
+      5,
+      6
+    ],
+    "2025": [
+      6,
+      15,
+      5,
+      5,
+      4
+    ],
+    "2026": [
+      4,
+      3,
+      0,
+      1,
+      1
+    ]
+  },
+  "year_group_matrix": {
+    "2021-2023": [
+      5,
+      7,
+      3,
+      9,
+      16
+    ],
+    "2024-2026": [
+      16,
+      23,
+      7,
+      11,
+      11
+    ]
+  },
+  "venue_matrix": {
+    "IEEE transaction / flagship journal": [
+      13,
+      14,
+      6,
+      10,
+      10
+    ],
+    "other journal": [
+      6,
+      13,
+      2,
+      8,
+      8
+    ],
+    "conference / proceedings": [
+      2,
+      3,
+      2,
+      2,
+      9
+    ]
+  },
+  "property_counts": {
+    "Anonymity": 91,
+    "Replay resistance": 76,
+    "Revocation": 75,
+    "Mutual authentication": 68,
+    "Session-key secrecy": 62,
+    "MITM resistance": 60,
+    "Impersonation resistance": 46,
+    "Unlinkability": 41,
+    "Perfect forward secrecy": 31,
+    "Key-compromise impersonation": 1
+  },
+  "wilson_95_pct": {
+    "A": {
+      "count": 21,
+      "n": 108,
+      "share_pct": 19.444444444444446,
+      "lower_pct": 13.084377723364826,
+      "upper_pct": 27.903516483369213
+    },
+    "B": {
+      "count": 30,
+      "n": 108,
+      "share_pct": 27.77777777777778,
+      "lower_pct": 20.20502650072486,
+      "upper_pct": 36.87707837689989
+    },
+    "C": {
+      "count": 10,
+      "n": 108,
+      "share_pct": 9.25925925925926,
+      "lower_pct": 5.107333030421826,
+      "upper_pct": 16.20985924522356
+    },
+    "D": {
+      "count": 20,
+      "n": 108,
+      "share_pct": 18.51851851851852,
+      "lower_pct": 12.319953824741528,
+      "upper_pct": 26.879694751893545
+    },
+    "E": {
+      "count": 27,
+      "n": 108,
+      "share_pct": 25.0,
+      "lower_pct": 17.787832878337294,
+      "upper_pct": 33.92953510899055
+    },
+    "Perfect forward secrecy": {
+      "count": 31,
+      "n": 108,
+      "share_pct": 28.703703703703702,
+      "lower_pct": 21.01936779821008,
+      "upper_pct": 37.85098270951364
+    },
+    "Key-compromise impersonation": {
+      "count": 1,
+      "n": 108,
+      "share_pct": 0.9259259259259258,
+      "lower_pct": 0.16363608538834917,
+      "upper_pct": 5.059345519366322
+    }
+  },
+  "period_tests": {
+    "symbolic_A": {
+      "table": [
+        [
+          5,
+          35
+        ],
+        [
+          16,
+          52
+        ]
+      ],
+      "pearson_chi_square": 1.9559547957113885,
+      "pearson_p": 0.1619466073097774,
+      "yates_chi_square": 1.3151840046363374,
+      "yates_p": 0.25145820371466454,
+      "fisher_two_sided_p": 0.21114983227017275
+    },
+    "informal_E": {
+      "table": [
+        [
+          16,
+          24
+        ],
+        [
+          11,
+          57
+        ]
+      ],
+      "pearson_chi_square": 7.623529411764706,
+      "pearson_p": 0.005761162816017596,
+      "yates_chi_square": 6.405882352941176,
+      "yates_p": 0.011374288677305572,
+      "fisher_two_sided_p": 0.010448346121245886
+    }
+  },
+  "venue_tests": {
+    "symbolic_A": {
+      "row_totals": [
+        53,
+        37,
+        18
+      ],
+      "successes": [
+        13,
+        6,
+        2
+      ],
+      "fisher_freeman_halton_two_sided_p": 0.4630495947033592
+    },
+    "informal_E": {
+      "row_totals": [
+        53,
+        37,
+        18
+      ],
+      "successes": [
+        10,
+        8,
+        9
+      ],
+      "fisher_freeman_halton_two_sided_p": 0.03600012254397391
+    }
+  },
+  "scope_correction": {
+    "excluded_id": "P207",
+    "decision": "exclude_out_of_scope_full_text",
+    "reason": "Excluded at full-text review: peer-reviewed UAV mutual-authentication protocol, but no explicit cross-domain, inter-domain, or multi-domain trust transition or authentication mechanism was identified.",
+    "old_primary_n": 109,
+    "new_primary_n": 108
+  }
+}

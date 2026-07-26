@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate final v17.1 supplementary evidence, family, year, and venue counts."""
+"""Validate v1.0.5 supplementary evidence, family, year, and venue counts."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-S1 = ROOT / "data" / "S1_ROWLEVEL_CODING_INCLUDED_109.csv"
+S1 = ROOT / "data" / "S1_ROWLEVEL_CODING_INCLUDED_108.csv"
 LEVELS = "ABCDE"
-EXPECTED_LEVELS = {"A": 21, "B": 31, "C": 10, "D": 20, "E": 27}
+EXPECTED_LEVELS = {"A": 21, "B": 30, "C": 10, "D": 20, "E": 27}
 EXPECTED_FAMILIES = {
-    "Ledger-mediated trust": [12, 11, 8, 8, 18],
+    "Ledger-mediated trust": [12, 10, 8, 8, 18],
     "Certificateless split-key": [2, 6, 1, 3, 3],
     "Zero-knowledge/privacy credential": [1, 3, 0, 4, 1],
     "Other/classical-general": [1, 4, 0, 3, 2],
@@ -21,11 +21,11 @@ EXPECTED_FAMILIES = {
     "Post-quantum": [0, 3, 1, 1, 0],
 }
 EXPECTED_YEAR_GROUP = {
-    "2021-2023": [5, 8, 3, 8, 16],
-    "2024-2026": [16, 23, 7, 12, 11],
+    "2021-2023": [5, 7, 3, 9, 16],
+    "2024-2026": [16, 23, 7, 11, 11],
 }
 EXPECTED_VENUE = {
-    "IEEE transaction / flagship journal": [13, 15, 6, 10, 10],
+    "IEEE transaction / flagship journal": [13, 14, 6, 10, 10],
     "other journal": [6, 13, 2, 8, 8],
     "conference / proceedings": [2, 3, 2, 2, 9],
 }
@@ -41,13 +41,13 @@ def matrix(rows, field, keys):
 def main():
     with S1.open("r", encoding="utf-8-sig", newline="") as stream:
         rows = list(csv.DictReader(stream))
-    assert len(rows) == 109
-    assert len({row["paper_id"] for row in rows}) == 109
+    assert len(rows) == 108
+    assert len({row["paper_id"] for row in rows}) == 108
     assert dict(Counter(row["verification_level"] for row in rows)) == EXPECTED_LEVELS
     assert matrix(rows, "mechanism_family", EXPECTED_FAMILIES) == EXPECTED_FAMILIES
     assert matrix(rows, "year_group", EXPECTED_YEAR_GROUP) == EXPECTED_YEAR_GROUP
     assert matrix(rows, "venue_tier", EXPECTED_VENUE) == EXPECTED_VENUE
-    print("PASS: final v17.1 row-level and aggregate invariants")
+    print("PASS: v1.0.5 108-study row-level and aggregate invariants")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,7 @@
+# Historical v1.0.2 evidence/venue validation report
+
+> Superseded for corpus denominators and aggregate totals by `20260726_V104_SCOPE_CORRECTION_REPORT.md`. The row-level evidence and venue corrections listed here remain provenance records.
+
 # Final Evidence and Venue Validation Report
 
 Date: 2026-07-20  

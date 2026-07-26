@@ -152,7 +152,7 @@ def make_image4() -> None:
         hspace=0.43,
     )
     fig.suptitle(
-        "Three-dimensional classification of\n109 IIoT-relevant studies",
+        "Three-dimensional classification of\n108 IIoT-relevant studies",
         fontsize=8.6,
         fontweight="normal",
         y=0.975,
@@ -244,7 +244,7 @@ def make_image5() -> None:
     fig, ax = plt.subplots(figsize=(3.5, 3.15), constrained_layout=True)
     bars = ax.bar(categories, values, color=EVIDENCE_COLORS, edgecolor=EDGE, linewidth=0.8)
     ax.set_title("Reported verification-evidence category", loc="left", fontsize=8.7, pad=6)
-    ax.set_ylabel("IIoT-relevant studies (n = 109)", fontsize=7.4)
+    ax.set_ylabel("IIoT-relevant studies (n = 108)", fontsize=7.4)
     ax.set_ylim(0, 38)
     ax.set_yticks(np.arange(0, 36, 5))
     ax.set_xticks(
@@ -303,7 +303,7 @@ def make_image6() -> None:
     )
     ax.set_xlim(-0.5, matrix.shape[1] - 0.5)
     ax.set_ylim(matrix.shape[0] - 0.5, -0.5)
-    ax.set_title("Mechanism family x verification-evidence\ncategory (n = 109)", loc="left", fontsize=8.2, pad=6)
+    ax.set_title("Mechanism family x verification-evidence\ncategory (n = 108)", loc="left", fontsize=8.2, pad=6)
     ax.set_yticks(np.arange(len(rows)), family_labels)
     ax.set_xticks(
         np.arange(len(columns)),
@@ -425,7 +425,7 @@ def make_image9() -> None:
         ax.add_patch(patch)
         label = row["label"]
         wrap = {
-            "Search, screening, and 109-study corpus": "Search, screening, and 109-study corpus",
+            "Search, screening, and 108-study corpus": "Search, screening, and 108-study corpus",
             "Three-dimensional coding": "Three-dimensional coding",
             "RQ1 Verification-evidence distribution": "RQ1  Verification-evidence distribution",
             "RQ2 Mechanism/property/threat gaps": "RQ2  Mechanism/property/threat gaps",
@@ -543,11 +543,11 @@ def validate_sources() -> None:
     family_matrix = np.array(
         [[int(row[col]) for col in ("A", "B", "C", "D", "E")] for row in family]
     )
-    if total_counts.sum() != 109:
-        raise ValueError(f"Verification totals sum to {total_counts.sum()}, expected 109")
+    if total_counts.sum() != 108:
+        raise ValueError(f"Verification totals sum to {total_counts.sum()}, expected 108")
     if not np.array_equal(family_matrix.sum(axis=0), total_counts):
         raise ValueError("Family matrix column totals do not match verification totals")
-    if not np.array_equal(family_matrix.sum(axis=1), np.array([57, 15, 9, 10, 7, 6, 5])):
+    if not np.array_equal(family_matrix.sum(axis=1), np.array([56, 15, 9, 10, 7, 6, 5])):
         raise ValueError("Family matrix row totals do not match the taxonomy totals")
     workflow = read_rows("paper_structure.csv")
     expected_nodes = {"methods_search", "methods_coding", "rq1", "rq2", "rq3", "rq4", "synthesis"}
